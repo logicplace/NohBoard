@@ -19,6 +19,7 @@ namespace ThoNohT.NohBoard.Hooking.Interop
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Threading;
     using static Defines;
     using static FunctionImports;
     using static Structs;
@@ -64,6 +65,8 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         /// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/windowing/hooks/hookreference/hookfunctions/callwndproc.asp
         /// </remarks>
         internal delegate int HookProc(int nCode, int wParam, IntPtr lParam);
+
+        internal delegate void TimerProc(object state);
 
         /// <summary>
         /// If <c>true</c>, keyboard or mouse events will not be propagate to other programs if their respective
@@ -204,6 +207,21 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         private static int keyboardHookHandle;
 
         /// <summary>
+        /// This field is used to keep a reference to the delegate so GC won't clean it up.
+        /// </summary>
+        private static TimerProc directInputDelegate;
+
+        /// <summary>
+        /// Stores the handle to the Keyboard hook procedure.
+        /// </summary>
+        private static Timer directInputTimerHandle;
+
+        /// <summary>
+        /// This flag will stop the DirectInput polling timer
+        /// </summary>
+        private static bool directInputTimerStop;
+
+        /// <summary>
         /// A callback function which will be called every Time a keyboard activity detected.
         /// </summary>
         /// <param name="nCode">
@@ -259,5 +277,12 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         }
 
         #endregion keyboard Hook
+
+        #region DirectInput Hook
+
+        private static void DirectInputTimerProc(object state) {
+        }
+
+        #endregion
     }
 }

@@ -129,6 +129,7 @@ namespace ThoNohT.NohBoard.Forms
             {
                 HookManager.DisableKeyboardHook();
                 HookManager.DisableMouseHook();
+                HookManager.DisableDirectInputTimer();
 
                 return new List<SerializableFont>();
             }
@@ -143,6 +144,14 @@ namespace ThoNohT.NohBoard.Forms
                 HookManager.EnableKeyboardHook();
             else
                 HookManager.DisableKeyboardHook();
+
+            if (GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputButtonDefinition)) {
+
+                
+                HookManager.EnableDirectInputTimer();
+            } else {
+                HookManager.DisableDirectInputTimer();
+            }
 
             //Prompt to download any fonts we don't have yet.
             var missingFonts = this.CheckMissingFonts();

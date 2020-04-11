@@ -20,6 +20,7 @@ namespace ThoNohT.NohBoard.Hooking.Interop
     using System;
     using System.ComponentModel;
     using System.Runtime.InteropServices;
+    using System.Threading;
     using static Defines;
     using static FunctionImports;
 
@@ -131,6 +132,33 @@ namespace ThoNohT.NohBoard.Hooking.Interop
 
             // If unsubscription failed, throw an exception with the error that occurred during the hook process.
             throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        /// <summary>
+        /// Enables the joystick hook
+        /// </summary>
+        public static void EnableDirectInputTimer() {
+
+            directInputDelegate = DirectInputTimerProc;
+
+            directInputTimerHandle = new Timer(
+                new TimerCallback(directInputDelegate),
+                null,
+                1000,
+            1000);
+
+            if (directInputTimerHandle != null) return;
+
+            // If subscription failed, throw an exception with the error that occurred during the hook process.
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        public static void DisableDirectInputTimer() {
+            if (directInputTimerHandle == null) return;
+
+            directInputTimerHandle.Change(
+                Timeout.Infinite,
+                Timeout.Infinite);
         }
 
         #endregion Methods
