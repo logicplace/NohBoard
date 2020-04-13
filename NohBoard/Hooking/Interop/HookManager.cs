@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace ThoNohT.NohBoard.Hooking.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using System.Threading;
     using static Defines;
@@ -278,9 +279,23 @@ namespace ThoNohT.NohBoard.Hooking.Interop
 
         #endregion keyboard Hook
 
+        private static List<SharpDX.DirectInput.Joystick> Devices = new List<SharpDX.DirectInput.Joystick>();
+        private static SharpDX.DirectInput.DirectInput DirectInput = new SharpDX.DirectInput.DirectInput();
+
         #region DirectInput Hook
 
+        private static IList<SharpDX.DirectInput.DeviceInstance> connectedJoysticks = new List<SharpDX.DirectInput.DeviceInstance>();
+
         private static void DirectInputTimerProc(object state) {
+            // for each joystick connected to the system
+            foreach (var device in Devices) {
+                try {
+                    var jState = device.GetCurrentState();
+
+                    DirectInputState.UpdatedPressedElements(device.Information.ProductGuid, jState.Buttons);
+                }
+                catch (Exception) { }
+            }
         }
 
         #endregion

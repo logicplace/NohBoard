@@ -243,6 +243,8 @@ namespace ThoNohT.NohBoard.Forms
                     // Render the individual keys.
                     foreach (var def in GlobalSettings.CurrentDefinition.Elements)
                     {
+                        if (def is EmaKeyboardKeyDefinition) ((EmaKeyboardKeyDefinition)def).Render(g, false, shift, caps);
+
                         if (def is KeyboardKeyDefinition) ((KeyboardKeyDefinition)def).Render(g, false, shift, caps);
 
                         if (def is MouseKeyDefinition) ((MouseKeyDefinition)def).Render(g, false, shift, caps);
@@ -608,6 +610,7 @@ namespace ThoNohT.NohBoard.Forms
             // Render all keys.
             KeyboardState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
             var kbKeys = KeyboardState.PressedKeys;
+            var diKeys = DirectInputState.PressedButtons;
             var mouseKeys = MouseState.PressedKeys.Select(k => (int)k).ToList();
             MouseState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
             MouseState.CheckScrollAndMovement();
@@ -615,7 +618,7 @@ namespace ThoNohT.NohBoard.Forms
             var allDefs = GlobalSettings.CurrentDefinition.Elements;
             foreach (var def in allDefs)
             {
-                this.Render(e.Graphics, def, allDefs, kbKeys, mouseKeys, scrollCounts, false);
+                this.Render(e.Graphics, def, allDefs, kbKeys, mouseKeys, diKeys, scrollCounts, false);
             }
 
             // Draw the element being manipulated
@@ -627,7 +630,7 @@ namespace ThoNohT.NohBoard.Forms
 
                 if (this.selectedDefinition != null)
                 {
-                    this.Render(e.Graphics, this.selectedDefinition, allDefs, kbKeys, mouseKeys, scrollCounts, true);
+                    this.Render(e.Graphics, this.selectedDefinition, allDefs, kbKeys, mouseKeys, diKeys, scrollCounts, true);
                     this.selectedDefinition.RenderSelected(e.Graphics);
                 }
             }
@@ -656,6 +659,7 @@ namespace ThoNohT.NohBoard.Forms
             List<ElementDefinition> allDefs,
             IReadOnlyList<int> kbKeys,
             List<int> mouseKeys,
+            Dictionary<Guid, bool[]> directInputKeys,
             IReadOnlyList<int> scrollCounts,
             bool alwaysRender)
         {
@@ -673,6 +677,28 @@ namespace ThoNohT.NohBoard.Forms
                 if (!pressed && !alwaysRender) return;
 
                 kkDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
+            }
+            if (def is EmaKeyboardKeyDefinition ekkDef) {
+                var pressed = true;
+                if (!ekkDef.KeyCodes.Any() || !ekkDef.KeyCodes.All(kbKeys.Contains)) pressed = false;
+
+                if (ekkDef.KeyCodes.Count == 1
+                    && allDefs.OfType<KeyboardKeyDefinition>()
+                        .Any(d => d.KeyCodes.Count > 1
+                        && d.KeyCodes.All(kbKeys.Contains)
+                        && d.KeyCodes.ContainsAll(ekkDef.KeyCodes))) pressed = false;
+
+                if (!pressed && !alwaysRender) return;
+
+                ekkDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
+            }
+            if (def is DirectInputButtonDefinition dibDef) {
+                var pressed = true;
+                if (!directInputKeys.ContainsKey(dibDef.DeviceId)) return;
+
+                if (directInputKeys.Any() && !directInputKeys[dibDef.DeviceId][dibDef.ButtonNumber]) pressed = false;
+
+                dibDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is MouseKeyDefinition mkDef)
             {

@@ -25,34 +25,69 @@ namespace ThoNohT.NohBoard.Hooking {
     using static Interop.Defines;
     using static Interop.FunctionImports;
 
-    class DirectInputState : StateBase<int> {
+    public class DirectInputState : StateBase<int> {
+
+        /// <summary>
+        /// Initializes the state of state keys.
+        /// </summary>
+        static DirectInputState() {
+        }
 
         /// <summary>
         /// Adds the specified mouse keycode to the list of pressed keys.
         /// </summary>
         /// <param name="keyCode">The keycode to add.</param>
         /// <param name="hold">The minimum time to hold keys.</param>
-        public static void AddPressedElement(int keyCode, int hold) {
-            lock (pressedKeys) {
+        public static void AddPressedElement(int buttonNumber, Guid guid, int hold) {
+            lock (pressedButtons) {
                 EnsureStopwatchRunning();
 
                 var time = keyHoldStopwatch.ElapsedMilliseconds;
 
-                if (pressedKeys.TryGetValue(keyCode, out var pressed)) {
-                    pressed.startTime = time;
-                    pressed.removed = false;
-                    pressedKeys[keyCode] = pressed;
-                } else {
-                    pressedKeys.Add(
-                        keyCode,
-                        new KeyPress {
-                            startTime = keyHoldStopwatch.ElapsedMilliseconds,
-                            removed = false
-                        });
-
-                    updated = true;
+                if (!pressedButtons.ContainsKey(guid)) {
+                    pressedButtons.Add(guid, new bool[256]);
                 }
 
+                if (pressedButtons.TryGetValue(guid, out var deviceDictionary)) {
+                    deviceDictionary[buttonNumber] = true;
+
+                    // Always update to keep checking whether to remove the key on the next render cycle.
+                    updated = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the specified keycode from the list of pressed keys.
+        /// </summary>
+        /// <param name="keyCode">The keycode to remove.</param>
+        /// <param name="hold">The minimum time to hold keys.</param>
+        public static void RemovePressedElement(int buttonNumber, Guid guid, int hold) {
+            lock (pressedButtons) {
+                if (!pressedButtons.ContainsKey(guid)) return;
+
+                if (pressedButtons.TryGetValue(guid, out var deviceDictionary)) {
+                    deviceDictionary[buttonNumber] = false;
+
+                    // Always update to keep checking whether to remove the key on the next render cycle.
+                    updated = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Replaces the current button matrix with the updated one
+        /// </summary>
+        /// <param name="buttons">the boolean array of buttons</param>
+        /// <param name="guid">the guid of the device we are updating</param>
+        public static void UpdatedPressedElements(Guid guid, bool[] buttons) {
+            lock (pressedButtons) {
+                if (!pressedButtons.ContainsKey(guid)) return;
+
+                pressedButtons[guid] = buttons;
+
+                // Always update to keep checking whether to remove the key on the next render cycle.
+                updated = true;
             }
         }
     }

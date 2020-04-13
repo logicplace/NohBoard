@@ -48,7 +48,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             List<TPoint> boundaries,
             string normalText,
             string shiftText,
-            string deviceId,
+            Guid deviceId,
             bool changeOnCaps,
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {

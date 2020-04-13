@@ -24,6 +24,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     using System.Runtime.Serialization;
     using ClipperLib;
     using Extra;
+    using ThoNohT.NohBoard.Keyboard.Styles;
 
     /// <summary>
     /// Represents a button or a on a mouse.
@@ -69,7 +70,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             List<TPoint> boundaries,
             string normalText,
             string shiftText,
-            string deviceId,
+            Guid deviceId,
             int buttonNumber,
             bool changeOnCaps,
             TPoint textPosition = null,
@@ -93,9 +94,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             return new DirectInputButtonDefinition(
                 this.Id,
                 newBoundaries,
-                this.DeviceId,
                 this.Text,
                 this.ShiftText,
+                this.DeviceId,
                 this.ButtonNumber,
                 this.ChangeOnCaps,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
@@ -131,7 +132,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             if (this.ShiftText != kkd.ShiftText) return true;
             if (this.ChangeOnCaps != kkd.ChangeOnCaps) return true;
             if (this.TextPosition.IsChanged(kkd.TextPosition)) return true;
-            if (!this.DeviceId.ToSet().SetEquals(kkd.DeviceId)) return true;
+            if (!this.DeviceId.Equals(kkd.DeviceId)) return true;
             if (this.ButtonNumber != kkd.ButtonNumber) return true;
 
             if (this.Boundaries.Count != kkd.Boundaries.Count) return true;
@@ -236,6 +237,40 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.CurrentManipulation);
         }
 
+        /// <summary>
+        /// Renders the button in the specified surface.
+        /// </summary>
+        /// <param name="g">The GDI+ surface to render on.</param>
+        /// <param name="pressed">A value indicating whether to render the key in its pressed state or not.</param>
+        /// <param name="shift">A value indicating whether shift is pressed during the render.</param>
+        /// <param name="capsLock">A value indicating whether caps lock is pressed during the render.</param>
+        public void Render(Graphics g, bool pressed, bool shift, bool capsLock) {
+            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
+                            ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
+            var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
+            var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
+
+            var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
+            var txtPoint = new TPoint(
+                this.TextPosition.X - (int)(txtSize.Width / 2),
+                this.TextPosition.Y - (int)(txtSize.Height / 2));
+
+            // Draw the background
+            var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
+            g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+
+            // Draw the text
+            g.SetClip(this.GetBoundingBox());
+            g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
+            g.ResetClip();
+
+            // Draw the outline.
+            if (subStyle.ShowOutline)
+                g.DrawPolygon(
+                    new Pen(subStyle.Outline, subStyle.OutlineWidth),
+                    this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+        }
+
         protected override DirectInputElementDefinition MoveEdge(int index, Size diff) {
             if (index < 0 || index >= this.Boundaries.Count)
                 throw new Exception("Attempting to move a non-existent edge.");
@@ -272,5 +307,33 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.TextPosition + diff,
                 this.CurrentManipulation);
         }
+
+        #region Private methods
+
+        /// <summary>
+        /// Determines whether to use the shift text or the regular text for this key depening on the shift, caps lock
+        /// state and the key's properties. Returns the text that should be displayed for this state.
+        /// </summary>
+        /// <param name="shift">Whether shift is pressed.</param>
+        /// <param name="capsLock">Whether caps lock is active.</param>
+        /// <returns>The text to display for this key.</returns>
+        private string GetText(bool shift, bool capsLock) {
+            if (GlobalSettings.Settings.Capitalization != CapitalizationMethod.FollowKeys) {
+                // Caps lock is set based on the capitalization method.
+                capsLock = GlobalSettings.Settings.Capitalization == CapitalizationMethod.Capitalize;
+
+                // If follow shift for caps insensitive keys is true, then don't edit the shift value if ChangeOnCaps.
+                // If follow shift for caps sensitive keys is true, then don't edit the shift value if not ChangeOnCaps.
+                var preserveShift = GlobalSettings.Settings.FollowShiftForCapsInsensitive && !this.ChangeOnCaps
+                                    || GlobalSettings.Settings.FollowShiftForCapsSensitive && this.ChangeOnCaps;
+                // Shift is ignored, but only if the follow shift is not set for this key's ChangeOnCaps setting.
+                shift &= preserveShift;
+            }
+
+            var capitalize = this.ChangeOnCaps && (capsLock ^ shift) || !this.ChangeOnCaps && shift;
+            return capitalize ? this.ShiftText : this.Text;
+        }
+
+        #endregion
     }
 }

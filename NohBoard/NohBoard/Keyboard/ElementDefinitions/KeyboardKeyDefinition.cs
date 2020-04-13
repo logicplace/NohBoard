@@ -75,7 +75,6 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             this.ChangeOnCaps = changeOnCaps;
         }
 
-
         /// <summary>
         /// Renders the key in the specified surface.
         /// </summary>

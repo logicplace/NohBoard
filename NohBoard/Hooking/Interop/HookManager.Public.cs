@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace ThoNohT.NohBoard.Hooking.Interop
 {
+    using SharpDX.DirectInput;
     using System;
     using System.ComponentModel;
     using System.Runtime.InteropServices;
@@ -135,9 +136,25 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         }
 
         /// <summary>
+        /// Acquires the currently connected DirectInput devies
+        /// </summary>
+        public static void AcquireJoysticks() {
+            foreach (var device in DirectInput.GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices)) {
+                var joystick = new SharpDX.DirectInput.Joystick(DirectInput, device.ProductGuid);
+                Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
+                joystick.Acquire();
+
+                Devices.Add(joystick);
+                DirectInputState.AddDirectInputDevice(device.ProductGuid);
+            }
+        }
+
+        /// <summary>
         /// Enables the joystick hook
         /// </summary>
         public static void EnableDirectInputTimer() {
+            // Acquire the joysticks currently connected
+            AcquireJoysticks();
 
             directInputDelegate = DirectInputTimerProc;
 

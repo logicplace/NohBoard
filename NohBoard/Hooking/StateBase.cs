@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace ThoNohT.NohBoard.Hooking
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
@@ -25,13 +26,26 @@ namespace ThoNohT.NohBoard.Hooking
     /// A base class for keyboard and mouse state.
     /// </summary>
     /// <typeparam name="T">The type of the key being tracked.</typeparam>
-    public class StateBase<T>
-    {
+    public class StateBase<T> {
         /// <summary>
         /// Contains information about a recorded keypress.
         /// </summary>
-        protected struct KeyPress
-        {
+        protected struct KeyPress {
+            /// <summary>
+            /// The time in milliseconds when the press was detected.
+            /// </summary>
+        public long startTime { get; set; }
+
+            /// <summary>
+            /// A value indicating whether the press should be removed, once the hold time is elapsed.
+            /// </summary>
+            public bool removed { get; set; }
+        }
+
+        /// <summary>
+        /// Contains information about a recorded button press.
+        /// </summary>
+        protected struct ButtonPress {
             /// <summary>
             /// The time in milliseconds when the press was detected.
             /// </summary>
@@ -47,6 +61,11 @@ namespace ThoNohT.NohBoard.Hooking
         /// A dictionary containing all currently pressed keys.
         /// </summary>
         protected static readonly Dictionary<T, KeyPress> pressedKeys = new Dictionary<T, KeyPress>();
+
+        /// <summary>
+        /// A dictionary containing all currently pressed keys.
+        /// </summary>
+        protected static readonly Dictionary<Guid, bool[]> pressedButtons = new Dictionary<Guid, bool[]>();
 
         /// <summary>
         /// A value indicating whether something has changed since the last check.
@@ -79,6 +98,19 @@ namespace ThoNohT.NohBoard.Hooking
         public static IReadOnlyList<T> PressedKeys
         {
             get { lock (pressedKeys) return pressedKeys.Keys.ToList().AsReadOnly(); }
+        }
+
+        /// <summary>
+        /// Returns a list with all keys that are currently pressed.
+        /// </summary>
+        public static Dictionary<Guid, bool[]> PressedButtons {
+            get { lock (pressedButtons) return pressedButtons; }
+        }
+
+        public static void AddDirectInputDevice(Guid guid) {
+            if (!PressedButtons.ContainsKey(guid)) {
+                pressedButtons.Add(guid, new bool[256]);
+            }
         }
 
         /// <summary>

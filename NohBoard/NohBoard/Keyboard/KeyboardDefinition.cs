@@ -308,6 +308,9 @@ namespace ThoNohT.NohBoard.Keyboard
 
             var kbDef = FileHelper.Deserialize<KeyboardDefinition>(filePath);
 
+            // Register any DirectInputDevices
+            Hooking.Interop.HookManager.AcquireJoysticks();
+
             // Check that there are not duplicate elements.
             var elementIds = kbDef.Elements.Select(e => e.Id);
             if (elementIds.Count() != elementIds.Distinct().Count())

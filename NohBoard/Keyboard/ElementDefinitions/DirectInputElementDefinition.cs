@@ -49,7 +49,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// The hardware ID of the DirectInput device 
         /// </summary>
         [DataMember]
-        public string DeviceId { get; private set; }
+        public Guid DeviceId { get; private set; }
 
         /// <summary>
         /// The boundaries of the key. This is a list of coordinates exactly defining the polygon
@@ -85,7 +85,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             int id,
             List<TPoint> boundaries,
             string text,
-            string deviceId,
+            Guid deviceId,
             TPoint textPosition = null,
             ElementManipulation manipulation = null)
         {
