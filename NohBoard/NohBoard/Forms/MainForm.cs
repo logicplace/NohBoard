@@ -146,8 +146,6 @@ namespace ThoNohT.NohBoard.Forms
                 HookManager.DisableKeyboardHook();
 
             if (GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputButtonDefinition)) {
-
-                
                 HookManager.EnableDirectInputTimer();
             } else {
                 HookManager.DisableDirectInputTimer();

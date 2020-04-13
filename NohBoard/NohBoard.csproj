@@ -165,7 +165,10 @@
     <Compile Include="Keyboard\ElementDefinitions\ElementDefinition.cs" />
     <Compile Include="Keyboard\ElementDefinitions\ElementManipulation.cs" />
     <Compile Include="Keyboard\ElementDefinitions\DirectInputButtonDefinition.cs" />
+    <Compile Include="Keyboard\ElementDefinitions\EmaKeyboardKeyDefinition.cs" />
     <Compile Include="Keyboard\ElementDefinitions\KeyboardKeyDefinition.cs" />
+    <Compile Include="Keyboard\ElementDefinitions\DirectInputElementDefinition.cs" />
+    <Compile Include="Keyboard\ElementDefinitions\EmaKeyDefinition.cs" />
     <Compile Include="Keyboard\ElementDefinitions\KeyDefinition.cs" />
     <Compile Include="Keyboard\ElementDefinitions\MouseKeyDefinition.cs" />
     <Compile Include="Keyboard\ElementDefinitions\MouseScrollDefinition.cs" />

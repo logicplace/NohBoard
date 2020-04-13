@@ -29,12 +29,10 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     /// <summary>
     /// Represents a key in a keyboard or on a mouse.
     /// </summary>
-    [DataContract(Name = "Key", Namespace = "")]
-    [KnownType(typeof(KeyboardKeyDefinition))]
-    [KnownType(typeof(EmaKeyDefinition))]
-    [KnownType(typeof(MouseKeyDefinition))]
-    [KnownType(typeof(MouseScrollDefinition))]
-    public abstract class KeyDefinition : ElementDefinition
+    [DataContract(Name = "DirectInputElement", Namespace = "")]
+    [KnownType(typeof(DirectInputButtonDefinition))]
+    [KnownType(typeof(DirectInputAxisDefinition))]
+    public abstract class DirectInputElementDefinition : ElementDefinition
     {
         #region Fields
 
@@ -46,6 +44,12 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// The hardware ID of the DirectInput device 
+        /// </summary>
+        [DataMember]
+        public string DeviceId { get; private set; }
 
         /// <summary>
         /// The boundaries of the key. This is a list of coordinates exactly defining the polygon
@@ -61,12 +65,6 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         public TPoint TextPosition { get; private set; }
 
         /// <summary>
-        /// The keycodes of the key.
-        /// </summary>
-        [DataMember]
-        public List<int> KeyCodes { get; private set; }
-
-        /// <summary>
         /// The text that should be shown.
         /// </summary>
         [DataMember]
@@ -75,27 +73,26 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         #endregion Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyDefinition" /> class.
+        /// Initializes a new instance of the <see cref="DirectInputElementDefinition" /> class.
         /// </summary>
         /// <param name="id">The identifier of the key.</param>
         /// <param name="boundaries">The boundaries.</param>
-        /// <param name="keyCodes">The keycodes.</param>
         /// <param name="text">The text of the key.</param>
         /// <param name="textPosition">The new text position.
         /// If not provided, the new position will be recalculated from the bounding box of the key.</param>
         /// <param name="manipulation">The current manipulation.</param>
-        protected KeyDefinition(
+        protected DirectInputElementDefinition(
             int id,
             List<TPoint> boundaries,
-            List<int> keyCodes,
             string text,
+            string deviceId,
             TPoint textPosition = null,
             ElementManipulation manipulation = null)
         {
             this.Id = id;
             this.Boundaries = boundaries;
-            this.KeyCodes = keyCodes;
             this.Text = text;
+            this.DeviceId = deviceId;
             this.CurrentManipulation = manipulation;
 
             var bb = this.GetBoundingBoxImpl();
@@ -117,7 +114,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// </summary>
         /// <param name="otherKey">The other key to check for overlapping on.</param>
         /// <returns><c>True</c> if the keys overlap, <c>false</c> otherwise.</returns>
-        public bool BordersWith(KeyDefinition otherKey)
+        public bool BordersWith(DirectInputButtonDefinition otherKey)
         {
             var clipper = new Clipper();
 
@@ -336,7 +333,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// </summary>
         /// <param name="diff">The distance to move the text.</param>
         /// <returns>A new key definition with the moved text.</returns>
-        protected abstract KeyDefinition MoveText(Size diff);
+        protected abstract DirectInputElementDefinition MoveText(Size diff);
 
         /// <summary>
         /// Moves an edge by the specified distance.
@@ -345,7 +342,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <see cref="Boundaries"/>.</param>
         /// <param name="diff">The distance to move the edge.</param>
         /// <returns>A new key definition with the moved edge.</returns>
-        protected abstract KeyDefinition MoveEdge(int index, Size diff);
+        protected abstract DirectInputElementDefinition MoveEdge(int index, Size diff);
 
         /// <summary>
         /// Moves a boundary point by the specified distance.
@@ -353,27 +350,27 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="index">The index of the boundary point in <see cref="Boundaries"/>.</param>
         /// <param name="diff">The distance to move the boundary point.</param>
         /// <returns>A new key definition with the moved boundary.</returns>
-        protected abstract KeyDefinition MoveBoundary(int index, Size diff);
+        protected abstract DirectInputElementDefinition MoveBoundary(int index, Size diff);
 
         /// <summary>
         /// Adds a boundary on the edge that is highlighted.
         /// </summary>
         /// <param name="location">To location to add the point at.</param>
         /// <returns>The new version of this key definition with the boundary added.</returns>
-        public abstract KeyDefinition AddBoundary(TPoint location);
+        public abstract DirectInputElementDefinition AddBoundary(TPoint location);
 
         /// <summary>
         /// Removes the highlighted boundary.
         /// </summary>
         /// <returns>The new version of this key definition with the boundary removed.</returns>
-        public abstract KeyDefinition RemoveBoundary();
+        public abstract DirectInputElementDefinition RemoveBoundary();
 
         /// <summary>
         /// Updates the key definition to occupy a region of itself plus the specified other keys.
         /// </summary>
         /// <param name="keys">The keys to union with.</param>
         /// <returns>A new key definition with the updated region.</returns>
-        public abstract KeyDefinition UnionWith(List<KeyDefinition> keys);
+        public abstract DirectInputElementDefinition UnionWith(List<DirectInputElementDefinition> keys);
 
         #region Private methods
 
@@ -430,12 +427,11 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// Specific method for mouse keys that do not have the additional properties of keyboard keys.
         /// </summary>
         /// <param name="boundaries">The new boundaries, or <c>null</c> if not changed.</param>
-        /// <param name="keyCode">The new key code, or <c>null</c> if not changed.</param>
         /// <param name="text">The new text, or <c>null</c> if not changed.</param>
         /// <param name="textPosition">The new text position, or <c>null</c> if not changed.</param>
         /// <returns>The new element definition.</returns>
-        public abstract KeyDefinition ModifyMouse(
-            List<TPoint> boundaries = null, int? keyCode = null, string text = null, TPoint textPosition = null);
+        public abstract DirectInputElementDefinition ModifyMouse(
+            List<TPoint> boundaries = null, string text = null, TPoint textPosition = null);
 
         #endregion Private methods
     }

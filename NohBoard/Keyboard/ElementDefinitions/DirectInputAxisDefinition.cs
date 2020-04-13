@@ -29,16 +29,36 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     /// <summary>
     /// Represents a button or a on a mouse.
     /// </summary>
-    public class DirectInputAxisDefinition : ElementDefinition {
+    [DataContract(Name = "DirectInputAxis", Namespace = "")]
+    public class DirectInputAxisDefinition : DirectInputElementDefinition {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirectInputAxisDefinition" /> class.
+        /// </summary>
+        /// <param name="id">The identifier of the key.</param>
+        /// <param name="boundaries">The boundaries.</param>
+        /// <param name="normalText">The normal text.</param>
+        /// <param name="shiftText">The shift text.</param>
+        /// <param name="changeOnCaps">Whether to change to shift text on caps lock.</param>
+        /// <param name="textPosition">The new text position.
+        /// If not provided, the new position will be recalculated from the bounding box of the key.</param>
+        /// <param name="manipulation">The current manipulation.</param>
+        public DirectInputAxisDefinition(
+            int id,
+            List<TPoint> boundaries,
+            string normalText,
+            string shiftText,
+            string deviceId,
+            bool changeOnCaps,
+            TPoint textPosition = null,
+            ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
+        }
+
+        public override DirectInputElementDefinition AddBoundary(TPoint location) {
+            throw new NotImplementedException();
+        }
+
         public override ElementDefinition Clone() {
-            throw new NotImplementedException();
-        }
-
-        public override Rectangle GetBoundingBox() {
-            throw new NotImplementedException();
-        }
-
-        public override bool Inside(Point point) {
             throw new NotImplementedException();
         }
 
@@ -46,27 +66,31 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             throw new NotImplementedException();
         }
 
-        public override ElementDefinition Manipulate(Size diff) {
+        public override DirectInputElementDefinition ModifyMouse(List<TPoint> boundaries = null, string text = null, TPoint textPosition = null) {
             throw new NotImplementedException();
         }
 
-        public override void RenderEditing(Graphics g) {
-            throw new NotImplementedException();
-        }
-
-        public override void RenderHighlight(Graphics g) {
-            throw new NotImplementedException();
-        }
-
-        public override void RenderSelected(Graphics g) {
-            throw new NotImplementedException();
-        }
-
-        public override bool StartManipulating(Point point, bool altDown, bool preview = false, bool translateOnly = false) {
+        public override DirectInputElementDefinition RemoveBoundary() {
             throw new NotImplementedException();
         }
 
         public override ElementDefinition Translate(int dx, int dy) {
+            throw new NotImplementedException();
+        }
+
+        public override DirectInputElementDefinition UnionWith(List<DirectInputElementDefinition> keys) {
+            throw new NotImplementedException();
+        }
+
+        protected override DirectInputElementDefinition MoveBoundary(int index, Size diff) {
+            throw new NotImplementedException();
+        }
+
+        protected override DirectInputElementDefinition MoveEdge(int index, Size diff) {
+            throw new NotImplementedException();
+        }
+
+        protected override DirectInputElementDefinition MoveText(Size diff) {
             throw new NotImplementedException();
         }
     }

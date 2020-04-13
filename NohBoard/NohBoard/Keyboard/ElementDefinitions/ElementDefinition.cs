@@ -26,6 +26,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     /// </summary>
     [DataContract(Name = "ElementDefinition", Namespace = "")]
     [KnownType(typeof(KeyDefinition))]
+    [KnownType(typeof(DirectInputElementDefinition))]
     [KnownType(typeof(MouseSpeedIndicatorDefinition))]
     public abstract class ElementDefinition : IEquatable<ElementDefinition>
     {
