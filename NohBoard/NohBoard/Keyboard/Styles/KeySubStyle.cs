@@ -97,11 +97,19 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         /// </summary>
         /// <param name="boundingBox">The bounding box of the key.</param>
         /// <returns>The appropriate brush.</returns>
-        public Brush GetBackgroundBrush(Rectangle boundingBox)
-        {
+        public Brush GetBackgroundBrush(Rectangle boundingBox) {
             return this.BackgroundImageFileName == null || !FileHelper.StyleImageExists(this.BackgroundImageFileName)
                 ? new SolidBrush(this.Background)
                 : this.BrushFromImage(boundingBox, this.BackgroundImageFileName);
+        }
+
+        /// <summary>
+        /// Returns the appropriate background brush to use for a key, given its dimensions.
+        /// </summary>
+        /// <param name="boundingBox">The bounding box of the key.</param>
+        /// <returns>The appropriate brush.</returns>
+        public Pen GetBackgroundPen(Rectangle boundingBox) {
+            return new Pen(GetBackgroundBrush(boundingBox));
         }
 
         /// <summary>

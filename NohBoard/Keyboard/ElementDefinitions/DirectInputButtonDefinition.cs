@@ -52,13 +52,56 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         [DataMember]
         public int ButtonNumber { get; private set; }
 
+        /// <summary>
+        /// The center of the button.
+        /// </summary>
+        public TPoint Center {
+            get {
+                var x = this.Boundaries.Sum(p => p.X) / this.Boundaries.Count;
+                var y = this.Boundaries.Sum(p => p.Y) / this.Boundaries.Count;
+
+                return new TPoint(x, y);
+            }
+        }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint TopLeft { get; set; }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint TopRight { get; set; }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint BottomLeft { get; set; }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint BottomRight { get; set; }
+
+        /// <summary>
+        /// The width of the button.
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// The height of the button.
+        /// </summary>
+        public int Height { get; set; }
+
+        private bool PropertiesInitialized;
+
         #endregion Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DirectInputAxisDefinition" /> class.
+        /// Initializes a new instance of the <see cref="DirectInputButtonDefinition" /> class.
         /// </summary>
         /// <param name="id">The identifier of the key.</param>
-        /// <param name="boundaries">The boundaries.</param>
         /// <param name="normalText">The normal text.</param>
         /// <param name="shiftText">The shift text.</param>
         /// <param name="changeOnCaps">Whether to change to shift text on caps lock.</param>
@@ -76,6 +119,10 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
                 this.ButtonNumber = buttonNumber;
+
+            if (!PropertiesInitialized) {
+                InitializeSubProperties();
+            }
         }
 
         /// <summary>
@@ -118,6 +165,24 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.ChangeOnCaps,
                 this.TextPosition,
                 this.CurrentManipulation);
+        }
+
+        private void InitializeSubProperties() {
+            var minx = this.Boundaries.Min(p => p.X);
+            var maxx = this.Boundaries.Max(p => p.X);
+            var miny = this.Boundaries.Min(p => p.Y);
+            var maxy = this.Boundaries.Max(p => p.Y);
+
+            TopLeft = new TPoint(minx, miny);
+            TopRight = new TPoint(maxx, miny);
+            BottomLeft = new TPoint(minx, maxy);
+            BottomRight = new TPoint(maxx, maxy);
+            Width = maxx - minx;
+            Height = maxy - miny;
+
+            //TextPosition = new TPoint(TopLeft.X + Width / 2, TopLeft.Y + Height / 2);
+
+            PropertiesInitialized = true;
         }
 
         /// <summary>
@@ -250,14 +315,17 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
             var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
 
+            if (!PropertiesInitialized) {
+                InitializeSubProperties();
+            }
+
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
-            var txtPoint = new TPoint(
-                this.TextPosition.X - (int)(txtSize.Width / 2),
-                this.TextPosition.Y - (int)(txtSize.Height / 2));
+            var txtPoint = new TPoint(TopLeft.X + Width / 2 -6, TopLeft.Y + Height / 2 - 6);
 
             // Draw the background
             var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
-            g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+
+            g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
 
             // Draw the text
             g.SetClip(this.GetBoundingBox());
@@ -265,10 +333,10 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             g.ResetClip();
 
             // Draw the outline.
-            if (subStyle.ShowOutline)
-                g.DrawPolygon(
-                    new Pen(subStyle.Outline, subStyle.OutlineWidth),
-                    this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+            if (subStyle.ShowOutline) {
+                var backgroundPen = this.GetBackgroundPen(subStyle, pressed);
+                g.DrawEllipse(backgroundPen, TopLeft.X, TopLeft.Y, Width, Height);
+            }
         }
 
         protected override DirectInputElementDefinition MoveEdge(int index, Size diff) {

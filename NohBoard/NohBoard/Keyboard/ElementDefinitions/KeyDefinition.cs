@@ -31,7 +31,6 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     /// </summary>
     [DataContract(Name = "Key", Namespace = "")]
     [KnownType(typeof(KeyboardKeyDefinition))]
-    [KnownType(typeof(EmaKeyDefinition))]
     [KnownType(typeof(MouseKeyDefinition))]
     [KnownType(typeof(MouseScrollDefinition))]
     public abstract class KeyDefinition : ElementDefinition

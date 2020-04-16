@@ -65,6 +65,11 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         /// </summary>
         public static int PressHold { get; set; } = 0;
 
+        /// <summary>
+        /// The amount of milliseconds between each call of the Direct Input polling timer
+        /// </summary>
+        public const int DIRECT_INPUT_POLLING_INTERVAL = 40;
+
         #endregion Properties
 
         #region Methods
@@ -139,14 +144,16 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         /// Acquires the currently connected DirectInput devies
         /// </summary>
         public static void AcquireJoysticks() {
-            foreach (var device in DirectInput.GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices)) {
-                var joystick = new SharpDX.DirectInput.Joystick(DirectInput, device.ProductGuid);
-                Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
-                joystick.Acquire();
+            if (DirectInput != null) {
+                foreach (var device in DirectInput.GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices)) {
+                    var joystick = new SharpDX.DirectInput.Joystick(DirectInput, device.ProductGuid);
+                    Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
+                    joystick.Acquire();
 
-                Devices.Add(joystick);
-                DirectInputState.AddDirectInputDevice(device.ProductGuid);
-            }
+                    Devices.Add(joystick);
+                    DirectInputState.AddDirectInputDevice(device.ProductGuid);
+                }
+            }   
         }
 
         /// <summary>
@@ -161,8 +168,8 @@ namespace ThoNohT.NohBoard.Hooking.Interop
             directInputTimerHandle = new Timer(
                 new TimerCallback(directInputDelegate),
                 null,
-                1000,
-            1000);
+                DIRECT_INPUT_POLLING_INTERVAL,
+            DIRECT_INPUT_POLLING_INTERVAL);
 
             if (directInputTimerHandle != null) return;
 

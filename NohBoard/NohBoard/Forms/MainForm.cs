@@ -243,8 +243,6 @@ namespace ThoNohT.NohBoard.Forms
                     // Render the individual keys.
                     foreach (var def in GlobalSettings.CurrentDefinition.Elements)
                     {
-                        if (def is EmaKeyboardKeyDefinition) ((EmaKeyboardKeyDefinition)def).Render(g, false, shift, caps);
-
                         if (def is KeyboardKeyDefinition) ((KeyboardKeyDefinition)def).Render(g, false, shift, caps);
 
                         if (def is MouseKeyDefinition) ((MouseKeyDefinition)def).Render(g, false, shift, caps);
@@ -677,20 +675,6 @@ namespace ThoNohT.NohBoard.Forms
                 if (!pressed && !alwaysRender) return;
 
                 kkDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
-            }
-            if (def is EmaKeyboardKeyDefinition ekkDef) {
-                var pressed = true;
-                if (!ekkDef.KeyCodes.Any() || !ekkDef.KeyCodes.All(kbKeys.Contains)) pressed = false;
-
-                if (ekkDef.KeyCodes.Count == 1
-                    && allDefs.OfType<KeyboardKeyDefinition>()
-                        .Any(d => d.KeyCodes.Count > 1
-                        && d.KeyCodes.All(kbKeys.Contains)
-                        && d.KeyCodes.ContainsAll(ekkDef.KeyCodes))) pressed = false;
-
-                if (!pressed && !alwaysRender) return;
-
-                ekkDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is DirectInputButtonDefinition dibDef) {
                 var pressed = true;

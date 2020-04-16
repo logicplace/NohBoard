@@ -40,6 +40,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// The background brushes used for the key's pressed and unpressed state.
         /// </summary>
         private Dictionary<bool, Brush> backgroundBrushes;
+        private Dictionary<bool, Pen> backgroundPens;
 
         #endregion Fields
 
@@ -405,6 +406,28 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
             this.backgroundBrushes.Add(pressed, brush);
             return brush;
+        }
+
+        /// <summary>
+        /// Returns the background brush for the key.
+        /// </summary>
+        /// <param name="subStyle">The substyle to use for rendering the key.</param>
+        /// <param name="pressed">Whether the is pressed.</param>
+        /// <returns>A brush to use when rendering the background for the key.</returns>
+        protected Pen GetBackgroundPen(KeySubStyle subStyle, bool pressed) {
+            if (this.backgroundPens == null) this.backgroundPens = new Dictionary<bool, Pen>();
+            if (this.StyleVersion != GlobalSettings.StyleDependencyCounter) {
+                this.backgroundPens.Clear();
+                this.StyleVersion = GlobalSettings.StyleDependencyCounter;
+            }
+
+            if (this.backgroundPens.ContainsKey(pressed))
+                return this.backgroundPens[pressed];
+
+            var pen = subStyle.GetBackgroundPen(this.GetBoundingBox());
+
+            this.backgroundPens.Add(pressed, pen);
+            return pen;
         }
 
         /// <summary>
