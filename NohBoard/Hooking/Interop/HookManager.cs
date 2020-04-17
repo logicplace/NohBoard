@@ -286,6 +286,10 @@ namespace ThoNohT.NohBoard.Hooking.Interop
 
         private static IList<SharpDX.DirectInput.DeviceInstance> connectedJoysticks = new List<SharpDX.DirectInput.DeviceInstance>();
 
+        /// <summary>
+        /// Updates the state of DirectInput devices
+        /// </summary>
+        /// <param name="state"></param>
         private static void DirectInputTimerProc(object state) {
             // for each joystick connected to the system
             foreach (var device in Devices) {
@@ -293,6 +297,8 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                     var jState = device.GetCurrentState();
 
                     DirectInputState.UpdatedPressedElements(device.Information.ProductGuid, jState.Buttons);
+
+                    DirectInputState.UpdateAxis(device.Information.ProductGuid, jState.X, jState.Y, jState.Z, jState.RotationX, jState.RotationY, jState.RotationZ);
                 }
                 catch (Exception) { }
             }

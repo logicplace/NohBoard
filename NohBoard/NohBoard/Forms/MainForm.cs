@@ -609,6 +609,7 @@ namespace ThoNohT.NohBoard.Forms
             KeyboardState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
             var kbKeys = KeyboardState.PressedKeys;
             var diKeys = DirectInputState.PressedButtons;
+            var diAxis = DirectInputState.DirectInputAxis;
             var mouseKeys = MouseState.PressedKeys.Select(k => (int)k).ToList();
             MouseState.CheckKeyHolds(GlobalSettings.Settings.PressHold);
             MouseState.CheckScrollAndMovement();
@@ -616,7 +617,7 @@ namespace ThoNohT.NohBoard.Forms
             var allDefs = GlobalSettings.CurrentDefinition.Elements;
             foreach (var def in allDefs)
             {
-                this.Render(e.Graphics, def, allDefs, kbKeys, mouseKeys, diKeys, scrollCounts, false);
+                this.Render(e.Graphics, def, allDefs, kbKeys, mouseKeys, diKeys, diAxis, scrollCounts, false);
             }
 
             // Draw the element being manipulated
@@ -628,7 +629,7 @@ namespace ThoNohT.NohBoard.Forms
 
                 if (this.selectedDefinition != null)
                 {
-                    this.Render(e.Graphics, this.selectedDefinition, allDefs, kbKeys, mouseKeys, diKeys, scrollCounts, true);
+                    this.Render(e.Graphics, this.selectedDefinition, allDefs, kbKeys, mouseKeys, diKeys, diAxis, scrollCounts, true);
                     this.selectedDefinition.RenderSelected(e.Graphics);
                 }
             }
@@ -658,6 +659,7 @@ namespace ThoNohT.NohBoard.Forms
             IReadOnlyList<int> kbKeys,
             List<int> mouseKeys,
             Dictionary<Guid, bool[]> directInputKeys,
+            Dictionary<Guid, int[]> directInputAxis,
             IReadOnlyList<int> scrollCounts,
             bool alwaysRender)
         {
@@ -683,6 +685,15 @@ namespace ThoNohT.NohBoard.Forms
                 if (directInputKeys.Any() && !directInputKeys[dibDef.DeviceId][dibDef.ButtonNumber]) pressed = false;
 
                 dibDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
+            }
+            if (def is DirectInputAxisDefinition diaDef) {
+                if (!directInputAxis.ContainsKey(diaDef.DeviceId)) return;
+
+                if (directInputAxis.Any() && directInputAxis.ContainsKey(diaDef.DeviceId)) {
+                    int[] axis;
+                    directInputAxis.TryGetValue(diaDef.DeviceId, out axis);
+                    diaDef.Render(g, axis, KeyboardState.ShiftDown, KeyboardState.CapsActive);
+                }
             }
             if (def is MouseKeyDefinition mkDef)
             {

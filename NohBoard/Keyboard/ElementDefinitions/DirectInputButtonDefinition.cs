@@ -27,7 +27,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     using ThoNohT.NohBoard.Keyboard.Styles;
 
     /// <summary>
-    /// Represents a button or a on a mouse.
+    /// Represents a button on a DirectInput device
     /// </summary>
     [DataContract(Name = "DirectInputButton", Namespace = "")]
     public class DirectInputButtonDefinition : DirectInputElementDefinition {
@@ -180,8 +180,6 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             Width = maxx - minx;
             Height = maxy - miny;
 
-            //TextPosition = new TPoint(TopLeft.X + Width / 2, TopLeft.Y + Height / 2);
-
             PropertiesInitialized = true;
         }
 
@@ -218,6 +216,10 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             throw new Exception("Cannot modify  the mouse properties of a joystick button.");
         }
 
+        /// <summary>
+        /// Removes the highlighted boundary.
+        /// </summary>
+        /// <returns>The new version of this key definition with the boundary removed.</returns>
         public override DirectInputElementDefinition RemoveBoundary() {
             if (this.RelevantManipulation == null) return this;
             if (this.RelevantManipulation.Type != ElementManipulationType.MoveBoundary)
@@ -238,6 +240,12 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.RelevantManipulation);
         }
 
+        /// <summary>
+        /// Translates the element, moving it the specified distance.
+        /// </summary>
+        /// <param name="dx">The distance along the x-axis.</param>
+        /// <param name="dy">The distance along the y-axis.</param>
+        /// <returns>A new <see cref="ElementDefinition"/> that is translated.</returns>
         public override ElementDefinition Translate(int dx, int dy) {
             return new DirectInputButtonDefinition(
                 this.Id,
@@ -251,6 +259,11 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.CurrentManipulation);
         }
 
+        /// <summary>
+        /// Updates the key definition to occupy a region of itself plus the specified other keys.
+        /// </summary>
+        /// <param name="keys">The keys to union with.</param>
+        /// <returns>A new key definition with the updated region.</returns>
         public override DirectInputElementDefinition UnionWith(List<DirectInputElementDefinition> keys) {
             return this.UnionWith(keys.ConvertAll(x => (DirectInputButtonDefinition)x));
         }
@@ -286,6 +299,12 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.ChangeOnCaps);
         }
 
+        /// <summary>
+        /// Moves a boundary point by the specified distance.
+        /// </summary>
+        /// <param name="index">The index of the boundary point in <see cref="KeyDefinition.Boundaries"/>.</param>
+        /// <param name="diff">The distance to move the boundary point.</param>
+        /// <returns>A new key definition with the moved boundary.</returns>
         protected override DirectInputElementDefinition MoveBoundary(int index, Size diff) {
             if (index < 0 || index >= this.Boundaries.Count)
                 throw new Exception("Attempting to move a non-existent boundary.");
@@ -339,6 +358,13 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             }
         }
 
+        /// <summary>
+        /// Moves an edge by the specified distance.
+        /// </summary>
+        /// <param name="index">The index of the edge as specified by the first of the two boundaries defining it in
+        /// <see cref="KeyDefinition.Boundaries"/>.</param>
+        /// <param name="diff">The distance to move the edge.</param>
+        /// <returns>A new key definition with the moved edge.</returns>
         protected override DirectInputElementDefinition MoveEdge(int index, Size diff) {
             if (index < 0 || index >= this.Boundaries.Count)
                 throw new Exception("Attempting to move a non-existent edge.");
@@ -363,6 +389,11 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.CurrentManipulation);
         }
 
+        /// <summary>
+        /// Moves the text inside the key by the specified ditsance.
+        /// </summary>
+        /// <param name="diff">The distance to move the text.</param>
+        /// <returns>A new key definition with the moved text.</returns>
         protected override DirectInputElementDefinition MoveText(Size diff) {
             return new DirectInputButtonDefinition(
                 this.Id,

@@ -68,6 +68,11 @@ namespace ThoNohT.NohBoard.Hooking
         protected static readonly Dictionary<Guid, bool[]> pressedButtons = new Dictionary<Guid, bool[]>();
 
         /// <summary>
+        /// A dictionary containing the value of the supported axis
+        /// </summary>
+        protected static readonly Dictionary<Guid, int[]> directInputAxis = new Dictionary<Guid, int[]>();
+
+        /// <summary>
         /// A value indicating whether something has changed since the last check.
         /// </summary>
         protected static bool updated;
@@ -107,9 +112,21 @@ namespace ThoNohT.NohBoard.Hooking
             get { lock (pressedButtons) return pressedButtons; }
         }
 
+        /// <summary>
+        /// Returns a list with all keys that are currently pressed.
+        /// </summary>
+        public static Dictionary<Guid, int[]> DirectInputAxis {
+            get { lock (directInputAxis) return directInputAxis; }
+        }
+
+        /// <summary>
+        /// Registers a new Direct Input device, initiating the data structures associated to it
+        /// </summary>
+        /// <param name="guid"></param>
         public static void AddDirectInputDevice(Guid guid) {
             if (!PressedButtons.ContainsKey(guid)) {
                 pressedButtons.Add(guid, new bool[256]);
+                directInputAxis.Add(guid, new int[6]);
             }
         }
 

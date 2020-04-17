@@ -34,57 +34,41 @@ namespace ThoNohT.NohBoard.Hooking {
         }
 
         /// <summary>
-        /// Adds the specified mouse keycode to the list of pressed keys.
+        /// Replaces the current button matrix for the Direct Input device with the guid passed as parameter
         /// </summary>
-        /// <param name="keyCode">The keycode to add.</param>
-        /// <param name="hold">The minimum time to hold keys.</param>
-        public static void AddPressedElement(int buttonNumber, Guid guid, int hold) {
-            lock (pressedButtons) {
-                EnsureStopwatchRunning();
-
-                var time = keyHoldStopwatch.ElapsedMilliseconds;
-
-                if (!pressedButtons.ContainsKey(guid)) {
-                    pressedButtons.Add(guid, new bool[256]);
-                }
-
-                if (pressedButtons.TryGetValue(guid, out var deviceDictionary)) {
-                    deviceDictionary[buttonNumber] = true;
-
-                    // Always update to keep checking whether to remove the key on the next render cycle.
-                    updated = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the specified keycode from the list of pressed keys.
-        /// </summary>
-        /// <param name="keyCode">The keycode to remove.</param>
-        /// <param name="hold">The minimum time to hold keys.</param>
-        public static void RemovePressedElement(int buttonNumber, Guid guid, int hold) {
-            lock (pressedButtons) {
-                if (!pressedButtons.ContainsKey(guid)) return;
-
-                if (pressedButtons.TryGetValue(guid, out var deviceDictionary)) {
-                    deviceDictionary[buttonNumber] = false;
-
-                    // Always update to keep checking whether to remove the key on the next render cycle.
-                    updated = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Replaces the current button matrix with the updated one
-        /// </summary>
-        /// <param name="buttons">the boolean array of buttons</param>
         /// <param name="guid">the guid of the device we are updating</param>
+        /// <param name="buttons">the boolean array of buttons</param>
         public static void UpdatedPressedElements(Guid guid, bool[] buttons) {
             lock (pressedButtons) {
                 if (!pressedButtons.ContainsKey(guid)) return;
 
                 pressedButtons[guid] = buttons;
+
+                // Always update to keep checking whether to remove the key on the next render cycle.
+                updated = true;
+            }
+        }
+
+        /// <summary>
+        /// Updates the currently supported axis for the Direct Input device with the guid passed as parameter
+        /// </summary>
+        /// <param name="guid">the guid of the device we are updating</param>
+        /// <param name="X">the X axis</param>
+        /// <param name="Y">the Y axis</param>
+        /// <param name="Z">the Z axis</param>
+        /// <param name="RotationX">the RotationX axis</param>
+        /// <param name="RotationY">the RotationY axis</param>
+        /// <param name="RotationZ">the RotationZ axis</param>
+        public static void UpdateAxis(Guid guid, int X, int Y, int Z, int RotationX, int RotationY, int RotationZ) {
+            lock (directInputAxis) {
+                if (!directInputAxis.ContainsKey(guid)) return;
+
+                directInputAxis[guid][(int)DirectInputAxisNames.X] = X;
+                directInputAxis[guid][(int)DirectInputAxisNames.Y] = Y;
+                directInputAxis[guid][(int)DirectInputAxisNames.Z] = Z;
+                directInputAxis[guid][(int)DirectInputAxisNames.RotationX] = RotationX;
+                directInputAxis[guid][(int)DirectInputAxisNames.RotationY] = RotationY;
+                directInputAxis[guid][(int)DirectInputAxisNames.RotationZ] = RotationZ;
 
                 // Always update to keep checking whether to remove the key on the next render cycle.
                 updated = true;
