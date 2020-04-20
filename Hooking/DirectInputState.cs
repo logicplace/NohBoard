@@ -50,6 +50,22 @@ namespace ThoNohT.NohBoard.Hooking {
         }
 
         /// <summary>
+        /// Replaces the current button matrix for the Direct Input device with the guid passed as parameter
+        /// </summary>
+        /// <param name="guid">the guid of the device we are updating</param>
+        /// <param name="dpads">the boolean array of dpad buttons</param>
+        public static void UpdatePressedDpads(Guid guid, int[] dpads) {
+            lock (pressedDpad) {
+                if (!pressedDpad.ContainsKey(guid)) return;
+
+                pressedDpad[guid] = dpads;
+
+                // Always update to keep checking whether to remove the key on the next render cycle.
+                updated = true;
+            }
+        }
+
+        /// <summary>
         /// Updates the currently supported axis for the Direct Input device with the guid passed as parameter
         /// </summary>
         /// <param name="guid">the guid of the device we are updating</param>

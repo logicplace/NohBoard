@@ -343,7 +343,6 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
             // Draw the background
             var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
-
             g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
 
             // Draw the text

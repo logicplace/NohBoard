@@ -68,6 +68,11 @@ namespace ThoNohT.NohBoard.Hooking
         protected static readonly Dictionary<Guid, bool[]> pressedButtons = new Dictionary<Guid, bool[]>();
 
         /// <summary>
+        /// A dictionary containing all currently pressed dpad buttons.
+        /// </summary>
+        protected static readonly Dictionary<Guid, int[]> pressedDpad = new Dictionary<Guid, int[]>();
+
+        /// <summary>
         /// A dictionary containing the value of the supported axis
         /// </summary>
         protected static readonly Dictionary<Guid, int[]> directInputAxis = new Dictionary<Guid, int[]>();
@@ -106,14 +111,21 @@ namespace ThoNohT.NohBoard.Hooking
         }
 
         /// <summary>
-        /// Returns a list with all keys that are currently pressed.
+        /// Returns a Dictrionary with all Direct Input buttons that are currently pressed.
         /// </summary>
         public static Dictionary<Guid, bool[]> PressedButtons {
             get { lock (pressedButtons) return pressedButtons; }
         }
 
         /// <summary>
-        /// Returns a list with all keys that are currently pressed.
+        /// Returns a Dictrionary with all Direct Input d-pad buttons that are currently pressed.
+        /// </summary>
+        public static Dictionary<Guid, int[]> PressedDpads {
+            get { lock (pressedDpad) return pressedDpad; }
+        }
+
+        /// <summary>
+        /// Returns a Dictrionary with the value of all Direct Input axis.
         /// </summary>
         public static Dictionary<Guid, int[]> DirectInputAxis {
             get { lock (directInputAxis) return directInputAxis; }
@@ -126,6 +138,7 @@ namespace ThoNohT.NohBoard.Hooking
         public static void AddDirectInputDevice(Guid guid) {
             if (!PressedButtons.ContainsKey(guid)) {
                 pressedButtons.Add(guid, new bool[256]);
+                pressedDpad.Add(guid, new int[4]);
                 directInputAxis.Add(guid, new int[6]);
             }
         }

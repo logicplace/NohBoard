@@ -24,15 +24,13 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     using System.Runtime.Serialization;
     using ClipperLib;
     using Extra;
-    using ThoNohT.NohBoard.Hooking;
     using ThoNohT.NohBoard.Keyboard.Styles;
 
     /// <summary>
-    /// Represents an axis, or couple of axis, on a DirectInput device
+    /// Represents a button on a DirectInput device
     /// </summary>
-    [DataContract(Name = "DirectInputAxis", Namespace = "")]
-    public class DirectInputAxisDefinition : DirectInputElementDefinition {
-
+    [DataContract(Name = "DirectInputDPad", Namespace = "")]
+    public class DirectInputDpadDefinition : DirectInputElementDefinition {
         #region Properties
 
         /// <summary>
@@ -48,22 +46,43 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         [DataMember]
         public bool ChangeOnCaps { get; private set; }
 
+        /// <summary>
+        /// Indicates the number from 0 to 3 of the DirectInput joystick
+        /// </summary>
         [DataMember]
-        public string AxisOne { get; private set; }
+        public int DpadNumber { get; private set; }
 
-        [DataMember]
-        public string AxisTwo { get; private set; }
+        /// <summary>
+        /// The center of the button.
+        /// </summary>
+        public TPoint Center {
+            get {
+                var x = this.Boundaries.Sum(p => p.X) / this.Boundaries.Count;
+                var y = this.Boundaries.Sum(p => p.Y) / this.Boundaries.Count;
 
-        [DataMember]
-        public int AxisOneMax { get; private set; }
-
-        [DataMember]
-        public int AxisTwoMax { get; private set; }
+                return new TPoint(x, y);
+            }
+        }
 
         /// <summary>
         /// The top left of the button
         /// </summary>
         public TPoint TopLeft { get; set; }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint TopRight { get; set; }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint BottomLeft { get; set; }
+
+        /// <summary>
+        /// The top left of the button
+        /// </summary>
+        public TPoint BottomRight { get; set; }
 
         /// <summary>
         /// The width of the button.
@@ -77,36 +96,33 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
         private bool PropertiesInitialized;
 
-        #endregion
+        #endregion Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DirectInputAxisDefinition" /> class.
+        /// Initializes a new instance of the <see cref="DirectInputDpadDefinition" /> class.
         /// </summary>
         /// <param name="id">The identifier of the key.</param>
-        /// <param name="boundaries">The boundaries.</param>
         /// <param name="normalText">The normal text.</param>
         /// <param name="shiftText">The shift text.</param>
         /// <param name="changeOnCaps">Whether to change to shift text on caps lock.</param>
         /// <param name="textPosition">The new text position.
         /// If not provided, the new position will be recalculated from the bounding box of the key.</param>
         /// <param name="manipulation">The current manipulation.</param>
-        public DirectInputAxisDefinition(
+        public DirectInputDpadDefinition(
             int id,
             List<TPoint> boundaries,
             string normalText,
             string shiftText,
             Guid deviceId,
+            int dpadNumber,
             bool changeOnCaps,
-            string axisOne,
-            string axisTwo,
-            int axisOneMax,
-            int axisTwoMax,
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
-            this.AxisOne = axisOne;
-            this.AxisTwo = axisTwo;
-            this.AxisOneMax = axisOneMax;
-            this.AxisTwoMax = axisTwoMax;
+                this.DpadNumber = dpadNumber;
+
+            if (!PropertiesInitialized) {
+                InitializeSubProperties();
+            }
         }
 
         /// <summary>
@@ -122,17 +138,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             var newBoundaries = this.Boundaries.ToList();
             newBoundaries.Insert(this.RelevantManipulation.Index + 1, location);
 
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 newBoundaries,
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -142,24 +155,18 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// </summary>
         /// <returns>The cloned element definition.</returns>
         public override ElementDefinition Clone() {
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 this.Boundaries.Select(x => x.Clone()).ToList(),
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 this.TextPosition,
                 this.CurrentManipulation);
         }
 
-        /// <summary>
-        /// Initializes the private properties
-        /// </summary>
         private void InitializeSubProperties() {
             var minx = this.Boundaries.Min(p => p.X);
             var maxx = this.Boundaries.Max(p => p.X);
@@ -167,6 +174,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             var maxy = this.Boundaries.Max(p => p.Y);
 
             TopLeft = new TPoint(minx, miny);
+            TopRight = new TPoint(maxx, miny);
+            BottomLeft = new TPoint(minx, maxy);
+            BottomRight = new TPoint(maxx, maxy);
             Width = maxx - minx;
             Height = maxy - miny;
 
@@ -179,17 +189,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="other">The definition to compare against.</param>
         /// <returns>True if the definition has changes, false otherwise.</returns>
         public override bool IsChanged(ElementDefinition other) {
-            if (!(other is DirectInputAxisDefinition kkd)) return true;
+            if (!(other is DirectInputDpadDefinition kkd)) return true;
 
             if (this.Text != kkd.Text) return true;
             if (this.ShiftText != kkd.ShiftText) return true;
             if (this.ChangeOnCaps != kkd.ChangeOnCaps) return true;
             if (this.TextPosition.IsChanged(kkd.TextPosition)) return true;
             if (!this.DeviceId.Equals(kkd.DeviceId)) return true;
-            if (this.AxisOne != kkd.AxisOne) return true;
-            if (this.AxisTwo != kkd.AxisTwo) return true;
-            if (this.AxisOneMax != kkd.AxisOneMax) return true;
-            if (this.AxisTwoMax != kkd.AxisTwoMax) return true;
+            if (this.DpadNumber != kkd.DpadNumber) return true;
 
             if (this.Boundaries.Count != kkd.Boundaries.Count) return true;
 
@@ -221,17 +228,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             if (this.Boundaries.Count < 4)
                 throw new Exception("Cannot have less than 3 boundary in an element.");
 
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 this.Boundaries.Where((b, i) => i != this.RelevantManipulation.Index).ToList(),
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 this.TextPosition,
                 this.RelevantManipulation);
         }
@@ -243,17 +247,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="dy">The distance along the y-axis.</param>
         /// <returns>A new <see cref="ElementDefinition"/> that is translated.</returns>
         public override ElementDefinition Translate(int dx, int dy) {
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 this.Boundaries.Select(b => b.Translate(dx, dy)).ToList(),
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 this.TextPosition.Translate(dx, dy),
                 this.CurrentManipulation);
         }
@@ -264,7 +265,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="keys">The keys to union with.</param>
         /// <returns>A new key definition with the updated region.</returns>
         public override DirectInputElementDefinition UnionWith(List<DirectInputElementDefinition> keys) {
-            return this.UnionWith(keys.ConvertAll(x => (DirectInputAxisDefinition)x));
+            return this.UnionWith(keys.ConvertAll(x => (DirectInputDpadDefinition)x));
         }
 
         /// <summary>
@@ -272,7 +273,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// </summary>
         /// <param name="keys">The keys to union with.</param>
         /// <returns>A new key definition with the updated region.</returns>
-        private DirectInputAxisDefinition UnionWith(IList<DirectInputAxisDefinition> keys) {
+        private DirectInputDpadDefinition UnionWith(IList<DirectInputDpadDefinition> keys) {
             var newBoundaries = this.Boundaries.Select(b => new TPoint(b.X, b.Y)).ToList();
 
             if (keys.Any()) {
@@ -288,17 +289,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 newBoundaries = union.Single().ConvertAll<TPoint>(x => x);
             }
 
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 newBoundaries,
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
-                this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax);
+                this.DpadNumber,
+                this.ChangeOnCaps);
         }
 
         /// <summary>
@@ -311,17 +309,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             if (index < 0 || index >= this.Boundaries.Count)
                 throw new Exception("Attempting to move a non-existent boundary.");
 
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 this.Boundaries.Select((b, i) => i != index ? b : b + diff).ToList(),
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -333,57 +328,69 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="pressed">A value indicating whether to render the key in its pressed state or not.</param>
         /// <param name="shift">A value indicating whether shift is pressed during the render.</param>
         /// <param name="capsLock">A value indicating whether caps lock is pressed during the render.</param>
-        public void Render(Graphics g, int[] directInputAxis, bool shift, bool capsLock) {
+        public void Render(Graphics g, int dpadValue, bool shift, bool capsLock) {
+            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
+                            ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
+            var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
+            var subStyle = style?.Loose ?? defaultStyle.Loose;
+            var backgroundBrush = this.GetBackgroundBrush(subStyle, false);
+            var foregroundBrush = this.GetBackgroundBrush(subStyle, true);
+
+            var borderPen = new Pen(subStyle.Outline, subStyle.OutlineWidth);
 
             if (!PropertiesInitialized) {
                 InitializeSubProperties();
             }
 
-            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
-                            ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = style.Pressed;
+            float x1 = TopLeft.X;
+            float x2 = TopLeft.X + Width / 3;
+            float x3 = TopLeft.X + 2* (Width / 3);
+            float x4 = TopRight.X;
 
-            // Draw the background
-            var backgroundBrush = this.GetBackgroundBrush(subStyle, true);
-            g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+            float y1 = TopLeft.Y;
+            float y2 = TopLeft.Y + Height / 3;
+            float y3 = TopLeft.Y + 2 * (Height / 3);
+            float y4 = BottomLeft.Y;
 
-            var axis1Number = Enum.Parse(typeof(DirectInputAxisNames), AxisOne);
-            var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
+            // Draws the D-pad
+            if (subStyle.ShowOutline) {
+                g.DrawLine(borderPen, x2, y1, x3, y1);
+                g.DrawLine(borderPen, x3, y1, x3, y2);
+                g.DrawLine(borderPen, x3, y2, x4, y2);
+                g.DrawLine(borderPen, x4, y2, x4, y3);
+                g.DrawLine(borderPen, x4, y3, x3, y3);
+                g.DrawLine(borderPen, x3, y3, x3, y4);
+                g.DrawLine(borderPen, x3, y4, x2, y4);
+                g.DrawLine(borderPen, x2, y4, x2, y3);
+                g.DrawLine(borderPen, x2, y3, x1, y3);
+                g.DrawLine(borderPen, x1, y3, x1, y2);
+                g.DrawLine(borderPen, x1, y2, x2, y2);
+                g.DrawLine(borderPen, x2, y2, x2, y1);
+            }
 
-            int axis1Value = directInputAxis[(int)axis1Number];
-            int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
-
-            var dotX = TopLeft.X + ((double)axis1Value / (double)AxisOneMax) * Width - 3;
-            var dotY = TopLeft.Y + ((double)axis2Value / (double)AxisTwoMax) * Height - 3;
-            
-            var foregroundBrush = new SolidBrush(Color.Black);
-            g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, 5, 5);
-
-            /*
-            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
-                            ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
+            // Draws the up fill if needed
+            if (dpadValue == 31500 || dpadValue == 0 || dpadValue == 4500) {
+                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
+            }
+            if (dpadValue == 4500 || dpadValue == 9000 || dpadValue == 13500) {
+                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
+            }
+            if (dpadValue == 13500 || dpadValue == 18000 || dpadValue == 22500) {
+                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
+            }
+            if (dpadValue == 22500 || dpadValue == 27000 || dpadValue == 31500) {
+                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
+            }
 
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
-            var txtPoint = new TPoint(TopLeft.X + Width / 2 - 6, TopLeft.Y + Height / 2 - 6);
-
-            // Draw the background
-            var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
-
-            g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
+            var txtPoint = new TPoint(
+                this.TextPosition.X - (int)(txtSize.Width / 2),
+                this.TextPosition.Y - (int)(txtSize.Height / 2));
 
             // Draw the text
             g.SetClip(this.GetBoundingBox());
             g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
             g.ResetClip();
-
-            // Draw the outline.
-            if (subStyle.ShowOutline) {
-                var backgroundPen = this.GetBackgroundPen(subStyle, pressed);
-                g.DrawEllipse(backgroundPen, TopLeft.X, TopLeft.Y, Width, Height);
-            }
-            */
         }
 
         /// <summary>
@@ -405,17 +412,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             var othogonalVector = edgeVector.RotateDegrees(90);
             var projectedDiff = ((SizeF)diff).ProjectOn(othogonalVector);
 
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 this.Boundaries.Select((b, i) => !doUpdate(i) ? b : b + projectedDiff).ToList(),
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -426,17 +430,14 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="diff">The distance to move the text.</param>
         /// <returns>A new key definition with the moved text.</returns>
         protected override DirectInputElementDefinition MoveText(Size diff) {
-            return new DirectInputAxisDefinition(
+            return new DirectInputDpadDefinition(
                 this.Id,
                 this.Boundaries.ToList(),
                 this.Text,
                 this.ShiftText,
                 this.DeviceId,
+                this.DpadNumber,
                 this.ChangeOnCaps,
-                this.AxisOne,
-                this.AxisTwo,
-                this.AxisOneMax,
-                this.AxisTwoMax,
                 this.TextPosition + diff,
                 this.CurrentManipulation);
         }

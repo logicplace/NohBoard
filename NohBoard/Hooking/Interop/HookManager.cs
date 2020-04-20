@@ -298,6 +298,8 @@ namespace ThoNohT.NohBoard.Hooking.Interop
 
                     DirectInputState.UpdatedPressedElements(device.Information.ProductGuid, jState.Buttons);
 
+                    DirectInputState.UpdatePressedDpads(device.Information.ProductGuid, jState.PointOfViewControllers);
+
                     DirectInputState.UpdateAxis(device.Information.ProductGuid, jState.X, jState.Y, jState.Z, jState.RotationX, jState.RotationY, jState.RotationZ);
                 }
                 catch (Exception) { }

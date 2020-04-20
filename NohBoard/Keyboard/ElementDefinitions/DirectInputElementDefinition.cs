@@ -31,6 +31,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     /// </summary>
     [DataContract(Name = "DirectInputElement", Namespace = "")]
     [KnownType(typeof(DirectInputButtonDefinition))]
+    [KnownType(typeof(DirectInputDpadDefinition))]
     [KnownType(typeof(DirectInputAxisDefinition))]
     public abstract class DirectInputElementDefinition : ElementDefinition
     {
