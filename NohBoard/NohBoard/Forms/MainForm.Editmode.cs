@@ -754,6 +754,16 @@ namespace ThoNohT.NohBoard.Forms
                 }
             }
 
+            if (relevantElement is DirectInputButtonDefinition directInputButtonElement) {
+                using (var propertiesForm = new DirectInputButtonPropertiesForm(directInputButtonElement)) {
+                    propertiesForm.DefinitionChanged += OnDefinitionChanged;
+                    propertiesForm.DefinitionSaved += OnDefinitionSaved;
+
+                    propertiesForm.ShowDialog(this);
+                    return;
+                }
+            }
+
             throw new Exception("Unknown element, cannot open properties form.");
         }
 

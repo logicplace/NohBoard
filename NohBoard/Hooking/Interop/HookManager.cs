@@ -301,6 +301,16 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                     DirectInputState.UpdatePressedDpads(device.Information.ProductGuid, jState.PointOfViewControllers);
 
                     DirectInputState.UpdateAxis(device.Information.ProductGuid, jState.X, jState.Y, jState.Z, jState.RotationX, jState.RotationY, jState.RotationZ);
+
+                    if (DirectInputButtonInsert != null) {
+                        for (int j = 0; j < 32; j++) {
+                            if (jState.Buttons[j]) {
+                                //DirectInputButtonInsert.Invoke(j, device.Information.ProductGuid.ToString());
+                                DirectInputButtonInsert.Invoke(j);
+                                return;
+                            }
+                        }
+                    }
                 }
                 catch (Exception) { }
             }

@@ -51,6 +51,12 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         public static Func<int, bool> KeyboardInsert = null;
 
         /// <summary>
+        /// If this property is set, every key-code processed from the keyboard will be passed through this function.
+        /// If the function returns true, the keycode is then trapped.
+        /// </summary>
+        public static Func<int, bool> DirectInputButtonInsert = null;
+
+        /// <summary>
         /// The keycode that toggles the mouse and or keyboard traps. Default is Scroll Lock.
         /// </summary>
 	    public static int TrapToggleKeyCode { get; set; } = VK_SCROLL;
@@ -144,6 +150,8 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         /// Acquires the currently connected DirectInput devies
         /// </summary>
         public static void AcquireJoysticks() {
+            Devices.Clear();
+
             if (DirectInput != null) {
                 foreach (var device in DirectInput.GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices)) {
                     var joystick = new SharpDX.DirectInput.Joystick(DirectInput, device.ProductGuid);
@@ -153,16 +161,13 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                     Devices.Add(joystick);
                     DirectInputState.AddDirectInputDevice(device.ProductGuid);
                 }
-            }   
+            }
         }
 
         /// <summary>
         /// Enables the joystick hook
         /// </summary>
         public static void EnableDirectInputTimer() {
-            // Acquire the joysticks currently connected
-            AcquireJoysticks();
-
             directInputDelegate = DirectInputTimerProc;
 
             directInputTimerHandle = new Timer(

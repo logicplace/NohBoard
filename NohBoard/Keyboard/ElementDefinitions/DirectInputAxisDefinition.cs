@@ -60,6 +60,12 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         [DataMember]
         public int AxisTwoMax { get; private set; }
 
+        [DataMember]
+        public int StickWidth { get; private set; }
+
+        [DataMember]
+        public int StickHeight { get; private set; }
+
         /// <summary>
         /// The top left of the button
         /// </summary>
@@ -339,13 +345,21 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 InitializeSubProperties();
             }
 
-            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
-                            ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = style.Pressed;
+            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(this.Id)
+                            ?? null;
+            var defaultKeyStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
+            var subStyle = style != null ? style.Substyle : defaultKeyStyle.Pressed;
+
+            var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
+            var txtPoint = new TPoint(
+                this.TextPosition.X - (int)(txtSize.Width / 2),
+                this.TextPosition.Y - (int)(txtSize.Height / 2));
 
             // Draw the background
-            var backgroundBrush = this.GetBackgroundBrush(subStyle, true);
-            g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+            if (style == null || (style != null && style.DrawAxisBackground)) {
+                var backgroundBrush = this.GetBackgroundBrush(subStyle, true);
+                g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+            }
 
             var axis1Number = Enum.Parse(typeof(DirectInputAxisNames), AxisOne);
             var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
@@ -353,37 +367,88 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             int axis1Value = directInputAxis[(int)axis1Number];
             int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
 
-            var dotX = TopLeft.X + ((double)axis1Value / (double)AxisOneMax) * Width - 3;
-            var dotY = TopLeft.Y + ((double)axis2Value / (double)AxisTwoMax) * Height - 3;
-            
-            var foregroundBrush = new SolidBrush(Color.Black);
-            g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, 5, 5);
+            var dotX = TopLeft.X + ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
+            var dotY = TopLeft.Y + ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
+            dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
+            dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
+            var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
 
-            /*
-            var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
-                            ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
-
-            var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
-            var txtPoint = new TPoint(TopLeft.X + Width / 2 - 6, TopLeft.Y + Height / 2 - 6);
-
-            // Draw the background
-            var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
-
-            g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
+            var foregroundBrush = GetAxisBrush(style, boundingBox, axis1Value, axis2Value);
+            g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, StickWidth, StickHeight);
 
             // Draw the text
-            g.SetClip(this.GetBoundingBox());
             g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
             g.ResetClip();
 
             // Draw the outline.
-            if (subStyle.ShowOutline) {
-                var backgroundPen = this.GetBackgroundPen(subStyle, pressed);
-                g.DrawEllipse(backgroundPen, TopLeft.X, TopLeft.Y, Width, Height);
+            if (subStyle.ShowOutline)
+                g.DrawPolygon(
+                    new Pen(subStyle.Outline, subStyle.OutlineWidth),
+                    this.Boundaries.ConvertAll<Point>(x => x).ToArray());
+        }
+
+        /// <summary>
+        /// Returns the brush used to draw the Axis dot
+        /// </summary>
+        /// <param name="style">The Axis style.</param>
+        /// <param name="x">The Axis x coordinate.</param>
+        /// <param name="y">The Axis y coordinate.</param>
+        /// <returns></returns>
+        public Brush GetAxisBrush(DirectInputAxisStyle style, Rectangle boundingBox, int x, int y) {
+            if (style != null ? style.DrawDirectionalIcon : false) {
+
+                string imageFileName = style.BackgroundNeutralImageFileName;
+                double relativeX = (double)x / (double)AxisOneMax;
+                double relativeY = (double)y / (double)AxisTwoMax;
+
+                if (relativeX < 0.4 || relativeY < 0.4) {
+                    imageFileName = relativeX < relativeY ? style.BackgroundLeftImageFileName : style.BackgroundTopImageFileName;
+                }
+
+                if (relativeX > 0.6 || relativeY > 0.6) {
+                    imageFileName = relativeX > relativeY ? style.BackgroundRightImageFileName : style.BackgroundBottomImageFileName;
+                }
+
+                return style.Substyle.BackgroundImageFileName == null || !FileHelper.StyleImageExists(imageFileName)
+                    ? new SolidBrush(style.Substyle.Background)
+                    : this.BrushFromImage(boundingBox, imageFileName);
+            } else {
+                return new SolidBrush(Color.Black);
             }
-            */
+        }
+
+        /// <summary>
+        /// Creates a brush from an image.
+        /// </summary>
+        /// <param name="boundingBox">The bounding box to fit the brush in.</param>
+        /// <param name="fileName">The filename to load the image from. This filename should be relative to the images
+        /// folder of the current style.</param>
+        /// <returns>The brush created from the image.</returns>
+        private Brush BrushFromImage(Rectangle boundingBox, string fileName) {
+            var img = ImageCache.Get(fileName);
+            var gu = GraphicsUnit.Pixel;
+            var imgBb = img.GetBounds(ref gu);
+
+            // Create a texture brush from the image.
+            var tex = new TextureBrush(img, imgBb);
+            tex.TranslateTransform(boundingBox.Left, boundingBox.Top);
+            tex.TranslateTransform(-25, -25);
+            tex.ScaleTransform(boundingBox.Width / imgBb.Width, boundingBox.Height / imgBb.Height);
+
+            return tex;
+        }
+
+        /// <summary>
+        /// Returns the bounding box of this element.
+        /// </summary>
+        /// <param name="x">The Axis x coordinate.</param>
+        /// <param name="y">The Axis y coordinate.</param>
+        /// <returns>A rectangle representing the bounding box of the element.</returns>
+        private Rectangle GetBoundingBoxImpl(int x, int y) {
+            var min = new Point(x - StickWidth / 2, y - StickHeight / 2);
+            var max = new Point(x + StickWidth / 2, y + StickHeight / 2);
+
+            return new Rectangle(min, new Size(StickWidth, StickHeight));
         }
 
         /// <summary>

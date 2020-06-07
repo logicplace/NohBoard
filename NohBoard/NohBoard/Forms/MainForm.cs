@@ -145,7 +145,7 @@ namespace ThoNohT.NohBoard.Forms
             else
                 HookManager.DisableKeyboardHook();
 
-            if (GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputButtonDefinition)) {
+            if (GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputButtonDefinition) || GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputAxisDefinition) || GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputDpadDefinition)) {
                 HookManager.EnableDirectInputTimer();
             } else {
                 HookManager.DisableDirectInputTimer();
@@ -689,7 +689,6 @@ namespace ThoNohT.NohBoard.Forms
                 dibDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is DirectInputDpadDefinition didDef) {
-                var pressed = true;
                 if (!directInputDpad.ContainsKey(didDef.DeviceId)) return;
 
                 didDef.Render(g, directInputDpad[didDef.DeviceId][didDef.DpadNumber], KeyboardState.ShiftDown, KeyboardState.CapsActive);
