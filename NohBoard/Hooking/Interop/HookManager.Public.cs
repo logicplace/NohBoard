@@ -19,6 +19,7 @@ namespace ThoNohT.NohBoard.Hooking.Interop
 {
     using SharpDX.DirectInput;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Runtime.InteropServices;
     using System.Threading;
@@ -188,6 +189,10 @@ namespace ThoNohT.NohBoard.Hooking.Interop
             directInputTimerHandle.Change(
                 Timeout.Infinite,
                 Timeout.Infinite);
+        }
+
+        public static List<Joystick> GetCurrentlyActiveJoysticks() {
+            return HookManager.Devices;
         }
 
         #endregion Methods

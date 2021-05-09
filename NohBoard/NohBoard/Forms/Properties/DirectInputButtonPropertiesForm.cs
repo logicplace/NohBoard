@@ -23,6 +23,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
     using System.Windows.Forms;
     using Extra;
     using Keyboard.ElementDefinitions;
+    using SharpDX.DirectInput;
+    using ThoNohT.NohBoard.Hooking.Interop;
 
     /// <summary>
     /// The form used to update the properties of a keyboard key.
@@ -47,9 +49,14 @@ namespace ThoNohT.NohBoard.Forms.Properties
         private bool detectingButtonNumber;
 
         /// <summary>
-        /// Datasource for the Buttons Combobox
+        /// The joystick currently associated to this control
         /// </summary>
-        public List<Item> comboBoxItems = new List<Item>();
+        private Joystick selectedJoystick = null;
+
+        /// <summary>
+        /// All of the devices currently connected to the machine
+        /// </summary>
+        private List<Joystick> devices = null;
 
         #endregion Fields
 
@@ -114,6 +121,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
             //this.cmbButtonNumber.DisplayMember = "Name";
             //this.cmbButtonNumber.ValueMember = "Id";
 
+            /*
             this.cmbButtonNumber.Items.Add("Button 1");
             this.cmbButtonNumber.Items.Add("Button 2");
             this.cmbButtonNumber.Items.Add("Button 3");
@@ -123,6 +131,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.cmbButtonNumber.Items.Add("Button 7");
             this.cmbButtonNumber.Items.Add("Button 8");
             this.cmbButtonNumber.Items.Add("Button 9");
+            */
         }
 
         /// <summary>
@@ -139,6 +148,29 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtDeviceId.Text = this.initialDefinition.DeviceId.ToString();
             this.cmbButtonNumber.SelectedValue = this.initialDefinition.ButtonNumber;
 
+            // Retrieves all of the currently available joysticks and lists them here
+            this.devices = HookManager.GetCurrentlyActiveJoysticks();
+            var data = new List<JoystickComboBoxItem>();
+            data.Add(new JoystickComboBoxItem(Guid.Empty.ToString(), "No Device Selected"));
+
+            foreach (var device in this.devices) {
+                data.Add(new JoystickComboBoxItem(device.Information.ProductGuid.ToString(), device.Information.ProductName));
+            }
+
+            // Sets the Joystick Combobox DataSource
+            this.comboBoxDevicesList.ValueMember = "ID";
+            this.comboBoxDevicesList.DisplayMember = "Text";
+            this.comboBoxDevicesList.DataSource = data;
+
+            // If one of the currently available joysticks matches the ID of the currentDefinition, we take it as the currently selected one
+            foreach (var joystick in this.devices) {
+                if (joystick.Information.ProductGuid == this.currentDefinition.DeviceId) {
+                    this.selectedJoystick = joystick;
+                    this.comboBoxDevicesList.SelectedValue = joystick.Information.ProductGuid.ToString();
+                    break;
+                }
+            }
+
             // Only add the event handlers after the initial properties have been set.
             this.lstBoundaries.SelectedIndexChanged += this.lstBoundaries_SelectedIndexChanged;
             this.txtText.TextChanged += this.txtText_TextChanged;
@@ -146,6 +178,27 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtShiftText.TextChanged += this.txtShiftText_TextChanged;
             this.chkChangeOnCaps.CheckedChanged += this.chkChangeOnCaps_CheckedChanged;
             this.txtDeviceId.TextChanged += this.txtDeviceId_TextChanged;
+        }
+
+        private void RefreshFormOnJoystickChange() {
+            this.cmbButtonNumber.Items.Clear();
+
+            if (this.selectedJoystick == null) {
+                cmbButtonNumber.Enabled = false;
+                btnDetectButton.Enabled = false;
+
+                this.cmbButtonNumber.Items.Add("Select a device first");
+            } else {
+                cmbButtonNumber.Enabled = true;
+                btnDetectButton.Enabled = true;
+
+                var state = this.selectedJoystick.GetCurrentState();
+
+                int counter = 0;
+                foreach (var button in state.Buttons) {
+                    this.cmbButtonNumber.Items.Add(string.Format("Button {0}", ++counter));
+                }
+            }
         }
 
         #region Boundaries
@@ -465,6 +518,23 @@ namespace ThoNohT.NohBoard.Forms.Properties
             DialogResult = DialogResult.Cancel;
         }
 
+        /// <summary>
+        /// Selects a different joystick from the dropdown
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxDevicesList_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox comboBox = (ComboBox)sender;
+            string selectedGuid = comboBox.SelectedValue.ToString();
+
+            this.selectedJoystick = null;
+            foreach (var joystick in this.devices) {
+                if (joystick.Information.ProductGuid.ToString() == selectedGuid) {
+                    this.selectedJoystick = joystick;
+                    break;
+                }
+            }
+        }
     }
 
     public class Item {
