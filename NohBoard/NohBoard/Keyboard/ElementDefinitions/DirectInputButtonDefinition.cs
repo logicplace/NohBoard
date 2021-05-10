@@ -425,7 +425,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 boundaries ?? this.Boundaries.Select(x => x.Clone()).ToList(),
                 text ?? this.Text,
                 shiftText ?? this.ShiftText,
-                Guid.Parse(deviceId) != Guid.Empty ? Guid.Parse(deviceId) : this.DeviceId,
+                deviceId != null && Guid.Parse(deviceId) != Guid.Empty ? Guid.Parse(deviceId) : this.DeviceId,
                 buttonNumber != 0 ? buttonNumber : this.ButtonNumber,
                 changeOnCaps ?? this.ChangeOnCaps,
                 textPosition ?? this.TextPosition,

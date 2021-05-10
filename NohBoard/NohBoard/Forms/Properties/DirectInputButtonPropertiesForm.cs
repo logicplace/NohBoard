@@ -83,55 +83,6 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.initialDefinition = initialDefinition;
             this.currentDefinition = (DirectInputButtonDefinition) initialDefinition.Clone();
             this.InitializeComponent();
-
-            //comboBoxItems.Add(new Item("Button 1", 1));
-            //comboBoxItems.Add(new Item("Button 2", 2));
-            //comboBoxItems.Add(new Item("Button 3", 3));
-            //comboBoxItems.Add(new Item("Button 4", 4));
-            //comboBoxItems.Add(new Item("Button 5", 5));
-            //comboBoxItems.Add(new Item("Button 6", 6));
-            //comboBoxItems.Add(new Item("Button 7", 7));
-            //comboBoxItems.Add(new Item("Button 8", 8));
-            //comboBoxItems.Add(new Item("Button 9", 9));
-            //comboBoxItems.Add(new Item("Button 10", 10));
-            //comboBoxItems.Add(new Item("Button 11", 11));
-            //comboBoxItems.Add(new Item("Button 12", 12));
-            //comboBoxItems.Add(new Item("Button 13", 13));
-            //comboBoxItems.Add(new Item("Button 14", 14));
-            //comboBoxItems.Add(new Item("Button 15", 15));
-            //comboBoxItems.Add(new Item("Button 16", 16));
-            //comboBoxItems.Add(new Item("Button 17", 17));
-            //comboBoxItems.Add(new Item("Button 18", 18));
-            //comboBoxItems.Add(new Item("Button 19", 19));
-            //comboBoxItems.Add(new Item("Button 20", 20));
-            //comboBoxItems.Add(new Item("Button 21", 21));
-            //comboBoxItems.Add(new Item("Button 22", 22));
-            //comboBoxItems.Add(new Item("Button 23", 23));
-            //comboBoxItems.Add(new Item("Button 24", 24));
-            //comboBoxItems.Add(new Item("Button 25", 25));
-            //comboBoxItems.Add(new Item("Button 26", 26));
-            //comboBoxItems.Add(new Item("Button 27", 27));
-            //comboBoxItems.Add(new Item("Button 28", 28));
-            //comboBoxItems.Add(new Item("Button 29", 29));
-            //comboBoxItems.Add(new Item("Button 30", 30));
-            //comboBoxItems.Add(new Item("Button 31", 31));
-            //comboBoxItems.Add(new Item("Button 32", 32));
-
-            //this.cmbButtonNumber.DataSource = comboBoxItems;
-            //this.cmbButtonNumber.DisplayMember = "Name";
-            //this.cmbButtonNumber.ValueMember = "Id";
-
-            /*
-            this.cmbButtonNumber.Items.Add("Button 1");
-            this.cmbButtonNumber.Items.Add("Button 2");
-            this.cmbButtonNumber.Items.Add("Button 3");
-            this.cmbButtonNumber.Items.Add("Button 4");
-            this.cmbButtonNumber.Items.Add("Button 5");
-            this.cmbButtonNumber.Items.Add("Button 6");
-            this.cmbButtonNumber.Items.Add("Button 7");
-            this.cmbButtonNumber.Items.Add("Button 8");
-            this.cmbButtonNumber.Items.Add("Button 9");
-            */
         }
 
         /// <summary>
@@ -146,7 +97,6 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.lstBoundaries.Items.AddRange(this.initialDefinition.Boundaries.Cast<object>().ToArray());
             this.chkChangeOnCaps.Checked = this.initialDefinition.ChangeOnCaps;
             this.txtDeviceId.Text = this.initialDefinition.DeviceId.ToString();
-            this.cmbButtonNumber.SelectedValue = this.initialDefinition.ButtonNumber;
 
             // Retrieves all of the currently available joysticks and lists them here
             this.devices = HookManager.GetCurrentlyActiveJoysticks();
@@ -171,6 +121,9 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 }
             }
 
+            // Refreshes the Buttons dropdown
+            RefreshFormOnJoystickChange();
+
             // Only add the event handlers after the initial properties have been set.
             this.lstBoundaries.SelectedIndexChanged += this.lstBoundaries_SelectedIndexChanged;
             this.txtText.TextChanged += this.txtText_TextChanged;
@@ -178,26 +131,36 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtShiftText.TextChanged += this.txtShiftText_TextChanged;
             this.chkChangeOnCaps.CheckedChanged += this.chkChangeOnCaps_CheckedChanged;
             this.txtDeviceId.TextChanged += this.txtDeviceId_TextChanged;
+            this.cmbButtonNumber.SelectedIndexChanged += this.cmbButtonNumber_SelectedIndexChanged;
+            this.comboBoxDevicesList.SelectedIndexChanged += this.comboBoxDevicesList_SelectedIndexChanged;
         }
 
+        /// <summary>
+        /// Refresh the status of the Buttons Combobox as well as the Detect button
+        /// </summary>
         private void RefreshFormOnJoystickChange() {
-            this.cmbButtonNumber.Items.Clear();
+            this.cmbButtonNumber.DataSource = null;
 
             if (this.selectedJoystick == null) {
                 cmbButtonNumber.Enabled = false;
                 btnDetectButton.Enabled = false;
 
+                this.cmbButtonNumber.Items.Clear();
                 this.cmbButtonNumber.Items.Add("Select a device first");
             } else {
                 cmbButtonNumber.Enabled = true;
                 btnDetectButton.Enabled = true;
 
-                var state = this.selectedJoystick.GetCurrentState();
-
                 int counter = 0;
-                foreach (var button in state.Buttons) {
-                    this.cmbButtonNumber.Items.Add(string.Format("Button {0}", ++counter));
+                var data = new List<JoystickButtonComboBoxItem>();
+                while (counter < this.selectedJoystick.Capabilities.ButtonCount) {
+                    data.Add(new JoystickButtonComboBoxItem(++counter, string.Format("Button {0}", counter)));
                 }
+
+                this.cmbButtonNumber.ValueMember = "ID";
+                this.cmbButtonNumber.DisplayMember = "Text";
+                this.cmbButtonNumber.DataSource = data;
+                this.cmbButtonNumber.SelectedValue = this.currentDefinition.ButtonNumber;
             }
         }
 
@@ -412,10 +375,17 @@ namespace ThoNohT.NohBoard.Forms.Properties
         private void btnDetectButton_Click(object sender, EventArgs e) {
             this.detectingButtonNumber = !this.detectingButtonNumber;
 
+            // If we just hit the Detect Button...
             if (this.detectingButtonNumber) {
+                // Change the label of the button
                 this.btnDetectButton.Text = "Detecting...";
+
+                // Wait for a button press
                 Hooking.Interop.HookManager.DirectInputButtonInsert = (code) => {
-                    this.cmbButtonNumber.Text = code.ToString();
+
+                    // Changes current definition
+                    this.currentDefinition = this.currentDefinition.Modify(buttonNumber: code);
+
                     return true;
                 };
             } else {
@@ -533,6 +503,25 @@ namespace ThoNohT.NohBoard.Forms.Properties
                     this.selectedJoystick = joystick;
                     break;
                 }
+            }
+
+            // Handles changing the device
+            this.currentDefinition = this.currentDefinition.Modify(deviceId: selectedGuid);
+            this.DefinitionChanged?.Invoke(this.currentDefinition);
+
+            // Refreshes the Buttons dropdown
+            RefreshFormOnJoystickChange();
+        }
+
+        private void cmbButtonNumber_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox comboBox = (ComboBox)sender;
+
+            if (comboBox.SelectedItem != null) {
+                int selectedButton = ((JoystickButtonComboBoxItem)comboBox.SelectedItem).ID;
+
+                // Handles changing the button
+                this.currentDefinition = this.currentDefinition.Modify(buttonNumber: selectedButton);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
             }
         }
     }

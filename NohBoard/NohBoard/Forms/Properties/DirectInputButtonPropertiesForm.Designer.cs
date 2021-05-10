@@ -327,7 +327,6 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.comboBoxDevicesList.Name = "comboBoxDevicesList";
             this.comboBoxDevicesList.Size = new System.Drawing.Size(349, 33);
             this.comboBoxDevicesList.TabIndex = 55;
-            this.comboBoxDevicesList.SelectedIndexChanged += new System.EventHandler(this.comboBoxDevicesList_SelectedIndexChanged);
             // 
             // DirectInputButtonPropertiesForm
             // 
