@@ -17,4 +17,10 @@
     <ProjectReference Include="..\Hooking\Hooking.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Forms\Properties\DirectInputAxisPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

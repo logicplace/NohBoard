@@ -107,12 +107,16 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             string axisTwo,
             int axisOneMax,
             int axisTwoMax,
+            int stickWidth,
+            int stickHeight,
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
             this.AxisOne = axisOne;
             this.AxisTwo = axisTwo;
             this.AxisOneMax = axisOneMax;
             this.AxisTwoMax = axisTwoMax;
+            this.StickWidth = stickWidth;
+            this.StickHeight = stickHeight;
         }
 
         /// <summary>
@@ -139,6 +143,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -159,6 +165,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -238,6 +246,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 this.TextPosition,
                 this.RelevantManipulation);
         }
@@ -260,6 +270,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 this.TextPosition.Translate(dx, dy),
                 this.CurrentManipulation);
         }
@@ -304,7 +316,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisOne,
                 this.AxisTwo,
                 this.AxisOneMax,
-                this.AxisTwoMax);
+                this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight);
         }
 
         /// <summary>
@@ -328,6 +342,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -481,6 +497,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -502,7 +520,40 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwo,
                 this.AxisOneMax,
                 this.AxisTwoMax,
+                this.StickWidth,
+                this.StickHeight,
                 this.TextPosition + diff,
+                this.CurrentManipulation);
+        }
+
+        /// <summary>
+        /// Returns a new version of this element definition with the specified properties changed.
+        /// </summary>
+        /// <param name="boundaries">The new boundaries, or <c>null</c> if not changed.</param>
+        /// <param name="deviceId">The new Device Id, or <c>null</c> if not changed.</param>
+        /// <param name="buttonNumber">The new Button Number, or <c>0</c> if not changed.</param>
+        /// <param name="text">The new text, or <c>null</c> if not changed.</param>
+        /// <param name="shiftText">The new shift text, or <c>null</c> if not changed.</param>
+        /// <param name="changeOnCaps">The new change on caps, or <c>null</c> if not changed.</param>
+        /// <param name="textPosition">The new text position, or <c>null</c> if not changed.</param>
+        /// <returns>The new element definition.</returns>
+        public DirectInputAxisDefinition Modify(
+            List<TPoint> boundaries = null, string deviceId = null, string axisOne = null, string axisTwo = null, int axisOneMax = 0, int axisTwoMax = 0, int stickWidth = 0, int stickHeight = 0, string text = null, string shiftText = null,
+            bool? changeOnCaps = null, TPoint textPosition = null) {
+            return new DirectInputAxisDefinition(
+                this.Id,
+                boundaries ?? this.Boundaries.Select(x => x.Clone()).ToList(),
+                text ?? this.Text,
+                shiftText ?? this.ShiftText,
+                deviceId != null && Guid.Parse(deviceId) != Guid.Empty ? Guid.Parse(deviceId) : this.DeviceId,
+                changeOnCaps ?? this.ChangeOnCaps,
+                axisOne ?? this.AxisOne,
+                axisTwo ?? this.AxisTwo,
+                axisOneMax != 0 ? axisOneMax : this.AxisOneMax,
+                axisTwoMax != 0 ? axisTwoMax : this.AxisTwoMax,
+                stickWidth != 0 ? stickWidth : this.StickWidth,
+                stickHeight != 0 ? stickHeight : this.StickHeight,
+                textPosition ?? this.TextPosition,
                 this.CurrentManipulation);
         }
 

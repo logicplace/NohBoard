@@ -26,24 +26,22 @@ namespace ThoNohT.NohBoard.Forms.Properties
     using SharpDX.DirectInput;
     using ThoNohT.NohBoard.Hooking.Interop;
 
-    public delegate void DataSetMethodInvoker(int code);
-
     /// <summary>
     /// The form used to update the properties of a keyboard key.
     /// </summary>
-    public partial class DirectInputButtonPropertiesForm : Form
+    public partial class DirectInputAxisPropertiesForm : Form
     {
         #region Fields
 
         /// <summary>
         /// A backup definition to return to if the user pressed cancel.
         /// </summary>
-        private readonly DirectInputButtonDefinition initialDefinition;
+        private readonly DirectInputAxisDefinition initialDefinition;
 
         /// <summary>
         /// The currently loaded definition.
         /// </summary>
-        private DirectInputButtonDefinition currentDefinition;
+        private DirectInputAxisDefinition currentDefinition;
 
         /// <summary>
         /// Indicates whether we are currently detecting key pressed via the <see cref="Hooking.Interop.HookManager"/>.
@@ -68,7 +66,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
         /// The event that is invoked when the definition has been changed. Only invoked when the definition is changed
         /// through the user interface, not when it is changed programmatically.
         /// </summary>
-        public event Action<DirectInputButtonDefinition> DefinitionChanged;
+        public event Action<DirectInputAxisDefinition> DefinitionChanged;
 
         /// <summary>
         /// The event that is invoked when the definition is saved.
@@ -78,19 +76,19 @@ namespace ThoNohT.NohBoard.Forms.Properties
         #endregion Events
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DirectInputButtonPropertiesForm" /> class.
+        /// Initializes a new instance of the <see cref="DirectInputAxisPropertiesForm" /> class.
         /// </summary>
-        public DirectInputButtonPropertiesForm(DirectInputButtonDefinition initialDefinition)
+        public DirectInputAxisPropertiesForm(DirectInputAxisDefinition initialDefinition)
         {
             this.initialDefinition = initialDefinition;
-            this.currentDefinition = (DirectInputButtonDefinition) initialDefinition.Clone();
+            this.currentDefinition = (DirectInputAxisDefinition) initialDefinition.Clone();
             this.InitializeComponent();
         }
 
         /// <summary>
         /// Loads the form, setting the controls to the initial style.
         /// </summary>
-        private void DirectInputButtonPropertiesForm_Load(object sender, EventArgs e)
+        private void DirectInputAxisPropertiesForm_Load(object sender, EventArgs e)
         {
             this.txtText.Text = this.initialDefinition.Text;
             this.txtShiftText.Text = this.initialDefinition.ShiftText;
@@ -133,7 +131,6 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtShiftText.TextChanged += this.txtShiftText_TextChanged;
             this.chkChangeOnCaps.CheckedChanged += this.chkChangeOnCaps_CheckedChanged;
             this.txtDeviceId.TextChanged += this.txtDeviceId_TextChanged;
-            this.cmbButtonNumber.SelectedIndexChanged += this.cmbButtonNumber_SelectedIndexChanged;
             this.comboBoxDevicesList.SelectedIndexChanged += this.comboBoxDevicesList_SelectedIndexChanged;
         }
 
@@ -141,17 +138,17 @@ namespace ThoNohT.NohBoard.Forms.Properties
         /// Refresh the status of the Buttons Combobox as well as the Detect button
         /// </summary>
         private void RefreshFormOnJoystickChange() {
-            this.cmbButtonNumber.DataSource = null;
+            this.cmbAxisOne.DataSource = null;
 
             if (this.selectedJoystick == null) {
-                cmbButtonNumber.Enabled = false;
-                btnDetectButton.Enabled = false;
+                cmbAxisOne.Enabled = false;
+                btnDetectButton1.Enabled = false;
 
-                this.cmbButtonNumber.Items.Clear();
-                this.cmbButtonNumber.Items.Add("Select a device first");
+                this.cmbAxisOne.Items.Clear();
+                this.cmbAxisOne.Items.Add("Select a device first");
             } else {
-                cmbButtonNumber.Enabled = true;
-                btnDetectButton.Enabled = true;
+                cmbAxisOne.Enabled = true;
+                btnDetectButton1.Enabled = true;
 
                 int counter = 0;
                 var data = new List<JoystickButtonComboBoxItem>();
@@ -159,16 +156,16 @@ namespace ThoNohT.NohBoard.Forms.Properties
                     data.Add(new JoystickButtonComboBoxItem(++counter, string.Format("Button {0}", counter)));
                 }
 
-                this.cmbButtonNumber.ValueMember = "ID";
-                this.cmbButtonNumber.DisplayMember = "Text";
-                this.cmbButtonNumber.DataSource = data;
-                this.cmbButtonNumber.SelectedValue = this.currentDefinition.ButtonNumber;
+                this.cmbAxisOne.ValueMember = "ID";
+                this.cmbAxisOne.DisplayMember = "Text";
+                this.cmbAxisOne.DataSource = data;
+                //this.cmbButtonNumber.SelectedValue = this.currentDefinition.ButtonNumber;
             }
         }
 
         public void ChangeButton(int button) {
-            this.cmbButtonNumber.SelectedValue = button;
-            this.btnDetectButton.Text = "Detect Button";
+            this.cmbAxisOne.SelectedValue = button;
+            this.btnDetectButton1.Text = "Detect Button";
             this.detectingButtonNumber = !this.detectingButtonNumber;
         }
 
@@ -386,24 +383,25 @@ namespace ThoNohT.NohBoard.Forms.Properties
             // If we just hit the Detect Button...
             if (this.detectingButtonNumber) {
                 // Change the label of the button
-                this.btnDetectButton.Text = "Detecting...";
+                this.btnDetectButton1.Text = "Detecting...";
 
                 // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputButtonInsert = (code) => {
+                Hooking.Interop.HookManager.DirectInputAxisInsert = (X, Y, Z) => {
 
+                    /*
                     // Changes current definition
                     this.currentDefinition = this.currentDefinition.Modify(buttonNumber: code);
 
-                    if (Application.OpenForms["DirectInputButtonPropertiesForm"] != null) {
-                        //(Application.OpenForms["DirectInputButtonPropertiesForm"] as DirectInputButtonPropertiesForm).RefreshFormOnJoystickChange();
-                        (Application.OpenForms["DirectInputButtonPropertiesForm"] as DirectInputButtonPropertiesForm).Invoke(new DataSetMethodInvoker(ChangeButton), code + 1);
+                    if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
+                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodInvoker(ChangeButton), code + 1);
                     }
+                    */
 
                     return true;
                 };
             } else {
-                this.btnDetectButton.Text = "Detect Button";
-                Hooking.Interop.HookManager.DirectInputButtonInsert = null;
+                this.btnDetectButton1.Text = "Detect Button";
+                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
             }
         }
 
@@ -526,36 +524,16 @@ namespace ThoNohT.NohBoard.Forms.Properties
             RefreshFormOnJoystickChange();
         }
 
-        private void cmbButtonNumber_SelectedIndexChanged(object sender, EventArgs e) {
-            ComboBox comboBox = (ComboBox)sender;
+        private void cmbAxisOne_SelectedIndexChanged(object sender, EventArgs e) {
 
-            if (comboBox.SelectedItem != null) {
-                int selectedButton = ((JoystickButtonComboBoxItem)comboBox.SelectedItem).ID;
-
-                // Handles changing the button
-                this.currentDefinition = this.currentDefinition.Modify(buttonNumber: selectedButton);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-    }
-
-    public class Item {
-        public string _Name;
-        public int _Id;
-
-        public Item(string name, int id) {
-            _Name = name;
-            _Id = id;
         }
 
-        public string Name {
-            get { return _Name; }
-            set { _Name = value; }
+        private void btnDetectButton2_Click(object sender, EventArgs e) {
+
         }
 
-        public int Id {
-            get { return _Id; }
-            set { _Id = value; }
+        private void cmbAxisTwo_SelectedIndexChanged(object sender, EventArgs e) {
+
         }
     }
 }

@@ -52,10 +52,16 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         public static Func<int, bool> KeyboardInsert = null;
 
         /// <summary>
-        /// If this property is set, every key-code processed from the keyboard will be passed through this function.
+        /// If this property is set, every button processed from the joystick will be passed through this function.
         /// If the function returns true, the keycode is then trapped.
         /// </summary>
         public static Func<int, bool> DirectInputButtonInsert = null;
+
+        /// <summary>
+        /// If this property is set, every axis used from the joystick will be passed through this function.
+        /// If the function returns true, the keycode is then trapped.
+        /// </summary>
+        public static Func<int, int, int, bool> DirectInputAxisInsert = null;
 
         /// <summary>
         /// The keycode that toggles the mouse and or keyboard traps. Default is Scroll Lock.

@@ -305,11 +305,15 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                     if (DirectInputButtonInsert != null) {
                         for (int j = 0; j < 32; j++) {
                             if (jState.Buttons[j]) {
-                                //DirectInputButtonInsert.Invoke(j, device.Information.ProductGuid.ToString());
                                 DirectInputButtonInsert.Invoke(j);
                                 return;
                             }
                         }
+                    }
+
+                    if (DirectInputAxisInsert != null) {
+                        DirectInputAxisInsert.Invoke(jState.X, jState.Y, jState.Z);
+                        return;
                     }
                 }
                 catch (Exception) { }
