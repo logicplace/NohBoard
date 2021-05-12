@@ -26,6 +26,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
     using SharpDX.DirectInput;
     using ThoNohT.NohBoard.Hooking.Interop;
 
+    public delegate void DataSetMethodInvokerString(string axis);
+
     /// <summary>
     /// The form used to update the properties of a keyboard key.
     /// </summary>
@@ -44,9 +46,14 @@ namespace ThoNohT.NohBoard.Forms.Properties
         private DirectInputAxisDefinition currentDefinition;
 
         /// <summary>
-        /// Indicates whether we are currently detecting key pressed via the <see cref="Hooking.Interop.HookManager"/>.
+        /// Indicates whether we are currently detecting axis one being moved via the <see cref="Hooking.Interop.HookManager"/>.
         /// </summary>
-        private bool detectingButtonNumber;
+        private bool detectingAxisOne;
+
+        /// <summary>
+        /// Indicates whether we are currently detecting axis two being moved via the <see cref="Hooking.Interop.HookManager"/>.
+        /// </summary>
+        private bool detectingAxisTwo;
 
         /// <summary>
         /// The joystick currently associated to this control
@@ -107,6 +114,12 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 data.Add(new JoystickComboBoxItem(device.Information.ProductGuid.ToString(), device.Information.ProductName));
             }
 
+            // Sets the other Joystick(s) values
+            this.txtStickWidth.Text = this.initialDefinition.StickWidth.ToString();
+            this.txtStickHeight.Text = this.initialDefinition.StickHeight.ToString();
+            this.txtAxisOneMax.Text = this.initialDefinition.AxisOneMax.ToString();
+            this.txtAxisTwoMax.Text = this.initialDefinition.AxisTwoMax.ToString();
+
             // Sets the Joystick Combobox DataSource
             this.comboBoxDevicesList.ValueMember = "ID";
             this.comboBoxDevicesList.DisplayMember = "Text";
@@ -132,6 +145,12 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.chkChangeOnCaps.CheckedChanged += this.chkChangeOnCaps_CheckedChanged;
             this.txtDeviceId.TextChanged += this.txtDeviceId_TextChanged;
             this.comboBoxDevicesList.SelectedIndexChanged += this.comboBoxDevicesList_SelectedIndexChanged;
+            this.cmbAxisOne.SelectedIndexChanged += this.cmbAxisOne_SelectedIndexChanged;
+            this.cmbAxisTwo.SelectedIndexChanged += this.cmbAxisTwo_SelectedIndexChanged;
+            this.txtAxisOneMax.TextChanged += this.txtAxisOneMax_TextChanged;
+            this.txtAxisTwoMax.TextChanged += this.txtAxisTwoMax_TextChanged;
+            this.txtStickWidth.TextChanged += this.txtStickWidth_TextChanged;
+            this.txtStickHeight.TextChanged += this.txtStickHeight_TextChanged;
         }
 
         /// <summary>
@@ -142,31 +161,45 @@ namespace ThoNohT.NohBoard.Forms.Properties
 
             if (this.selectedJoystick == null) {
                 cmbAxisOne.Enabled = false;
-                btnDetectButton1.Enabled = false;
+                btnDetectAxis1.Enabled = false;
 
                 this.cmbAxisOne.Items.Clear();
                 this.cmbAxisOne.Items.Add("Select a device first");
             } else {
                 cmbAxisOne.Enabled = true;
-                btnDetectButton1.Enabled = true;
+                btnDetectAxis1.Enabled = true;
 
-                int counter = 0;
-                var data = new List<JoystickButtonComboBoxItem>();
-                while (counter < this.selectedJoystick.Capabilities.ButtonCount) {
-                    data.Add(new JoystickButtonComboBoxItem(++counter, string.Format("Button {0}", counter)));
+                var data1 = new List<JoystickComboBoxItem>();
+                var data2 = new List<JoystickComboBoxItem>();
+                for (var counter = 0; counter < 6; counter++) {
+                    var enumDisplayStatus = (Hooking.DirectInputAxisNames)counter;
+                    string stringValue = enumDisplayStatus.ToString();
+                    data1.Add(new JoystickComboBoxItem(stringValue, string.Format("{0} Axis", stringValue)));
+                    data2.Add(new JoystickComboBoxItem(stringValue, string.Format("{0} Axis", stringValue)));
                 }
 
                 this.cmbAxisOne.ValueMember = "ID";
                 this.cmbAxisOne.DisplayMember = "Text";
-                this.cmbAxisOne.DataSource = data;
-                //this.cmbButtonNumber.SelectedValue = this.currentDefinition.ButtonNumber;
+                this.cmbAxisOne.DataSource = data1;
+                this.cmbAxisOne.SelectedValue = this.currentDefinition.AxisOne;
+
+                this.cmbAxisTwo.ValueMember = "ID";
+                this.cmbAxisTwo.DisplayMember = "Text";
+                this.cmbAxisTwo.DataSource = data2;
+                this.cmbAxisTwo.SelectedValue = this.currentDefinition.AxisTwo;
             }
         }
 
-        public void ChangeButton(int button) {
-            this.cmbAxisOne.SelectedValue = button;
-            this.btnDetectButton1.Text = "Detect Button";
-            this.detectingButtonNumber = !this.detectingButtonNumber;
+        public void ChangeAxisOne(string axis) {
+            this.cmbAxisOne.SelectedValue = axis;
+            this.btnDetectAxis1.Text = "Detect Axis One";
+            this.detectingAxisOne = false;
+        }
+
+        public void ChangeAxisTwo(string axis) {
+            this.cmbAxisTwo.SelectedValue = axis;
+            this.btnDetectAxis2.Text = "Detect Axis Two";
+            this.detectingAxisTwo = false;
         }
 
         #region Boundaries
@@ -309,103 +342,6 @@ namespace ThoNohT.NohBoard.Forms.Properties
         #region KeyCodes
 
         /// <summary>
-        /// Handles selecting an item in the boundaries list.
-        /// </summary>
-        private void txtButtonNumber_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //if (this.lstKeyCodes.SelectedItem != null)
-            //    this.udKeyCode.Value = Convert.ToInt32(this.lstKeyCodes.SelectedItem);
-        }
-
-        /// <summary>
-        /// Handles adding a key code, sets the new key codes and invokes the changed event.
-        /// </summary>
-        private void btnAddKeyCode_Click(object sender, EventArgs e)
-        {
-            //var newVal = Convert.ToInt32(this.udKeyCode.Value);
-            //if (this.lstKeyCodes.Items.Contains(newVal)) return;
-
-            //this.lstKeyCodes.Items.Add(newVal);
-            //this.lstKeyCodes.SelectedIndex = this.lstKeyCodes.Items.Count - 1;
-
-            //this.currentDefinition =
-            //    this.currentDefinition.Modify(keyCodes: this.lstKeyCodes.Items.Cast<int>().ToList());
-            //this.DefinitionChanged?.Invoke(this.currentDefinition);
-        }
-
-        /// <summary>
-        /// Handles removing a key code, sets the new key codes and invokes the changed event.
-        /// </summary>
-        private void btnRemoveKeyCode_Click(object sender, EventArgs e)
-        {
-            //if (this.lstKeyCodes.SelectedItem == null) return;
-
-            //var index = this.lstKeyCodes.SelectedIndex;
-            //this.lstKeyCodes.Items.Remove(this.lstKeyCodes.SelectedItem);
-
-            //this.lstKeyCodes.Items.Remove(this.lstKeyCodes.SelectedItem);
-            //this.lstKeyCodes.SelectedIndex = Math.Min(this.lstKeyCodes.Items.Count - 1, index);
-
-            //this.currentDefinition =
-            //    this.currentDefinition.Modify(keyCodes: this.lstKeyCodes.Items.Cast<int>().ToList());
-            //this.DefinitionChanged?.Invoke(this.currentDefinition);
-        }
-
-        /// <summary>
-        /// Toggles the key-code detection.
-        /// </summary>
-        private void btnDetectKeyCode_Click(object sender, EventArgs e)
-        {
-            //this.detectingKeyCode = !this.detectingKeyCode;
-
-            //if (this.detectingKeyCode)
-            //{
-            //    this.btnDetectKeyCode.Text = "Detecting...";
-            //    Hooking.Interop.HookManager.KeyboardInsert = code =>
-            //    {
-            //        //this.udKeyCode.Value = code;
-            //        return true;
-            //    };
-            //}
-            //else
-            //{
-            //    this.btnDetectKeyCode.Text = "Detect";
-            //    Hooking.Interop.HookManager.KeyboardInsert = null;
-            //}
-        }
-
-        /// <summary>
-        /// Detects the DirectInput button being presed
-        /// </summary>
-        private void btnDetectButton_Click(object sender, EventArgs e) {
-            this.detectingButtonNumber = !this.detectingButtonNumber;
-
-            // If we just hit the Detect Button...
-            if (this.detectingButtonNumber) {
-                // Change the label of the button
-                this.btnDetectButton1.Text = "Detecting...";
-
-                // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputAxisInsert = (X, Y, Z) => {
-
-                    /*
-                    // Changes current definition
-                    this.currentDefinition = this.currentDefinition.Modify(buttonNumber: code);
-
-                    if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
-                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodInvoker(ChangeButton), code + 1);
-                    }
-                    */
-
-                    return true;
-                };
-            } else {
-                this.btnDetectButton1.Text = "Detect Button";
-                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
-            }
-        }
-
-        /// <summary>
         /// Disables key-code detection, in case it was still active.
         /// </summary>
         private void KeyboardKeyPropertiesForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -524,16 +460,132 @@ namespace ThoNohT.NohBoard.Forms.Properties
             RefreshFormOnJoystickChange();
         }
 
-        private void cmbAxisOne_SelectedIndexChanged(object sender, EventArgs e) {
+        /// <summary>
+        /// Detects the first Axis being moved
+        /// </summary>
+        private void btnDetectButton_Click(object sender, EventArgs e) {
+            this.detectingAxisOne = !this.detectingAxisOne;
 
+            // If we just hit the Detect Button...
+            if (this.detectingAxisOne) {
+                // Change the label of the button
+                this.btnDetectAxis1.Text = "Detecting...";
+
+                // Wait for a button press
+                Hooking.Interop.HookManager.DirectInputAxisInsert = (axis) => {
+
+                    // Changes current definition
+                    this.currentDefinition = this.currentDefinition.Modify(axisOne: axis);
+
+                    if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
+                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodInvokerString(ChangeAxisOne), axis);
+                    }
+
+                    return true;
+                };
+            } else {
+                this.btnDetectAxis1.Text = "Detect Axis";
+                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
+            }
+        }
+
+        private void cmbAxisOne_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox comboBox = (ComboBox)sender;
+
+            if (comboBox.SelectedItem != null) {
+                string axisName = ((JoystickComboBoxItem)comboBox.SelectedItem).ID;
+
+                // Handles changing the button
+                this.currentDefinition = this.currentDefinition.Modify(axisOne: axisName);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
         }
 
         private void btnDetectButton2_Click(object sender, EventArgs e) {
+            this.detectingAxisTwo = !this.detectingAxisTwo;
+
+            // If we just hit the Detect Button...
+            if (this.detectingAxisTwo) {
+                // Change the label of the button
+                this.btnDetectAxis2.Text = "Detecting...";
+
+                // Wait for a button press
+                Hooking.Interop.HookManager.DirectInputAxisInsert = (axis) => {
+
+                    // Changes current definition
+                    this.currentDefinition = this.currentDefinition.Modify(axisTwo: axis);
+
+                    if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
+                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodInvokerString(ChangeAxisTwo), axis);
+                    }
+
+                    return true;
+                };
+            } else {
+                this.btnDetectAxis2.Text = "Detect Axis";
+                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
+            }
 
         }
 
         private void cmbAxisTwo_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox comboBox = (ComboBox)sender;
 
+            if (comboBox.SelectedItem != null) {
+                string axisName = ((JoystickComboBoxItem)comboBox.SelectedItem).ID;
+
+                // Handles changing the button
+                this.currentDefinition = this.currentDefinition.Modify(axisTwo: axisName);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
+        }
+
+        private void txtAxisOneMax_TextChanged(object sender, EventArgs e) {
+            TextBox txtBox = (TextBox)sender;
+
+            int value;
+            bool result = int.TryParse(txtBox.Text, out value);
+
+            if (result) {
+                this.currentDefinition = this.currentDefinition.Modify(axisOneMax: value);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
+        }
+
+        private void txtAxisTwoMax_TextChanged(object sender, EventArgs e) {
+            TextBox txtBox = (TextBox)sender;
+
+            int value;
+            bool result = int.TryParse(txtBox.Text, out value);
+
+            if (result) {
+                this.currentDefinition = this.currentDefinition.Modify(axisTwoMax: value);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
+        }
+
+        private void txtStickWidth_TextChanged(object sender, EventArgs e) {
+            TextBox txtBox = (TextBox)sender;
+
+            int value;
+            bool result = int.TryParse(txtBox.Text, out value);
+
+            if (result) {
+                this.currentDefinition = this.currentDefinition.Modify(stickWidth: value);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
+        }
+
+        private void txtStickHeight_TextChanged(object sender, EventArgs e) {
+            TextBox txtBox = (TextBox)sender;
+
+            int value;
+            bool result = int.TryParse(txtBox.Text, out value);
+
+            if (result) {
+                this.currentDefinition = this.currentDefinition.Modify(stickHeight: value);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
         }
     }
 }

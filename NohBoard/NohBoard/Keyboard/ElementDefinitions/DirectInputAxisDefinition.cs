@@ -377,10 +377,10 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
             }
 
-            var axis1Number = Enum.Parse(typeof(DirectInputAxisNames), AxisOne);
+            var axis1Number = AxisOne != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisOne) : null;
             var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
 
-            int axis1Value = directInputAxis[(int)axis1Number];
+            int axis1Value = axis1Number != null ? directInputAxis[(int)axis1Number] : AxisOneMax / 2;
             int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
 
             var dotX = TopLeft.X + ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);

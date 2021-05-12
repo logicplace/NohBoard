@@ -63,7 +63,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.btnRectangle = new System.Windows.Forms.Button();
             this.txtDeviceId = new System.Windows.Forms.TextBox();
             this.cmbAxisOne = new System.Windows.Forms.ComboBox();
-            this.btnDetectButton1 = new System.Windows.Forms.Button();
+            this.btnDetectAxis1 = new System.Windows.Forms.Button();
             this.txtBoundaries = new ThoNohT.NohBoard.Controls.VectorTextBox();
             this.txtTextPosition = new ThoNohT.NohBoard.Controls.VectorTextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -72,7 +72,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.txtAxisOneMax = new System.Windows.Forms.TextBox();
             this.txtAxisTwoMax = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnDetectButton2 = new System.Windows.Forms.Button();
+            this.btnDetectAxis2 = new System.Windows.Forms.Button();
             this.cmbAxisTwo = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtStickWidth = new System.Windows.Forms.TextBox();
@@ -220,9 +220,9 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.lblKeyCodes.Location = new System.Drawing.Point(417, 128);
             this.lblKeyCodes.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblKeyCodes.Name = "lblKeyCodes";
-            this.lblKeyCodes.Size = new System.Drawing.Size(82, 25);
+            this.lblKeyCodes.Size = new System.Drawing.Size(60, 25);
             this.lblKeyCodes.TabIndex = 51;
-            this.lblKeyCodes.Text = "Axis One";
+            this.lblKeyCodes.Text = "X Axis";
             // 
             // chkChangeOnCaps
             // 
@@ -283,18 +283,17 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.cmbAxisOne.Name = "cmbAxisOne";
             this.cmbAxisOne.Size = new System.Drawing.Size(197, 33);
             this.cmbAxisOne.TabIndex = 52;
-            this.cmbAxisOne.SelectedIndexChanged += new System.EventHandler(this.cmbAxisOne_SelectedIndexChanged);
             // 
-            // btnDetectButton1
+            // btnDetectAxis1
             // 
-            this.btnDetectButton1.Location = new System.Drawing.Point(417, 166);
-            this.btnDetectButton1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.btnDetectButton1.Name = "btnDetectButton1";
-            this.btnDetectButton1.Size = new System.Drawing.Size(170, 44);
-            this.btnDetectButton1.TabIndex = 53;
-            this.btnDetectButton1.Text = "Detect Axis One";
-            this.btnDetectButton1.UseVisualStyleBackColor = true;
-            this.btnDetectButton1.Click += new System.EventHandler(this.btnDetectButton_Click);
+            this.btnDetectAxis1.Location = new System.Drawing.Point(417, 166);
+            this.btnDetectAxis1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnDetectAxis1.Name = "btnDetectAxis1";
+            this.btnDetectAxis1.Size = new System.Drawing.Size(170, 44);
+            this.btnDetectAxis1.TabIndex = 53;
+            this.btnDetectAxis1.Text = "Detect Axis One";
+            this.btnDetectAxis1.UseVisualStyleBackColor = true;
+            this.btnDetectAxis1.Click += new System.EventHandler(this.btnDetectButton_Click);
             // 
             // txtBoundaries
             // 
@@ -373,16 +372,16 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.label3.TabIndex = 61;
             this.label3.Text = "Axis Two Max";
             // 
-            // btnDetectButton2
+            // btnDetectAxis2
             // 
-            this.btnDetectButton2.Location = new System.Drawing.Point(417, 296);
-            this.btnDetectButton2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.btnDetectButton2.Name = "btnDetectButton2";
-            this.btnDetectButton2.Size = new System.Drawing.Size(170, 44);
-            this.btnDetectButton2.TabIndex = 60;
-            this.btnDetectButton2.Text = "Detect Axis Two";
-            this.btnDetectButton2.UseVisualStyleBackColor = true;
-            this.btnDetectButton2.Click += new System.EventHandler(this.btnDetectButton2_Click);
+            this.btnDetectAxis2.Location = new System.Drawing.Point(417, 296);
+            this.btnDetectAxis2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnDetectAxis2.Name = "btnDetectAxis2";
+            this.btnDetectAxis2.Size = new System.Drawing.Size(170, 44);
+            this.btnDetectAxis2.TabIndex = 60;
+            this.btnDetectAxis2.Text = "Detect Axis Two";
+            this.btnDetectAxis2.UseVisualStyleBackColor = true;
+            this.btnDetectAxis2.Click += new System.EventHandler(this.btnDetectButton2_Click);
             // 
             // cmbAxisTwo
             // 
@@ -392,7 +391,6 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.cmbAxisTwo.Name = "cmbAxisTwo";
             this.cmbAxisTwo.Size = new System.Drawing.Size(197, 33);
             this.cmbAxisTwo.TabIndex = 59;
-            this.cmbAxisTwo.SelectedIndexChanged += new System.EventHandler(this.cmbAxisTwo_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -400,9 +398,9 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.label4.Location = new System.Drawing.Point(417, 260);
             this.label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(81, 25);
+            this.label4.Size = new System.Drawing.Size(59, 25);
             this.label4.TabIndex = 58;
-            this.label4.Text = "Axis Two";
+            this.label4.Text = "Y Axis";
             // 
             // txtStickWidth
             // 
@@ -449,14 +447,14 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtAxisTwoMax);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.btnDetectButton2);
+            this.Controls.Add(this.btnDetectAxis2);
             this.Controls.Add(this.cmbAxisTwo);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtAxisOneMax);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBoxDevicesList);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnDetectButton1);
+            this.Controls.Add(this.btnDetectAxis1);
             this.Controls.Add(this.cmbAxisOne);
             this.Controls.Add(this.btnUpdateBoundary);
             this.Controls.Add(this.btnCenterText);
@@ -515,14 +513,14 @@ namespace ThoNohT.NohBoard.Forms.Properties {
         private System.Windows.Forms.Button btnCenterText;
         private System.Windows.Forms.Button btnRectangle;
         private System.Windows.Forms.ComboBox cmbAxisOne;
-        private System.Windows.Forms.Button btnDetectButton1;
+        private System.Windows.Forms.Button btnDetectAxis1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBoxDevicesList;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtAxisOneMax;
         private System.Windows.Forms.TextBox txtAxisTwoMax;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button btnDetectButton2;
+        private System.Windows.Forms.Button btnDetectAxis2;
         private System.Windows.Forms.ComboBox cmbAxisTwo;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox2;

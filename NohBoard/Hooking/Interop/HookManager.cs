@@ -312,8 +312,26 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                     }
 
                     if (DirectInputAxisInsert != null) {
-                        DirectInputAxisInsert.Invoke(jState.X, jState.Y, jState.Z);
-                        return;
+                        string axisChanged = "";
+                        if (jState.X != 0 && jState.X < 30000 || jState.X > 35000) {
+                            axisChanged = "X";
+                        } else if (jState.Y != 0 && jState.Y < 30000 || jState.Y > 35000) {
+                            axisChanged = "Y";
+                        } else if (jState.Z != 0 && jState.Z < 30000 || jState.Z > 35000) {
+                            axisChanged = "Z";
+                        } else if (jState.RotationX != 0 && jState.RotationX < 30000 || jState.RotationX > 35000) {
+                            axisChanged = "RotationX";
+                        } else if (jState.RotationY != 0 && jState.RotationY < 30000 || jState.RotationY > 35000) {
+                            axisChanged = "RotationY";
+                        } else if (jState.RotationZ != 0 && jState.RotationZ < 30000 || jState.RotationZ > 35000) {
+                            axisChanged = "RotationZ";
+                        }
+
+                        if (!string.IsNullOrEmpty(axisChanged)) {
+                            DirectInputAxisInsert.Invoke(axisChanged);
+                            DirectInputAxisInsert = null;
+                            return;
+                        }
                     }
                 }
                 catch (Exception) { }

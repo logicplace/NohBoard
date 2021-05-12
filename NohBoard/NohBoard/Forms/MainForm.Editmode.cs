@@ -764,6 +764,16 @@ namespace ThoNohT.NohBoard.Forms
                 }
             }
 
+            if (relevantElement is DirectInputAxisDefinition directInputAxisElement) {
+                using (var propertiesForm = new DirectInputAxisPropertiesForm(directInputAxisElement)) {
+                    propertiesForm.DefinitionChanged += OnDefinitionChanged;
+                    propertiesForm.DefinitionSaved += OnDefinitionSaved;
+
+                    propertiesForm.ShowDialog(this);
+                    return;
+                }
+            }
+
             throw new Exception("Unknown element, cannot open properties form.");
         }
 

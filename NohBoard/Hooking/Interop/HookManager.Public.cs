@@ -61,7 +61,7 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         /// If this property is set, every axis used from the joystick will be passed through this function.
         /// If the function returns true, the keycode is then trapped.
         /// </summary>
-        public static Func<int, int, int, bool> DirectInputAxisInsert = null;
+        public static Func<string, bool> DirectInputAxisInsert = null;
 
         /// <summary>
         /// The keycode that toggles the mouse and or keyboard traps. Default is Scroll Lock.
