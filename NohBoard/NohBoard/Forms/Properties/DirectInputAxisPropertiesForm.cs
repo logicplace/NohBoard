@@ -119,6 +119,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtStickHeight.Text = this.initialDefinition.StickHeight.ToString();
             this.txtAxisOneMax.Text = this.initialDefinition.AxisOneMax.ToString();
             this.txtAxisTwoMax.Text = this.initialDefinition.AxisTwoMax.ToString();
+            this.chkInvertAxisOne.Checked = this.initialDefinition.InvertAxisOne == 1;
+            this.chkInvertAxisTwo.Checked = this.initialDefinition.InvertAxisTwo == 1;
 
             // Sets the Joystick Combobox DataSource
             this.comboBoxDevicesList.ValueMember = "ID";
@@ -151,6 +153,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtAxisTwoMax.TextChanged += this.txtAxisTwoMax_TextChanged;
             this.txtStickWidth.TextChanged += this.txtStickWidth_TextChanged;
             this.txtStickHeight.TextChanged += this.txtStickHeight_TextChanged;
+            this.chkInvertAxisOne.CheckedChanged += this.chkInvertAxisOne_CheckedChanged;
+            this.chkInvertAxisTwo.CheckedChanged += this.chkInvertAxisTwo_CheckedChanged;
         }
 
         /// <summary>
@@ -586,6 +590,20 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 this.currentDefinition = this.currentDefinition.Modify(stickHeight: value);
                 this.DefinitionChanged?.Invoke(this.currentDefinition);
             }
+        }
+
+        private void chkInvertAxisOne_CheckedChanged(object sender, EventArgs e) {
+            CheckBox chkBox = (CheckBox)sender;
+
+            this.currentDefinition = this.currentDefinition.Modify(invertAxisOne: chkBox.Checked ? 1 : 0);
+            this.DefinitionChanged?.Invoke(this.currentDefinition);
+        }
+
+        private void chkInvertAxisTwo_CheckedChanged(object sender, EventArgs e) {
+            CheckBox chkBox = (CheckBox)sender;
+
+            this.currentDefinition = this.currentDefinition.Modify(invertAxisTwo: chkBox.Checked ? 1 : 0);
+            this.DefinitionChanged?.Invoke(this.currentDefinition);
         }
     }
 }

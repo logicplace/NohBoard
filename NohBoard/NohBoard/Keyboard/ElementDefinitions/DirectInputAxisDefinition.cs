@@ -66,6 +66,12 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         [DataMember]
         public int StickHeight { get; private set; }
 
+        [DataMember]
+        public int InvertAxisOne { get; private set; }
+
+        [DataMember]
+        public int InvertAxisTwo { get; private set; }
+
         /// <summary>
         /// The top left of the button
         /// </summary>
@@ -109,6 +115,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             int axisTwoMax,
             int stickWidth,
             int stickHeight,
+            int invertAxisOne,
+            int invertAxisTwo,
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
             this.AxisOne = axisOne;
@@ -117,6 +125,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             this.AxisTwoMax = axisTwoMax;
             this.StickWidth = stickWidth;
             this.StickHeight = stickHeight;
+            this.InvertAxisOne = invertAxisOne;
+            this.InvertAxisTwo = invertAxisTwo;
         }
 
         /// <summary>
@@ -145,6 +155,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -167,6 +179,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -204,6 +218,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             if (this.AxisTwo != kkd.AxisTwo) return true;
             if (this.AxisOneMax != kkd.AxisOneMax) return true;
             if (this.AxisTwoMax != kkd.AxisTwoMax) return true;
+            if (this.InvertAxisOne != kkd.InvertAxisOne) return true;
+            if (this.InvertAxisTwo != kkd.InvertAxisTwo) return true;
 
             if (this.Boundaries.Count != kkd.Boundaries.Count) return true;
 
@@ -248,6 +264,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 this.TextPosition,
                 this.RelevantManipulation);
         }
@@ -272,6 +290,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 this.TextPosition.Translate(dx, dy),
                 this.CurrentManipulation);
         }
@@ -318,7 +338,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisOneMax,
                 this.AxisTwoMax,
                 this.StickWidth,
-                this.StickHeight);
+                this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo);
         }
 
         /// <summary>
@@ -344,6 +366,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -383,8 +407,10 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             int axis1Value = axis1Number != null ? directInputAxis[(int)axis1Number] : AxisOneMax / 2;
             int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
 
-            var dotX = TopLeft.X + ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
-            var dotY = TopLeft.Y + ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
+            var deltaX = ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
+            var deltaY = ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
+            var dotX = TopLeft.X + (this.InvertAxisOne == 1 ? (Width - StickWidth) - deltaX : deltaX);
+            var dotY = TopLeft.Y + (this.InvertAxisTwo == 1 ? (Height - StickHeight) - deltaY : deltaY);
             dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
             dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
             var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
@@ -499,6 +525,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -522,6 +550,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.AxisTwoMax,
                 this.StickWidth,
                 this.StickHeight,
+                this.InvertAxisOne,
+                this.InvertAxisTwo,
                 this.TextPosition + diff,
                 this.CurrentManipulation);
         }
@@ -538,7 +568,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="textPosition">The new text position, or <c>null</c> if not changed.</param>
         /// <returns>The new element definition.</returns>
         public DirectInputAxisDefinition Modify(
-            List<TPoint> boundaries = null, string deviceId = null, string axisOne = null, string axisTwo = null, int axisOneMax = 0, int axisTwoMax = 0, int stickWidth = 0, int stickHeight = 0, string text = null, string shiftText = null,
+            List<TPoint> boundaries = null, string deviceId = null, string axisOne = null, string axisTwo = null, int axisOneMax = 0, int axisTwoMax = 0, int stickWidth = 0, int stickHeight = 0,
+            int invertAxisOne = 0, int invertAxisTwo = 0, string text = null, string shiftText = null,
             bool? changeOnCaps = null, TPoint textPosition = null) {
             return new DirectInputAxisDefinition(
                 this.Id,
@@ -553,6 +584,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 axisTwoMax != 0 ? axisTwoMax : this.AxisTwoMax,
                 stickWidth != 0 ? stickWidth : this.StickWidth,
                 stickHeight != 0 ? stickHeight : this.StickHeight,
+                invertAxisOne != 0 ? invertAxisOne : this.InvertAxisOne,
+                invertAxisTwo != 0 ? invertAxisTwo : this.InvertAxisTwo,
                 textPosition ?? this.TextPosition,
                 this.CurrentManipulation);
         }

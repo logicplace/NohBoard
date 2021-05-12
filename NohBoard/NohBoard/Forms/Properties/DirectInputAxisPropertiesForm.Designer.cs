@@ -79,6 +79,10 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.label5 = new System.Windows.Forms.Label();
             this.txtStickHeight = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.chkInvertAxisOne = new System.Windows.Forms.CheckBox();
+            this.chkInvertAxisTwo = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnBoundaryDown
@@ -278,15 +282,15 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // cmbAxisOne
             // 
             this.cmbAxisOne.FormattingEnabled = true;
-            this.cmbAxisOne.Location = new System.Drawing.Point(569, 125);
+            this.cmbAxisOne.Location = new System.Drawing.Point(487, 125);
             this.cmbAxisOne.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.cmbAxisOne.Name = "cmbAxisOne";
-            this.cmbAxisOne.Size = new System.Drawing.Size(197, 33);
+            this.cmbAxisOne.Size = new System.Drawing.Size(279, 33);
             this.cmbAxisOne.TabIndex = 52;
             // 
             // btnDetectAxis1
             // 
-            this.btnDetectAxis1.Location = new System.Drawing.Point(417, 166);
+            this.btnDetectAxis1.Location = new System.Drawing.Point(417, 206);
             this.btnDetectAxis1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.btnDetectAxis1.Name = "btnDetectAxis1";
             this.btnDetectAxis1.Size = new System.Drawing.Size(170, 44);
@@ -343,7 +347,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(417, 216);
+            this.label2.Location = new System.Drawing.Point(417, 342);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(120, 25);
             this.label2.TabIndex = 56;
@@ -351,14 +355,14 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // 
             // txtAxisOneMax
             // 
-            this.txtAxisOneMax.Location = new System.Drawing.Point(569, 216);
+            this.txtAxisOneMax.Location = new System.Drawing.Point(569, 342);
             this.txtAxisOneMax.Name = "txtAxisOneMax";
             this.txtAxisOneMax.Size = new System.Drawing.Size(197, 31);
             this.txtAxisOneMax.TabIndex = 57;
             // 
             // txtAxisTwoMax
             // 
-            this.txtAxisTwoMax.Location = new System.Drawing.Point(569, 349);
+            this.txtAxisTwoMax.Location = new System.Drawing.Point(569, 379);
             this.txtAxisTwoMax.Name = "txtAxisTwoMax";
             this.txtAxisTwoMax.Size = new System.Drawing.Size(197, 31);
             this.txtAxisTwoMax.TabIndex = 62;
@@ -366,7 +370,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(417, 352);
+            this.label3.Location = new System.Drawing.Point(417, 382);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(119, 25);
             this.label3.TabIndex = 61;
@@ -374,7 +378,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // 
             // btnDetectAxis2
             // 
-            this.btnDetectAxis2.Location = new System.Drawing.Point(417, 296);
+            this.btnDetectAxis2.Location = new System.Drawing.Point(597, 206);
             this.btnDetectAxis2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.btnDetectAxis2.Name = "btnDetectAxis2";
             this.btnDetectAxis2.Size = new System.Drawing.Size(170, 44);
@@ -386,16 +390,16 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // cmbAxisTwo
             // 
             this.cmbAxisTwo.FormattingEnabled = true;
-            this.cmbAxisTwo.Location = new System.Drawing.Point(569, 257);
+            this.cmbAxisTwo.Location = new System.Drawing.Point(486, 167);
             this.cmbAxisTwo.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.cmbAxisTwo.Name = "cmbAxisTwo";
-            this.cmbAxisTwo.Size = new System.Drawing.Size(197, 33);
+            this.cmbAxisTwo.Size = new System.Drawing.Size(280, 33);
             this.cmbAxisTwo.TabIndex = 59;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(417, 260);
+            this.label4.Location = new System.Drawing.Point(417, 170);
             this.label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(59, 25);
@@ -404,7 +408,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // 
             // txtStickWidth
             // 
-            this.txtStickWidth.Location = new System.Drawing.Point(569, 397);
+            this.txtStickWidth.Location = new System.Drawing.Point(570, 416);
             this.txtStickWidth.Name = "txtStickWidth";
             this.txtStickWidth.Size = new System.Drawing.Size(197, 31);
             this.txtStickWidth.TabIndex = 64;
@@ -412,7 +416,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(417, 400);
+            this.label5.Location = new System.Drawing.Point(418, 419);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(101, 25);
             this.label5.TabIndex = 63;
@@ -420,7 +424,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // 
             // txtStickHeight
             // 
-            this.txtStickHeight.Location = new System.Drawing.Point(569, 446);
+            this.txtStickHeight.Location = new System.Drawing.Point(570, 453);
             this.txtStickHeight.Name = "txtStickHeight";
             this.txtStickHeight.Size = new System.Drawing.Size(197, 31);
             this.txtStickHeight.TabIndex = 66;
@@ -428,11 +432,47 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(417, 449);
+            this.label6.Location = new System.Drawing.Point(418, 456);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(106, 25);
             this.label6.TabIndex = 65;
             this.label6.Text = "Stick Height";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(418, 269);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(132, 25);
+            this.label7.TabIndex = 67;
+            this.label7.Text = "Invert Axis One";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(418, 303);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(131, 25);
+            this.label8.TabIndex = 68;
+            this.label8.Text = "Invert Axis Two";
+            // 
+            // chkInvertAxisOne
+            // 
+            this.chkInvertAxisOne.AutoSize = true;
+            this.chkInvertAxisOne.Location = new System.Drawing.Point(583, 268);
+            this.chkInvertAxisOne.Name = "chkInvertAxisOne";
+            this.chkInvertAxisOne.Size = new System.Drawing.Size(22, 21);
+            this.chkInvertAxisOne.TabIndex = 69;
+            this.chkInvertAxisOne.UseVisualStyleBackColor = true;
+            // 
+            // chkInvertAxisTwo
+            // 
+            this.chkInvertAxisTwo.AutoSize = true;
+            this.chkInvertAxisTwo.Location = new System.Drawing.Point(583, 302);
+            this.chkInvertAxisTwo.Name = "chkInvertAxisTwo";
+            this.chkInvertAxisTwo.Size = new System.Drawing.Size(22, 21);
+            this.chkInvertAxisTwo.TabIndex = 70;
+            this.chkInvertAxisTwo.UseVisualStyleBackColor = true;
             // 
             // DirectInputAxisPropertiesForm
             // 
@@ -440,7 +480,11 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelButton2;
-            this.ClientSize = new System.Drawing.Size(820, 563);
+            this.ClientSize = new System.Drawing.Size(820, 759);
+            this.Controls.Add(this.chkInvertAxisTwo);
+            this.Controls.Add(this.chkInvertAxisOne);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.txtStickHeight);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtStickWidth);
@@ -528,5 +572,9 @@ namespace ThoNohT.NohBoard.Forms.Properties {
         private System.Windows.Forms.TextBox txtStickHeight;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtStickWidth;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox chkInvertAxisOne;
+        private System.Windows.Forms.CheckBox chkInvertAxisTwo;
     }
 }
