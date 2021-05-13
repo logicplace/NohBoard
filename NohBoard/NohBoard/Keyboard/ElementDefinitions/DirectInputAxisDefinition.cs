@@ -569,7 +569,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <returns>The new element definition.</returns>
         public DirectInputAxisDefinition Modify(
             List<TPoint> boundaries = null, string deviceId = null, string axisOne = null, string axisTwo = null, int axisOneMax = 0, int axisTwoMax = 0, int stickWidth = 0, int stickHeight = 0,
-            int invertAxisOne = 0, int invertAxisTwo = 0, string text = null, string shiftText = null,
+            int invertAxisOne = -1, int invertAxisTwo = -1, string text = null, string shiftText = null,
             bool? changeOnCaps = null, TPoint textPosition = null) {
             return new DirectInputAxisDefinition(
                 this.Id,
@@ -584,8 +584,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 axisTwoMax != 0 ? axisTwoMax : this.AxisTwoMax,
                 stickWidth != 0 ? stickWidth : this.StickWidth,
                 stickHeight != 0 ? stickHeight : this.StickHeight,
-                invertAxisOne != 0 ? invertAxisOne : this.InvertAxisOne,
-                invertAxisTwo != 0 ? invertAxisTwo : this.InvertAxisTwo,
+                invertAxisOne != -1 ? invertAxisOne : this.InvertAxisOne,
+                invertAxisTwo != -1 ? invertAxisTwo : this.InvertAxisTwo,
                 textPosition ?? this.TextPosition,
                 this.CurrentManipulation);
         }
