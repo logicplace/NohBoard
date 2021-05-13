@@ -684,14 +684,14 @@ namespace ThoNohT.NohBoard.Forms
                 var pressed = true;
                 if (!directInputKeys.ContainsKey(dibDef.DeviceId)) return;
 
-                if (directInputKeys.Any() && !directInputKeys[dibDef.DeviceId][dibDef.ButtonNumber]) pressed = false;
+                if (directInputKeys.Any() && !directInputKeys[dibDef.DeviceId][dibDef.ButtonNumber - 1]) pressed = false;
 
                 dibDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is DirectInputDpadDefinition didDef) {
                 if (!directInputDpad.ContainsKey(didDef.DeviceId)) return;
 
-                didDef.Render(g, directInputDpad[didDef.DeviceId][didDef.DpadNumber], KeyboardState.ShiftDown, KeyboardState.CapsActive);
+                didDef.Render(g, directInputDpad[didDef.DeviceId][didDef.DpadNumber - 1], KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is DirectInputAxisDefinition diaDef) {
                 if (!directInputAxis.ContainsKey(diaDef.DeviceId)) return;
