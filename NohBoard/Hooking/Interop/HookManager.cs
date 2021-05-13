@@ -303,7 +303,7 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                     DirectInputState.UpdateAxis(device.Information.ProductGuid, jState.X, jState.Y, jState.Z, jState.RotationX, jState.RotationY, jState.RotationZ);
 
                     if (DirectInputButtonInsert != null) {
-                        for (int j = 0; j < 32; j++) {
+                        for (int j = 0; j < device.Capabilities.ButtonCount; j++) {
                             if (jState.Buttons[j]) {
                                 DirectInputButtonInsert.Invoke(j);
                                 return;
@@ -331,6 +331,15 @@ namespace ThoNohT.NohBoard.Hooking.Interop
                             DirectInputAxisInsert.Invoke(axisChanged);
                             DirectInputAxisInsert = null;
                             return;
+                        }
+                    }
+
+                    if (DirectInputDpadInsert != null) {
+                        for (int j = 0; j < device.Capabilities.PovCount; j++) {
+                            if (jState.PointOfViewControllers[j] != -1) {
+                                DirectInputDpadInsert.Invoke(j);
+                                return;
+                            }
                         }
                     }
                 }

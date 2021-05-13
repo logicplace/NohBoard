@@ -442,6 +442,32 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.CurrentManipulation);
         }
 
+        /// <summary>
+        /// Returns a new version of this element definition with the specified properties changed.
+        /// </summary>
+        /// <param name="boundaries">The new boundaries, or <c>null</c> if not changed.</param>
+        /// <param name="deviceId">The new Device Id, or <c>null</c> if not changed.</param>
+        /// <param name="buttonNumber">The new Button Number, or <c>0</c> if not changed.</param>
+        /// <param name="text">The new text, or <c>null</c> if not changed.</param>
+        /// <param name="shiftText">The new shift text, or <c>null</c> if not changed.</param>
+        /// <param name="changeOnCaps">The new change on caps, or <c>null</c> if not changed.</param>
+        /// <param name="textPosition">The new text position, or <c>null</c> if not changed.</param>
+        /// <returns>The new element definition.</returns>
+        public DirectInputDpadDefinition Modify(
+            List<TPoint> boundaries = null, string deviceId = null, int dpadNumber = 0, string text = null, string shiftText = null,
+            bool? changeOnCaps = null, TPoint textPosition = null) {
+            return new DirectInputDpadDefinition(
+                this.Id,
+                boundaries ?? this.Boundaries.Select(x => x.Clone()).ToList(),
+                text ?? this.Text,
+                shiftText ?? this.ShiftText,
+                deviceId != null && Guid.Parse(deviceId) != Guid.Empty ? Guid.Parse(deviceId) : this.DeviceId,
+                dpadNumber != 0 ? dpadNumber : this.DpadNumber,
+                changeOnCaps ?? this.ChangeOnCaps,
+                textPosition ?? this.TextPosition,
+                this.CurrentManipulation);
+        }
+
         #region Private methods
 
         /// <summary>

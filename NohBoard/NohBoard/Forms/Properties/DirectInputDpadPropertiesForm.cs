@@ -26,34 +26,29 @@ namespace ThoNohT.NohBoard.Forms.Properties
     using SharpDX.DirectInput;
     using ThoNohT.NohBoard.Hooking.Interop;
 
-    public delegate void DataSetMethodInvokerString(string axis);
+    public delegate void DataSetMethodDpadInvokerInt(int dpad);
 
     /// <summary>
     /// The form used to update the properties of a keyboard key.
     /// </summary>
-    public partial class DirectInputAxisPropertiesForm : Form
+    public partial class DirectInputDpadPropertiesForm : Form
     {
         #region Fields
 
         /// <summary>
         /// A backup definition to return to if the user pressed cancel.
         /// </summary>
-        private readonly DirectInputAxisDefinition initialDefinition;
+        private readonly DirectInputDpadDefinition initialDefinition;
 
         /// <summary>
         /// The currently loaded definition.
         /// </summary>
-        private DirectInputAxisDefinition currentDefinition;
+        private DirectInputDpadDefinition currentDefinition;
 
         /// <summary>
         /// Indicates whether we are currently detecting axis one being moved via the <see cref="Hooking.Interop.HookManager"/>.
         /// </summary>
-        private bool detectingAxisOne;
-
-        /// <summary>
-        /// Indicates whether we are currently detecting axis two being moved via the <see cref="Hooking.Interop.HookManager"/>.
-        /// </summary>
-        private bool detectingAxisTwo;
+        private bool detectingDpad;
 
         /// <summary>
         /// The joystick currently associated to this control
@@ -73,7 +68,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
         /// The event that is invoked when the definition has been changed. Only invoked when the definition is changed
         /// through the user interface, not when it is changed programmatically.
         /// </summary>
-        public event Action<DirectInputAxisDefinition> DefinitionChanged;
+        public event Action<DirectInputDpadDefinition> DefinitionChanged;
 
         /// <summary>
         /// The event that is invoked when the definition is saved.
@@ -83,19 +78,19 @@ namespace ThoNohT.NohBoard.Forms.Properties
         #endregion Events
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DirectInputAxisPropertiesForm" /> class.
+        /// Initializes a new instance of the <see cref="DirectInputDpadPropertiesForm" /> class.
         /// </summary>
-        public DirectInputAxisPropertiesForm(DirectInputAxisDefinition initialDefinition)
+        public DirectInputDpadPropertiesForm(DirectInputDpadDefinition initialDefinition)
         {
             this.initialDefinition = initialDefinition;
-            this.currentDefinition = (DirectInputAxisDefinition) initialDefinition.Clone();
+            this.currentDefinition = (DirectInputDpadDefinition) initialDefinition.Clone();
             this.InitializeComponent();
         }
 
         /// <summary>
         /// Loads the form, setting the controls to the initial style.
         /// </summary>
-        private void DirectInputAxisPropertiesForm_Load(object sender, EventArgs e)
+        private void DirectInputDpadPropertiesForm_Load(object sender, EventArgs e)
         {
             this.txtText.Text = this.initialDefinition.Text;
             this.txtShiftText.Text = this.initialDefinition.ShiftText;
@@ -113,14 +108,6 @@ namespace ThoNohT.NohBoard.Forms.Properties
             foreach (var device in this.devices) {
                 data.Add(new JoystickComboBoxItem(device.Information.ProductGuid.ToString(), device.Information.ProductName));
             }
-
-            // Sets the other Joystick(s) values
-            this.txtStickWidth.Text = this.initialDefinition.StickWidth.ToString();
-            this.txtStickHeight.Text = this.initialDefinition.StickHeight.ToString();
-            this.txtAxisOneMax.Text = this.initialDefinition.AxisOneMax.ToString();
-            this.txtAxisTwoMax.Text = this.initialDefinition.AxisTwoMax.ToString();
-            this.chkInvertAxisOne.Checked = this.initialDefinition.InvertAxisOne == 1;
-            this.chkInvertAxisTwo.Checked = this.initialDefinition.InvertAxisTwo == 1;
 
             // Sets the Joystick Combobox DataSource
             this.comboBoxDevicesList.ValueMember = "ID";
@@ -147,63 +134,42 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.chkChangeOnCaps.CheckedChanged += this.chkChangeOnCaps_CheckedChanged;
             this.txtDeviceId.TextChanged += this.txtDeviceId_TextChanged;
             this.comboBoxDevicesList.SelectedIndexChanged += this.comboBoxDevicesList_SelectedIndexChanged;
-            this.cmbAxisOne.SelectedIndexChanged += this.cmbAxisOne_SelectedIndexChanged;
-            this.cmbAxisTwo.SelectedIndexChanged += this.cmbAxisTwo_SelectedIndexChanged;
-            this.txtAxisOneMax.TextChanged += this.txtAxisOneMax_TextChanged;
-            this.txtAxisTwoMax.TextChanged += this.txtAxisTwoMax_TextChanged;
-            this.txtStickWidth.TextChanged += this.txtStickWidth_TextChanged;
-            this.txtStickHeight.TextChanged += this.txtStickHeight_TextChanged;
-            this.chkInvertAxisOne.CheckedChanged += this.chkInvertAxisOne_CheckedChanged;
-            this.chkInvertAxisTwo.CheckedChanged += this.chkInvertAxisTwo_CheckedChanged;
+            this.cmbDpad.SelectedIndexChanged += this.cmbDpad_SelectedIndexChanged;
+            this.btnDetectDpad.Click += this.btnDetectAxis1_Click;
         }
 
         /// <summary>
         /// Refresh the status of the Buttons Combobox as well as the Detect button
         /// </summary>
         private void RefreshFormOnJoystickChange() {
-            this.cmbAxisOne.DataSource = null;
+            this.cmbDpad.DataSource = null;
 
             if (this.selectedJoystick == null) {
-                cmbAxisOne.Enabled = false;
-                btnDetectAxis1.Enabled = false;
+                cmbDpad.Enabled = false;
+                btnDetectDpad.Enabled = false;
 
-                this.cmbAxisOne.Items.Clear();
-                this.cmbAxisOne.Items.Add("Select a device first");
+                this.cmbDpad.Items.Clear();
+                this.cmbDpad.Items.Add("Select a device first");
             } else {
-                cmbAxisOne.Enabled = true;
-                btnDetectAxis1.Enabled = true;
+                cmbDpad.Enabled = true;
+                btnDetectDpad.Enabled = true;
 
-                var data1 = new List<JoystickComboBoxItem>();
-                var data2 = new List<JoystickComboBoxItem>();
-                for (var counter = 0; counter < this.selectedJoystick.Capabilities.AxeCount; counter++) {
-                    var enumDisplayStatus = (Hooking.DirectInputAxisNames)counter;
-                    string stringValue = enumDisplayStatus.ToString();
-                    data1.Add(new JoystickComboBoxItem(stringValue, string.Format("{0} Axis", stringValue)));
-                    data2.Add(new JoystickComboBoxItem(stringValue, string.Format("{0} Axis", stringValue)));
+                int counter = 0;
+                var data = new List<JoystickButtonComboBoxItem>();
+                while (counter < this.selectedJoystick.Capabilities.PovCount) {
+                    data.Add(new JoystickButtonComboBoxItem(++counter, string.Format("DPad {0}", counter)));
                 }
 
-                this.cmbAxisOne.ValueMember = "ID";
-                this.cmbAxisOne.DisplayMember = "Text";
-                this.cmbAxisOne.DataSource = data1;
-                this.cmbAxisOne.SelectedValue = this.currentDefinition.AxisOne;
-
-                this.cmbAxisTwo.ValueMember = "ID";
-                this.cmbAxisTwo.DisplayMember = "Text";
-                this.cmbAxisTwo.DataSource = data2;
-                this.cmbAxisTwo.SelectedValue = this.currentDefinition.AxisTwo;
+                this.cmbDpad.ValueMember = "ID";
+                this.cmbDpad.DisplayMember = "Text";
+                this.cmbDpad.DataSource = data;
+                this.cmbDpad.SelectedValue = this.currentDefinition.DpadNumber;
             }
         }
-
-        public void ChangeAxisOne(string axis) {
-            this.cmbAxisOne.SelectedValue = axis;
-            this.btnDetectAxis1.Text = "Detect Axis One";
-            this.detectingAxisOne = false;
-        }
-
-        public void ChangeAxisTwo(string axis) {
-            this.cmbAxisTwo.SelectedValue = axis;
-            this.btnDetectAxis2.Text = "Detect Axis Two";
-            this.detectingAxisTwo = false;
+        public void ChangeDpad(int dpad) {
+            this.cmbDpad.SelectedValue = dpad;
+            this.btnDetectDpad.Text = "Detect Dpad";
+            this.detectingDpad = false;
         }
 
         #region Boundaries
@@ -439,11 +405,10 @@ namespace ThoNohT.NohBoard.Forms.Properties
             DialogResult = DialogResult.Cancel;
         }
 
-        /// <summary>
-        /// Selects a different joystick from the dropdown
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        private void cmbDpad_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
+
         private void comboBoxDevicesList_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox comboBox = (ComboBox)sender;
             string selectedGuid = comboBox.SelectedValue.ToString();
@@ -464,145 +429,30 @@ namespace ThoNohT.NohBoard.Forms.Properties
             RefreshFormOnJoystickChange();
         }
 
-        /// <summary>
-        /// Detects the first Axis being moved
-        /// </summary>
-        private void btnDetectButton_Click(object sender, EventArgs e) {
-            this.detectingAxisOne = !this.detectingAxisOne;
+        private void btnDetectAxis1_Click(object sender, EventArgs e) {
+            this.detectingDpad = !this.detectingDpad;
 
             // If we just hit the Detect Button...
-            if (this.detectingAxisOne) {
+            if (this.detectingDpad) {
                 // Change the label of the button
-                this.btnDetectAxis1.Text = "Detecting...";
+                this.btnDetectDpad.Text = "Detecting...";
 
                 // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputAxisInsert = (axis) => {
+                Hooking.Interop.HookManager.DirectInputDpadInsert = (dpad) => {
 
                     // Changes current definition
-                    this.currentDefinition = this.currentDefinition.Modify(axisOne: axis);
+                    this.currentDefinition = this.currentDefinition.Modify(dpadNumber: dpad);
 
                     if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
-                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodInvokerString(ChangeAxisOne), axis);
+                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodDpadInvokerInt(ChangeDpad), dpad + 1);
                     }
 
                     return true;
                 };
             } else {
-                this.btnDetectAxis1.Text = "Detect Axis";
+                this.btnDetectDpad.Text = "Detect Axis";
                 Hooking.Interop.HookManager.DirectInputAxisInsert = null;
             }
-        }
-
-        private void cmbAxisOne_SelectedIndexChanged(object sender, EventArgs e) {
-            ComboBox comboBox = (ComboBox)sender;
-
-            if (comboBox.SelectedItem != null) {
-                string axisName = ((JoystickComboBoxItem)comboBox.SelectedItem).ID;
-
-                // Handles changing the button
-                this.currentDefinition = this.currentDefinition.Modify(axisOne: axisName);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-
-        private void btnDetectButton2_Click(object sender, EventArgs e) {
-            this.detectingAxisTwo = !this.detectingAxisTwo;
-
-            // If we just hit the Detect Button...
-            if (this.detectingAxisTwo) {
-                // Change the label of the button
-                this.btnDetectAxis2.Text = "Detecting...";
-
-                // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputAxisInsert = (axis) => {
-
-                    // Changes current definition
-                    this.currentDefinition = this.currentDefinition.Modify(axisTwo: axis);
-
-                    if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
-                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodInvokerString(ChangeAxisTwo), axis);
-                    }
-
-                    return true;
-                };
-            } else {
-                this.btnDetectAxis2.Text = "Detect Axis";
-                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
-            }
-        }
-
-        private void cmbAxisTwo_SelectedIndexChanged(object sender, EventArgs e) {
-            ComboBox comboBox = (ComboBox)sender;
-
-            if (comboBox.SelectedItem != null) {
-                string axisName = ((JoystickComboBoxItem)comboBox.SelectedItem).ID;
-
-                // Handles changing the button
-                this.currentDefinition = this.currentDefinition.Modify(axisTwo: axisName);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-
-        private void txtAxisOneMax_TextChanged(object sender, EventArgs e) {
-            TextBox txtBox = (TextBox)sender;
-
-            int value;
-            bool result = int.TryParse(txtBox.Text, out value);
-
-            if (result) {
-                this.currentDefinition = this.currentDefinition.Modify(axisOneMax: value);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-
-        private void txtAxisTwoMax_TextChanged(object sender, EventArgs e) {
-            TextBox txtBox = (TextBox)sender;
-
-            int value;
-            bool result = int.TryParse(txtBox.Text, out value);
-
-            if (result) {
-                this.currentDefinition = this.currentDefinition.Modify(axisTwoMax: value);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-
-        private void txtStickWidth_TextChanged(object sender, EventArgs e) {
-            TextBox txtBox = (TextBox)sender;
-
-            int value;
-            bool result = int.TryParse(txtBox.Text, out value);
-
-            if (result) {
-                this.currentDefinition = this.currentDefinition.Modify(stickWidth: value);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-
-        private void txtStickHeight_TextChanged(object sender, EventArgs e) {
-            TextBox txtBox = (TextBox)sender;
-
-            int value;
-            bool result = int.TryParse(txtBox.Text, out value);
-
-            if (result) {
-                this.currentDefinition = this.currentDefinition.Modify(stickHeight: value);
-                this.DefinitionChanged?.Invoke(this.currentDefinition);
-            }
-        }
-
-        private void chkInvertAxisOne_CheckedChanged(object sender, EventArgs e) {
-            CheckBox chkBox = (CheckBox)sender;
-
-            this.currentDefinition = this.currentDefinition.Modify(invertAxisOne: chkBox.Checked ? 1 : 0);
-            this.DefinitionChanged?.Invoke(this.currentDefinition);
-        }
-
-        private void chkInvertAxisTwo_CheckedChanged(object sender, EventArgs e) {
-            CheckBox chkBox = (CheckBox)sender;
-
-            this.currentDefinition = this.currentDefinition.Modify(invertAxisTwo: chkBox.Checked ? 1 : 0);
-            this.DefinitionChanged?.Invoke(this.currentDefinition);
         }
     }
 }

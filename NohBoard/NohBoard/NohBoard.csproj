@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Forms\Properties\DirectInputDpadPropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Properties\DirectInputAxisPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>

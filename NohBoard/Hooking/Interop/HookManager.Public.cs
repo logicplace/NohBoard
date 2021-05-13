@@ -64,6 +64,12 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         public static Func<string, bool> DirectInputAxisInsert = null;
 
         /// <summary>
+        /// If this property is set, every dpad used from the joystick will be passed through this function.
+        /// If the function returns true, the keycode is then trapped.
+        /// </summary>
+        public static Func<int, bool> DirectInputDpadInsert = null;
+
+        /// <summary>
         /// The keycode that toggles the mouse and or keyboard traps. Default is Scroll Lock.
         /// </summary>
 	    public static int TrapToggleKeyCode { get; set; } = VK_SCROLL;
