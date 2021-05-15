@@ -75,7 +75,7 @@ namespace ThoNohT.NohBoard.Hooking {
         /// <param name="RotationX">the RotationX axis</param>
         /// <param name="RotationY">the RotationY axis</param>
         /// <param name="RotationZ">the RotationZ axis</param>
-        public static void UpdateAxis(Guid guid, int X, int Y, int Z, int RotationX, int RotationY, int RotationZ) {
+        public static void UpdateAxis(Guid guid, int X, int Y, int Z, int RotationX, int RotationY, int RotationZ, int Slider0, int Slider1) {
             lock (directInputAxis) {
                 if (!directInputAxis.ContainsKey(guid)) return;
 
@@ -85,6 +85,8 @@ namespace ThoNohT.NohBoard.Hooking {
                 directInputAxis[guid][(int)DirectInputAxisNames.RotationX] = RotationX;
                 directInputAxis[guid][(int)DirectInputAxisNames.RotationY] = RotationY;
                 directInputAxis[guid][(int)DirectInputAxisNames.RotationZ] = RotationZ;
+                directInputAxis[guid][(int)DirectInputAxisNames.Slider0] = Slider0;
+                directInputAxis[guid][(int)DirectInputAxisNames.Slider1] = Slider1;
 
                 // Always update to keep checking whether to remove the key on the next render cycle.
                 updated = true;

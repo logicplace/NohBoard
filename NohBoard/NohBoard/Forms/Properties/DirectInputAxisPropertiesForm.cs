@@ -165,21 +165,56 @@ namespace ThoNohT.NohBoard.Forms.Properties
 
             if (this.selectedJoystick == null) {
                 cmbAxisOne.Enabled = false;
+                cmbAxisTwo.Enabled = false;
                 btnDetectAxis1.Enabled = false;
+                btnDetectAxis2.Enabled = false;
 
+                this.cmbAxisOne.DataSource = null;
                 this.cmbAxisOne.Items.Clear();
                 this.cmbAxisOne.Items.Add("Select a device first");
+                this.cmbAxisTwo.DataSource = null;
+                this.cmbAxisTwo.Items.Clear();
+                this.cmbAxisTwo.Items.Add("Select a device first");
             } else {
                 cmbAxisOne.Enabled = true;
+                cmbAxisTwo.Enabled = true;
                 btnDetectAxis1.Enabled = true;
+                btnDetectAxis2.Enabled = true;
 
                 var data1 = new List<JoystickComboBoxItem>();
                 var data2 = new List<JoystickComboBoxItem>();
-                for (var counter = 0; counter < this.selectedJoystick.Capabilities.AxeCount; counter++) {
-                    var enumDisplayStatus = (Hooking.DirectInputAxisNames)counter;
-                    string stringValue = enumDisplayStatus.ToString();
-                    data1.Add(new JoystickComboBoxItem(stringValue, string.Format("{0} Axis", stringValue)));
-                    data2.Add(new JoystickComboBoxItem(stringValue, string.Format("{0} Axis", stringValue)));
+                var axis = this.selectedJoystick.GetObjects(DeviceObjectTypeFlags.Axis);
+                for (var counter = 0; counter < axis.Count; counter++) {
+                    string name = axis[counter].Name.Replace("\0", "");
+                    string lowerName = name.ToLower();
+                    string axeName = null;
+                    if (lowerName.Contains("rotation")) {
+                        if (lowerName.StartsWith("x") || lowerName.EndsWith("x")) {
+                            axeName = "RotationX";
+                        } else if (lowerName.StartsWith("y") || lowerName.EndsWith("y")) {
+                            axeName = "RotationY";
+                        } else if (lowerName.StartsWith("z") || lowerName.EndsWith("z")) {
+                            axeName = "RotationZ";
+                        }
+                    } else if (lowerName.Contains("slider")) {
+                        if (lowerName.StartsWith("1") || lowerName.EndsWith("1")) {
+                            axeName = "Slider1";
+                        } else {
+                            axeName = "Slider0";
+                        }
+                    } else {
+                        if (lowerName.StartsWith("x") || lowerName.EndsWith("x")) {
+                            axeName = "X";
+                        } else if (lowerName.StartsWith("y") || lowerName.EndsWith("y")) {
+                            axeName = "Y";
+                        } else if (lowerName.StartsWith("z") || lowerName.EndsWith("z")) {
+                            axeName = "Z";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(axeName)) {
+                        data1.Add(new JoystickComboBoxItem(axeName, name));
+                        data2.Add(new JoystickComboBoxItem(axeName, name));
+                    }
                 }
 
                 this.cmbAxisOne.ValueMember = "ID";
@@ -476,7 +511,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 this.btnDetectAxis1.Text = "Detecting...";
 
                 // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputAxisInsert = (axis) => {
+                HookManager.CurrentDevideGuid = this.selectedJoystick.Information.ProductGuid;
+                HookManager.DirectInputAxisInsert = (axis) => {
 
                     // Changes current definition
                     this.currentDefinition = this.currentDefinition.Modify(axisOne: axis);
@@ -489,7 +525,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 };
             } else {
                 this.btnDetectAxis1.Text = "Detect Axis";
-                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
+                HookManager.DirectInputAxisInsert = null;
             }
         }
 
@@ -514,7 +550,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 this.btnDetectAxis2.Text = "Detecting...";
 
                 // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputAxisInsert = (axis) => {
+                HookManager.CurrentDevideGuid = this.selectedJoystick.Information.ProductGuid;
+                HookManager.DirectInputAxisInsert = (axis) => {
 
                     // Changes current definition
                     this.currentDefinition = this.currentDefinition.Modify(axisTwo: axis);
@@ -527,7 +564,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 };
             } else {
                 this.btnDetectAxis2.Text = "Detect Axis";
-                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
+                HookManager.DirectInputAxisInsert = null;
             }
         }
 

@@ -401,22 +401,24 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
             }
 
-            var axis1Number = AxisOne != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisOne) : null;
-            var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
+            try {
+                var axis1Number = AxisOne != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisOne) : null;
+                var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
 
-            int axis1Value = axis1Number != null ? directInputAxis[(int)axis1Number] : AxisOneMax / 2;
-            int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
+                int axis1Value = axis1Number != null ? directInputAxis[(int)axis1Number] : AxisOneMax / 2;
+                int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
 
-            var deltaX = ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
-            var deltaY = ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
-            var dotX = TopLeft.X + (this.InvertAxisOne == 1 ? (Width - StickWidth) - deltaX : deltaX);
-            var dotY = TopLeft.Y + (this.InvertAxisTwo == 1 ? (Height - StickHeight) - deltaY : deltaY);
-            dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
-            dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
-            var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
+                var deltaX = ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
+                var deltaY = ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
+                var dotX = TopLeft.X + (this.InvertAxisOne == 1 ? (Width - StickWidth) - deltaX : deltaX);
+                var dotY = TopLeft.Y + (this.InvertAxisTwo == 1 ? (Height - StickHeight) - deltaY : deltaY);
+                dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
+                dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
+                var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
 
-            var foregroundBrush = GetAxisBrush(style, boundingBox, axis1Value, axis2Value);
-            g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, StickWidth, StickHeight);
+                var foregroundBrush = GetAxisBrush(style, boundingBox, axis1Value, axis2Value);
+                g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, StickWidth, StickHeight);
+            } catch (Exception) { }
 
             // Draw the text
             g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
@@ -443,12 +445,36 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 double relativeX = (double)x / (double)AxisOneMax;
                 double relativeY = (double)y / (double)AxisTwoMax;
 
-                if (relativeX < 0.4 || relativeY < 0.4) {
-                    imageFileName = relativeX < relativeY ? style.BackgroundLeftImageFileName : style.BackgroundTopImageFileName;
+                if (relativeX < 0.4 && relativeY > 0.4 && relativeY < 0.6) {
+                    imageFileName = style.BackgroundLeftImageFileName;
                 }
 
-                if (relativeX > 0.6 || relativeY > 0.6) {
-                    imageFileName = relativeX > relativeY ? style.BackgroundRightImageFileName : style.BackgroundBottomImageFileName;
+                if (relativeX > 0.6 && relativeY > 0.4 && relativeY < 0.6) {
+                    imageFileName = style.BackgroundRightImageFileName;
+                }
+
+                if (relativeY < 0.4 && relativeX > 0.4 && relativeX < 0.6) {
+                    imageFileName = style.BackgroundTopImageFileName;
+                }
+
+                if (relativeY > 0.6 && relativeX > 0.4 && relativeX < 0.6) {
+                    imageFileName = style.BackgroundBottomImageFileName;
+                }
+
+                if (relativeX < 0.4 && relativeY < 0.4) {
+                    imageFileName = style.BackgroundTopLeftImageFileName;
+                }
+
+                if (relativeX > 0.6 && relativeY < 0.4) {
+                    imageFileName = style.BackgroundTopRightImageFileName;
+                }
+
+                if (relativeX < 0.4 && relativeY > 0.6) {
+                    imageFileName = style.BackgroundBottomLeftImageFileName;
+                }
+
+                if (relativeX > 0.6 && relativeY > 0.6) {
+                    imageFileName = style.BackgroundBottomRightImageFileName;
                 }
 
                 return style.Substyle.BackgroundImageFileName == null || !FileHelper.StyleImageExists(imageFileName)

@@ -69,16 +69,40 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         public string BackgroundRightImageFileName { get; set; }
 
         /// <summary>
-        /// The filename of the Top background image, relative to the style's images folder.
+        /// The filename of the top background image, relative to the style's images folder.
         /// </summary>
         [DataMember]
         public string BackgroundTopImageFileName { get; set; }
 
         /// <summary>
-        /// The filename of the Bottom background image, relative to the style's images folder.
+        /// The filename of the bottom background image, relative to the style's images folder.
         /// </summary>
         [DataMember]
         public string BackgroundBottomImageFileName { get; set; }
+
+        /// <summary>
+        /// The filename of the bottom left background image, relative to the style's images folder.
+        /// </summary>
+        [DataMember]
+        public string BackgroundBottomLeftImageFileName { get; set; }
+
+        /// <summary>
+        /// The filename of the bottom right background image, relative to the style's images folder.
+        /// </summary>
+        [DataMember]
+        public string BackgroundBottomRightImageFileName { get; set; }
+
+        /// <summary>
+        /// The filename of the top left background image, relative to the style's images folder.
+        /// </summary>
+        [DataMember]
+        public string BackgroundTopLeftImageFileName { get; set; }
+
+        /// <summary>
+        /// The filename of the top right background image, relative to the style's images folder.
+        /// </summary>
+        [DataMember]
+        public string BackgroundTopRightImageFileName { get; set; }
 
         /// <summary>
         /// Returns a clone of this element style.

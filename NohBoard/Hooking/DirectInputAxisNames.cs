@@ -48,6 +48,16 @@ namespace ThoNohT.NohBoard.Hooking {
         /// <summary>
         /// The RotationZ Axis.
         /// </summary>
-        RotationZ = 5
+        RotationZ = 5,
+
+        /// <summary>
+        /// The Slider 0 Axis
+        /// </summary>
+        Slider0 = 6,
+
+        /// <summary>
+        /// The Slider 1 Axis
+        /// </summary>
+        Slider1 = 7
     }
 }

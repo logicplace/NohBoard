@@ -70,6 +70,11 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         public static Func<int, bool> DirectInputDpadInsert = null;
 
         /// <summary>
+        /// The GUID of the currently selected device
+        /// </summary>
+        public static Guid CurrentDevideGuid = Guid.Empty;
+
+        /// <summary>
         /// The keycode that toggles the mouse and or keyboard traps. Default is Scroll Lock.
         /// </summary>
 	    public static int TrapToggleKeyCode { get; set; } = VK_SCROLL;
@@ -166,8 +171,32 @@ namespace ThoNohT.NohBoard.Hooking.Interop
             Devices.Clear();
 
             if (DirectInput != null) {
-                foreach (var device in DirectInput.GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices)) {
-                    var joystick = new SharpDX.DirectInput.Joystick(DirectInput, device.ProductGuid);
+                foreach (var device in DirectInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices)) {
+                    var joystick = new Joystick(DirectInput, device.ProductGuid);
+                    Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
+                    joystick.Acquire();
+
+                    Devices.Add(joystick);
+                    DirectInputState.AddDirectInputDevice(device.ProductGuid);
+                }
+                foreach (var device in DirectInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices)) {
+                    var joystick = new Joystick(DirectInput, device.ProductGuid);
+                    Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
+                    joystick.Acquire();
+
+                    Devices.Add(joystick);
+                    DirectInputState.AddDirectInputDevice(device.ProductGuid);
+                }
+                foreach (var device in DirectInput.GetDevices(DeviceType.Driving, DeviceEnumerationFlags.AllDevices)) {
+                    var joystick = new Joystick(DirectInput, device.ProductGuid);
+                    Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
+                    joystick.Acquire();
+
+                    Devices.Add(joystick);
+                    DirectInputState.AddDirectInputDevice(device.ProductGuid);
+                }
+                foreach (var device in DirectInput.GetDevices(DeviceType.Flight, DeviceEnumerationFlags.AllDevices)) {
+                    var joystick = new Joystick(DirectInput, device.ProductGuid);
                     Console.WriteLine(string.Format("Device Acquired! {0}", device.ProductGuid.ToString()));
                     joystick.Acquire();
 

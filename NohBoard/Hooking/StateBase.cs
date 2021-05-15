@@ -139,7 +139,7 @@ namespace ThoNohT.NohBoard.Hooking
             if (!PressedButtons.ContainsKey(guid)) {
                 pressedButtons.Add(guid, new bool[256]);
                 pressedDpad.Add(guid, new int[4]);
-                directInputAxis.Add(guid, new int[6]);
+                directInputAxis.Add(guid, new int[8]);
             }
         }
 
