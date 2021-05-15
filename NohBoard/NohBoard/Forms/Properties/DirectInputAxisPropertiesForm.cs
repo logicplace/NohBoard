@@ -184,6 +184,9 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 var data1 = new List<JoystickComboBoxItem>();
                 var data2 = new List<JoystickComboBoxItem>();
                 var axis = this.selectedJoystick.GetObjects(DeviceObjectTypeFlags.Axis);
+                data1.Add(new JoystickComboBoxItem(string.Empty, "none"));
+                data2.Add(new JoystickComboBoxItem(string.Empty, "none"));
+
                 for (var counter = 0; counter < axis.Count; counter++) {
                     string name = axis[counter].Name.Replace("\0", "");
                     string lowerName = name.ToLower();

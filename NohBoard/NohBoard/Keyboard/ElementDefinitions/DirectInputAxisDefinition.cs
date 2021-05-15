@@ -119,6 +119,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             int invertAxisTwo,
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
+            this.ShiftText = shiftText;
             this.AxisOne = axisOne;
             this.AxisTwo = axisTwo;
             this.AxisOneMax = axisOneMax;
@@ -385,11 +386,11 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 InitializeSubProperties();
             }
 
+            // Get the style, defaultkeys, substyle, txtSize, txtPoint
             var style = GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(this.Id)
                             ?? null;
             var defaultKeyStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
             var subStyle = style != null ? style.Substyle : defaultKeyStyle.Pressed;
-
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
             var txtPoint = new TPoint(
                 this.TextPosition.X - (int)(txtSize.Width / 2),
@@ -402,21 +403,29 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             }
 
             try {
+                // Retrieve the value of both axis
                 var axis1Number = AxisOne != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisOne) : null;
                 var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
 
+                // If there is no axis defined, the value is the "rest" one
                 int axis1Value = axis1Number != null ? directInputAxis[(int)axis1Number] : AxisOneMax / 2;
                 int axis2Value = axis2Number != null ? directInputAxis[(int)axis2Number] : AxisTwoMax / 2;
 
+                // Calculate the "delta" (from the starting position) of each axis
                 var deltaX = ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
                 var deltaY = ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
+
+                // Calculate the absolute X/Y position of a given axis
                 var dotX = TopLeft.X + (this.InvertAxisOne == 1 ? (Width - StickWidth) - deltaX : deltaX);
                 var dotY = TopLeft.Y + (this.InvertAxisTwo == 1 ? (Height - StickHeight) - deltaY : deltaY);
+
+                /// Round'em up
                 dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
                 dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
                 var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
 
-                var foregroundBrush = GetAxisBrush(style, boundingBox, axis1Value, axis2Value);
+                // Draw brush and draw
+                var foregroundBrush = GetAxisBrush(style, boundingBox, this.InvertAxisOne == 1 ? AxisOneMax - axis1Value : axis1Value, this.InvertAxisTwo == 1 ? AxisTwoMax - axis2Value : axis2Value);
                 g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, StickWidth, StickHeight);
             } catch (Exception) { }
 
