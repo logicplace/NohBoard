@@ -684,7 +684,11 @@ namespace ThoNohT.NohBoard.Forms
                 var pressed = true;
                 if (!directInputKeys.ContainsKey(dibDef.DeviceId)) return;
 
-                if (directInputKeys.Any() && !directInputKeys[dibDef.DeviceId][dibDef.ButtonNumber - 1]) pressed = false;
+                try {
+                    if (directInputKeys.Any() && !directInputKeys[dibDef.DeviceId][dibDef.ButtonNumber - 1]) pressed = false;
+                } catch (Exception) {
+                    var lol = "true";
+                }
 
                 dibDef.Render(g, pressed, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
@@ -696,10 +700,14 @@ namespace ThoNohT.NohBoard.Forms
             if (def is DirectInputAxisDefinition diaDef) {
                 if (!directInputAxis.ContainsKey(diaDef.DeviceId)) return;
 
-                if (directInputAxis.Any() && directInputAxis.ContainsKey(diaDef.DeviceId)) {
-                    int[] axis;
-                    directInputAxis.TryGetValue(diaDef.DeviceId, out axis);
-                    diaDef.Render(g, axis, KeyboardState.ShiftDown, KeyboardState.CapsActive);
+                try {
+                    if (directInputAxis.Any() && directInputAxis.ContainsKey(diaDef.DeviceId)) {
+                        int[] axis;
+                        directInputAxis.TryGetValue(diaDef.DeviceId, out axis);
+                        diaDef.Render(g, axis, KeyboardState.ShiftDown, KeyboardState.CapsActive);
+                    }
+                } catch (Exception e) {
+                    var lol = "true";
                 }
             }
             if (def is MouseKeyDefinition mkDef)

@@ -455,35 +455,35 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 double relativeY = (double)y / (double)AxisTwoMax;
 
                 if (relativeX < 0.4 && relativeY > 0.4 && relativeY < 0.6) {
-                    imageFileName = style.BackgroundLeftImageFileName;
+                    imageFileName = style.BackgroundLeftImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeX > 0.6 && relativeY > 0.4 && relativeY < 0.6) {
-                    imageFileName = style.BackgroundRightImageFileName;
+                    imageFileName = style.BackgroundRightImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeY < 0.4 && relativeX > 0.4 && relativeX < 0.6) {
-                    imageFileName = style.BackgroundTopImageFileName;
+                    imageFileName = style.BackgroundTopImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeY > 0.6 && relativeX > 0.4 && relativeX < 0.6) {
-                    imageFileName = style.BackgroundBottomImageFileName;
+                    imageFileName = style.BackgroundBottomImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeX < 0.4 && relativeY < 0.4) {
-                    imageFileName = style.BackgroundTopLeftImageFileName;
+                    imageFileName = style.BackgroundTopLeftImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeX > 0.6 && relativeY < 0.4) {
-                    imageFileName = style.BackgroundTopRightImageFileName;
+                    imageFileName = style.BackgroundTopRightImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeX < 0.4 && relativeY > 0.6) {
-                    imageFileName = style.BackgroundBottomLeftImageFileName;
+                    imageFileName = style.BackgroundBottomLeftImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 if (relativeX > 0.6 && relativeY > 0.6) {
-                    imageFileName = style.BackgroundBottomRightImageFileName;
+                    imageFileName = style.BackgroundBottomRightImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
                 return style.Substyle.BackgroundImageFileName == null || !FileHelper.StyleImageExists(imageFileName)

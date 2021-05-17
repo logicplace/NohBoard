@@ -61,6 +61,9 @@ namespace ThoNohT.NohBoard.Forms
             this.mnuMoveToBottom = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddElement = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddKeyboardKeyDefinition = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAddDirectInputButtonDefinition = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAddDirectInputAxisDefinition = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAddDirectInputDpadDefinition = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddMouseKeyDefinition = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddMouseScrollDefinition = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAddMouseSpeedIndicatorDefinition = new System.Windows.Forms.ToolStripMenuItem();
@@ -203,6 +206,9 @@ namespace ThoNohT.NohBoard.Forms
             // 
             this.mnuAddElement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddKeyboardKeyDefinition,
+            this.mnuAddDirectInputButtonDefinition,
+            this.mnuAddDirectInputAxisDefinition,
+            this.mnuAddDirectInputDpadDefinition,
             this.mnuAddMouseKeyDefinition,
             this.mnuAddMouseScrollDefinition,
             this.mnuAddMouseSpeedIndicatorDefinition});
@@ -217,6 +223,27 @@ namespace ThoNohT.NohBoard.Forms
             this.mnuAddKeyboardKeyDefinition.Size = new System.Drawing.Size(220, 22);
             this.mnuAddKeyboardKeyDefinition.Text = "Add &Keyboard Key";
             this.mnuAddKeyboardKeyDefinition.Click += new System.EventHandler(this.mnuAddKeyboardKeyDefinition_Click);
+            // 
+            // mnuAddDirectInputButtonDefinition
+            // 
+            this.mnuAddDirectInputButtonDefinition.Name = "mnuAddDirectInputButtonDefinition";
+            this.mnuAddDirectInputButtonDefinition.Size = new System.Drawing.Size(220, 22);
+            this.mnuAddDirectInputButtonDefinition.Text = "Add &DirectInput Button";
+            this.mnuAddDirectInputButtonDefinition.Click += new System.EventHandler(this.mnuAddDirectInputButtonDefinition_Click);
+            // 
+            // mnuAddDirectInputAxisDefinition
+            // 
+            this.mnuAddDirectInputAxisDefinition.Name = "mnuAddDirectInputAxisDefinition";
+            this.mnuAddDirectInputAxisDefinition.Size = new System.Drawing.Size(220, 22);
+            this.mnuAddDirectInputAxisDefinition.Text = "Add &DirectInput Axis";
+            this.mnuAddDirectInputAxisDefinition.Click += new System.EventHandler(this.mnuAddDirectInputAxisDefinition_Click);
+            // 
+            // mnuAddDirectInputDpadDefinition
+            // 
+            this.mnuAddDirectInputDpadDefinition.Name = "mnuAddDirectInputDpadDefinition";
+            this.mnuAddDirectInputDpadDefinition.Size = new System.Drawing.Size(220, 22);
+            this.mnuAddDirectInputDpadDefinition.Text = "Add &DirectInput Dpad";
+            this.mnuAddDirectInputDpadDefinition.Click += new System.EventHandler(this.mnuAddDirectInputDpadDefinition_Click);
             // 
             // mnuAddMouseKeyDefinition
             // 
@@ -448,6 +475,9 @@ namespace ThoNohT.NohBoard.Forms
         private System.Windows.Forms.ToolStripMenuItem mnuRemoveElement;
         private System.Windows.Forms.ToolStripMenuItem mnuAddElement;
         private System.Windows.Forms.ToolStripMenuItem mnuAddKeyboardKeyDefinition;
+        private System.Windows.Forms.ToolStripMenuItem mnuAddDirectInputButtonDefinition;
+        private System.Windows.Forms.ToolStripMenuItem mnuAddDirectInputAxisDefinition;
+        private System.Windows.Forms.ToolStripMenuItem mnuAddDirectInputDpadDefinition;
         private System.Windows.Forms.ToolStripMenuItem mnuAddMouseKeyDefinition;
         private System.Windows.Forms.ToolStripMenuItem mnuAddMouseScrollDefinition;
         private System.Windows.Forms.ToolStripMenuItem mnuAddMouseSpeedIndicatorDefinition;

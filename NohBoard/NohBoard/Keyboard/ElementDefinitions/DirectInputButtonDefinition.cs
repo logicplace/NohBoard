@@ -339,7 +339,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             }
 
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
-            var txtPoint = new TPoint(TopLeft.X + Width / 2 -6, TopLeft.Y + Height / 2 - 6);
+            var txtPoint = new TPoint(
+                this.TextPosition.X - (int)(txtSize.Width / 2),
+                this.TextPosition.Y - (int)(txtSize.Height / 2));
 
             // Draw the background
             var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
@@ -352,8 +354,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
             // Draw the outline.
             if (subStyle.ShowOutline) {
-                var backgroundPen = this.GetBackgroundPen(subStyle, pressed);
-                g.DrawEllipse(backgroundPen, TopLeft.X, TopLeft.Y, Width, Height);
+                g.DrawEllipse(
+                    new Pen(subStyle.Outline, subStyle.OutlineWidth),
+                    TopLeft.X, TopLeft.Y, Width, Height);
             }
         }
 

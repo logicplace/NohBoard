@@ -525,6 +525,100 @@ namespace ThoNohT.NohBoard.Forms
                     "",
                     true));
         }
+        
+        /// <summary>
+        /// Creates a new Direct Input Button definition and adds it to the keyboard definition
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuAddDirectInputButtonDefinition_Click(object sender, EventArgs e) {
+            this.menuOpen = false;
+
+            var c = this.currentManipulationPoint;
+            var w = Constants.DefaultElementSize / 2;
+            var boundaries = new List<TPoint>
+            {
+                new TPoint(c.X - w, c.Y - w), // Top left
+                new TPoint(c.X + w, c.Y - w), // Top right
+                new TPoint(c.X + w, c.Y + w), // Bottom right
+                new TPoint(c.X - w, c.Y + w), // Bottom left
+            };
+
+            this.AddElement(
+                new DirectInputButtonDefinition(
+                    GlobalSettings.CurrentDefinition.GetNextId(),
+                    boundaries,
+                    string.Empty,
+                    string.Empty,
+                    Guid.Empty,
+                    0,
+                    false));
+        }
+
+        /// <summary>
+        /// Creates a new Direct Input Axis definition and adds it to the keyboard definition
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuAddDirectInputAxisDefinition_Click(object sender, EventArgs e) {
+            this.menuOpen = false;
+
+            var c = this.currentManipulationPoint;
+            var w = Constants.DefaultElementSize / 2;
+            var boundaries = new List<TPoint>
+            {
+                new TPoint(c.X - w, c.Y - w), // Top left
+                new TPoint(c.X + w, c.Y - w), // Top right
+                new TPoint(c.X + w, c.Y + w), // Bottom right
+                new TPoint(c.X - w, c.Y + w), // Bottom left
+            };
+
+            this.AddElement(
+                new DirectInputAxisDefinition(
+                    GlobalSettings.CurrentDefinition.GetNextId(),
+                    boundaries,
+                    string.Empty,
+                    string.Empty,
+                    Guid.Empty,
+                    false,
+                    string.Empty,
+                    string.Empty,
+                    65535,
+                    65535,
+                    20,
+                    20,
+                    0,
+                    0));
+        }
+
+        /// <summary>
+        /// Creates a new Direct Input Dpad definition and adds it to the keyboard definition
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuAddDirectInputDpadDefinition_Click(object sender, EventArgs e) {
+            this.menuOpen = false;
+
+            var c = this.currentManipulationPoint;
+            var w = Constants.DefaultElementSize / 2;
+            var boundaries = new List<TPoint>
+            {
+                new TPoint(c.X - w, c.Y - w), // Top left
+                new TPoint(c.X + w, c.Y - w), // Top right
+                new TPoint(c.X + w, c.Y + w), // Bottom right
+                new TPoint(c.X - w, c.Y + w), // Bottom left
+            };
+
+            this.AddElement(
+                new DirectInputDpadDefinition(
+                    GlobalSettings.CurrentDefinition.GetNextId(),
+                    boundaries,
+                    string.Empty,
+                    string.Empty,
+                    Guid.Empty,
+                    0,
+                    false));
+        }
 
         /// <summary>
         /// Creates a new mouse key definition and adds it to the keyboard definition.
@@ -870,6 +964,36 @@ namespace ThoNohT.NohBoard.Forms
                         }
                         else
                         {
+                            // Set style.
+                            GlobalSettings.Settings
+                                .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
+                        }
+
+                        this.ResetBackBrushes();
+                    };
+
+                    styleForm.StyleSaved += () =>
+                    {
+                        GlobalSettings.Settings.UpdateStyle(GlobalSettings.CurrentStyle, true);
+                    };
+
+                    styleForm.ShowDialog(this);
+                }
+            }
+
+            if (relevantElement is DirectInputElementDefinition) {
+                using (var styleForm = new KeyStyleForm(
+                    GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(id),
+                    GlobalSettings.CurrentStyle.DefaultKeyStyle)) {
+                    styleForm.StyleChanged += style =>
+                    {
+                        if (style.Loose == null && style.Pressed == null) {
+                            if (GlobalSettings.CurrentStyle.ElementIsStyled(id)) {
+                                // Remove existing style.
+                                GlobalSettings.Settings
+                                    .UpdateStyle(GlobalSettings.CurrentStyle.RemoveElementStyle(id), false);
+                            }
+                        } else {
                             // Set style.
                             GlobalSettings.Settings
                                 .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
