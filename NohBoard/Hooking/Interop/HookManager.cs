@@ -292,64 +292,69 @@ namespace ThoNohT.NohBoard.Hooking.Interop
         /// <param name="state"></param>
         private static void DirectInputTimerProc(object state) {
             // for each joystick connected to the system
-            foreach (var device in Devices) {
-                try {
-                    var jState = device.GetCurrentState();
+            try {
+                foreach (var device in Devices) {
+                    try {
+                        var jState = device.GetCurrentState();
 
-                    DirectInputState.UpdatedPressedElements(device.Information.ProductGuid, jState.Buttons);
+                        DirectInputState.UpdatedPressedElements(device.Information.ProductGuid, jState.Buttons);
 
-                    DirectInputState.UpdatePressedDpads(device.Information.ProductGuid, jState.PointOfViewControllers);
+                        DirectInputState.UpdatePressedDpads(device.Information.ProductGuid, jState.PointOfViewControllers);
 
-                    DirectInputState.UpdateAxis(device.Information.ProductGuid, jState.X, jState.Y, jState.Z, jState.RotationX, jState.RotationY, jState.RotationZ, jState.Sliders[0], jState.Sliders[1]);
+                        DirectInputState.UpdateAxis(device.Information.ProductGuid, jState.X, jState.Y, jState.Z, jState.RotationX, jState.RotationY, jState.RotationZ, jState.Sliders[0], jState.Sliders[1]);
 
-                    if (DirectInputButtonInsert != null && device.Information.ProductGuid == CurrentDevideGuid) {
-                        for (int j = 0; j < device.Capabilities.ButtonCount; j++) {
-                            if (jState.Buttons[j]) {
-                                DirectInputButtonInsert.Invoke(j);
-                                return;
+                        if (DirectInputButtonInsert != null && device.Information.ProductGuid == CurrentDevideGuid) {
+                            for (int j = 0; j < device.Capabilities.ButtonCount; j++) {
+                                if (jState.Buttons[j]) {
+                                    DirectInputButtonInsert.Invoke(j);
+                                    return;
+                                }
                             }
                         }
-                    }
 
-                    if (DirectInputAxisInsert != null && device.Information.ProductGuid == CurrentDevideGuid) {
-                        string axisChanged = "";
-                        var axis = device.GetObjects(SharpDX.DirectInput.DeviceObjectTypeFlags.Axis);
+                        if (DirectInputAxisInsert != null && device.Information.ProductGuid == CurrentDevideGuid) {
+                            string axisChanged = "";
+                            var axis = device.GetObjects(SharpDX.DirectInput.DeviceObjectTypeFlags.Axis);
 
-                        if (jState.X != 0 && jState.X < 30000 || jState.X > 35000) {
-                            axisChanged = "X";
-                        } else if (jState.Y != 0 && jState.Y < 30000 || jState.Y > 35000) {
-                            axisChanged = "Y";
-                        } else if (jState.Z != 0 && jState.Z < 30000 || jState.Z > 35000) {
-                            axisChanged = "Z";
-                        } else if (jState.RotationX != 0 && jState.RotationX < 30000 || jState.RotationX > 35000) {
-                            axisChanged = "RotationX";
-                        } else if (jState.RotationY != 0 && jState.RotationY < 30000 || jState.RotationY > 35000) {
-                            axisChanged = "RotationY";
-                        } else if (jState.RotationZ != 0 && jState.RotationZ < 30000 || jState.RotationZ > 35000) {
-                            axisChanged = "RotationZ";
-                        } else if (jState.Sliders[0] > 5000 && jState.Sliders[0] < 30000 || jState.Sliders[0] > 35000 && jState.Sliders[0] < 60000) {
-                            axisChanged = "Slider0";
-                        } else if (jState.Sliders[1] > 5000 && jState.Sliders[1] < 30000 || jState.Sliders[1] > 35000 && jState.Sliders[1] < 60000) {
-                            axisChanged = "Slider1";
-                        }
+                            if (jState.X != 0 && jState.X < 30000 || jState.X > 35000) {
+                                axisChanged = "X";
+                            } else if (jState.Y != 0 && jState.Y < 30000 || jState.Y > 35000) {
+                                axisChanged = "Y";
+                            } else if (jState.Z != 0 && jState.Z < 30000 || jState.Z > 35000) {
+                                axisChanged = "Z";
+                            } else if (jState.RotationX != 0 && jState.RotationX < 30000 || jState.RotationX > 35000) {
+                                axisChanged = "RotationX";
+                            } else if (jState.RotationY != 0 && jState.RotationY < 30000 || jState.RotationY > 35000) {
+                                axisChanged = "RotationY";
+                            } else if (jState.RotationZ != 0 && jState.RotationZ < 30000 || jState.RotationZ > 35000) {
+                                axisChanged = "RotationZ";
+                            } else if (jState.Sliders[0] > 5000 && jState.Sliders[0] < 30000 || jState.Sliders[0] > 35000 && jState.Sliders[0] < 60000) {
+                                axisChanged = "Slider0";
+                            } else if (jState.Sliders[1] > 5000 && jState.Sliders[1] < 30000 || jState.Sliders[1] > 35000 && jState.Sliders[1] < 60000) {
+                                axisChanged = "Slider1";
+                            }
 
                             if (!string.IsNullOrEmpty(axisChanged)) {
-                            DirectInputAxisInsert.Invoke(axisChanged);
-                            DirectInputAxisInsert = null;
-                            return;
-                        }
-                    }
-
-                    if (DirectInputDpadInsert != null && device.Information.ProductGuid == CurrentDevideGuid) {
-                        for (int j = 0; j < device.Capabilities.PovCount; j++) {
-                            if (jState.PointOfViewControllers[j] != -1) {
-                                DirectInputDpadInsert.Invoke(j);
+                                DirectInputAxisInsert.Invoke(axisChanged);
+                                DirectInputAxisInsert = null;
                                 return;
                             }
                         }
+
+                        if (DirectInputDpadInsert != null && device.Information.ProductGuid == CurrentDevideGuid) {
+                            for (int j = 0; j < device.Capabilities.PovCount; j++) {
+                                if (jState.PointOfViewControllers[j] != -1) {
+                                    DirectInputDpadInsert.Invoke(j);
+                                    return;
+                                }
+                            }
+                        }
+                    } catch (Exception) {
+                        string text = "lol";
                     }
                 }
-                catch (Exception) { }
+            } catch (Exception) {
+                string text = "lol";
             }
         }
 

@@ -328,35 +328,44 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="pressed">A value indicating whether to render the key in its pressed state or not.</param>
         /// <param name="shift">A value indicating whether shift is pressed during the render.</param>
         /// <param name="capsLock">A value indicating whether caps lock is pressed during the render.</param>
-        public void Render(Graphics g, bool pressed, bool shift, bool capsLock) {
+        public void Render(Graphics g, Dictionary<Guid, bool[]> directInputKeys, bool shift, bool capsLock) {
             var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
                             ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
             var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
+            bool pressed = false;
 
             if (!PropertiesInitialized) {
                 InitializeSubProperties();
             }
 
-            var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
-            var txtPoint = new TPoint(
-                this.TextPosition.X - (int)(txtSize.Width / 2),
-                this.TextPosition.Y - (int)(txtSize.Height / 2));
+            if (directInputKeys.ContainsKey(DeviceId)) {
+                if (directInputKeys.Any() && DeviceId != Guid.Empty && ButtonNumber > 0 && directInputKeys[DeviceId][ButtonNumber - 1]) pressed = true;
+                var subStyle = pressed ? style?.Pressed ?? defaultStyle.Pressed : style?.Loose ?? defaultStyle.Loose;
 
-            // Draw the background
-            var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
-            g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
+                // Draw the background
+                var backgroundBrush = this.GetBackgroundBrush(subStyle, pressed);
+                g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
 
-            // Draw the text
-            g.SetClip(this.GetBoundingBox());
-            g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
-            g.ResetClip();
+                var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
+                var txtPoint = new TPoint(
+                    this.TextPosition.X - (int)(txtSize.Width / 2),
+                    this.TextPosition.Y - (int)(txtSize.Height / 2));
 
-            // Draw the outline.
-            if (subStyle.ShowOutline) {
-                g.DrawEllipse(
-                    new Pen(subStyle.Outline, subStyle.OutlineWidth),
-                    TopLeft.X, TopLeft.Y, Width, Height);
+                // Draw the text
+                g.SetClip(this.GetBoundingBox());
+                g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
+                g.ResetClip();
+
+                // Draw the outline.
+                if (subStyle.ShowOutline) {
+                    g.DrawEllipse(
+                        new Pen(subStyle.Outline, subStyle.OutlineWidth),
+                        TopLeft.X, TopLeft.Y, Width, Height);
+                }
+            } else {
+                // Just draws the background
+                var backgroundBrush = this.GetBackgroundBrush(style?.Loose ?? defaultStyle.Loose, pressed);
+                g.FillEllipse(backgroundBrush, TopLeft.X, TopLeft.Y, Width, Height);
             }
         }
 

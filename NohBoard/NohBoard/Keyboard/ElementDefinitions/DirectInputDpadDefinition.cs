@@ -328,69 +328,79 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="pressed">A value indicating whether to render the key in its pressed state or not.</param>
         /// <param name="shift">A value indicating whether shift is pressed during the render.</param>
         /// <param name="capsLock">A value indicating whether caps lock is pressed during the render.</param>
-        public void Render(Graphics g, int dpadValue, bool shift, bool capsLock) {
+        public void Render(Graphics g, Dictionary<Guid, int[]> directInputDpad, bool shift, bool capsLock) {
             var style = GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(this.Id)
                             ?? GlobalSettings.CurrentStyle.DefaultKeyStyle;
             var defaultStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
             var subStyle = style?.Loose ?? defaultStyle.Loose;
             var backgroundBrush = this.GetBackgroundBrush(subStyle, false);
-            var foregroundBrush = this.GetBackgroundBrush(subStyle, true);
+            var foregroundBrush = new SolidBrush(GlobalSettings.CurrentStyle.DefaultKeyStyle.Pressed.Background);
 
-            var borderPen = new Pen(subStyle.Outline, subStyle.OutlineWidth);
+            // Draw the background
+            g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
 
-            if (!PropertiesInitialized) {
-                InitializeSubProperties();
+            if (directInputDpad.ContainsKey(DeviceId) && DpadNumber > 0) {
+                int dpadValue = directInputDpad[DeviceId][DpadNumber - 1];
+
+                var borderPen = new Pen(subStyle.Outline, subStyle.OutlineWidth);
+
+                if (!PropertiesInitialized) {
+                    InitializeSubProperties();
+                }
+
+                float x1 = TopLeft.X;
+                float x2 = TopLeft.X + Width / 3;
+                float x3 = TopLeft.X + 2 * (Width / 3);
+                float x4 = TopRight.X;
+
+                float y1 = TopLeft.Y;
+                float y2 = TopLeft.Y + Height / 3;
+                float y3 = TopLeft.Y + 2 * (Height / 3);
+                float y4 = BottomLeft.Y;
+
+                // Draws the D-pad
+                if (subStyle.ShowOutline) {
+                    g.DrawLine(borderPen, x2, y1, x3, y1);
+                    g.DrawLine(borderPen, x3, y1, x3, y2);
+                    g.DrawLine(borderPen, x3, y2, x4, y2);
+                    g.DrawLine(borderPen, x4, y2, x4, y3);
+                    g.DrawLine(borderPen, x4, y3, x3, y3);
+                    g.DrawLine(borderPen, x3, y3, x3, y4);
+                    g.DrawLine(borderPen, x3, y4, x2, y4);
+                    g.DrawLine(borderPen, x2, y4, x2, y3);
+                    g.DrawLine(borderPen, x2, y3, x1, y3);
+                    g.DrawLine(borderPen, x1, y3, x1, y2);
+                    g.DrawLine(borderPen, x1, y2, x2, y2);
+                    g.DrawLine(borderPen, x2, y2, x2, y1);
+                }
+
+                // Draws the up fill if needed
+                if (dpadValue == 31500 || dpadValue == 0 || dpadValue == 4500) {
+                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
+                }
+                if (dpadValue == 4500 || dpadValue == 9000 || dpadValue == 13500) {
+                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
+                }
+                if (dpadValue == 13500 || dpadValue == 18000 || dpadValue == 22500) {
+                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
+                }
+                if (dpadValue == 22500 || dpadValue == 27000 || dpadValue == 31500) {
+                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
+                }
+                if (dpadValue == -1) {
+                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y2), new PointF(x3, y2), new PointF(x3, y3), new PointF(x2, y3) });
+                }
+
+                var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
+                var txtPoint = new TPoint(
+                    this.TextPosition.X - (int)(txtSize.Width / 2),
+                    this.TextPosition.Y - (int)(txtSize.Height / 2));
+
+                // Draw the text
+                g.SetClip(this.GetBoundingBox());
+                g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
+                g.ResetClip();
             }
-
-            float x1 = TopLeft.X;
-            float x2 = TopLeft.X + Width / 3;
-            float x3 = TopLeft.X + 2* (Width / 3);
-            float x4 = TopRight.X;
-
-            float y1 = TopLeft.Y;
-            float y2 = TopLeft.Y + Height / 3;
-            float y3 = TopLeft.Y + 2 * (Height / 3);
-            float y4 = BottomLeft.Y;
-
-            // Draws the D-pad
-            if (subStyle.ShowOutline) {
-                g.DrawLine(borderPen, x2, y1, x3, y1);
-                g.DrawLine(borderPen, x3, y1, x3, y2);
-                g.DrawLine(borderPen, x3, y2, x4, y2);
-                g.DrawLine(borderPen, x4, y2, x4, y3);
-                g.DrawLine(borderPen, x4, y3, x3, y3);
-                g.DrawLine(borderPen, x3, y3, x3, y4);
-                g.DrawLine(borderPen, x3, y4, x2, y4);
-                g.DrawLine(borderPen, x2, y4, x2, y3);
-                g.DrawLine(borderPen, x2, y3, x1, y3);
-                g.DrawLine(borderPen, x1, y3, x1, y2);
-                g.DrawLine(borderPen, x1, y2, x2, y2);
-                g.DrawLine(borderPen, x2, y2, x2, y1);
-            }
-
-            // Draws the up fill if needed
-            if (dpadValue == 31500 || dpadValue == 0 || dpadValue == 4500) {
-                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
-            }
-            if (dpadValue == 4500 || dpadValue == 9000 || dpadValue == 13500) {
-                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
-            }
-            if (dpadValue == 13500 || dpadValue == 18000 || dpadValue == 22500) {
-                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
-            }
-            if (dpadValue == 22500 || dpadValue == 27000 || dpadValue == 31500) {
-                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
-            }
-
-            var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
-            var txtPoint = new TPoint(
-                this.TextPosition.X - (int)(txtSize.Width / 2),
-                this.TextPosition.Y - (int)(txtSize.Height / 2));
-
-            // Draw the text
-            g.SetClip(this.GetBoundingBox());
-            g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
-            g.ResetClip();
         }
 
         /// <summary>

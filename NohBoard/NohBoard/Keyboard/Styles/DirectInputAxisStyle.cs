@@ -32,7 +32,7 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         [DataMember]
         public KeySubStyle Substyle { get; set; } = new KeySubStyle
         {
-            Background = Color.FromArgb(100, 100, 100),
+            Background = Color.FromArgb(0, 0, 100),
             Text = Color.FromArgb(0, 0, 0),
             Outline = Color.FromArgb(0, 255, 0),
             OutlineWidth = 1
@@ -110,10 +110,8 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         /// <returns>The cloned element style.</returns>
         public override ElementStyle Clone()
         {
-            return new KeyStyle
-            {
-                Loose = this.Substyle.Clone(),
-                Pressed = this.Substyle.Clone()
+            return new DirectInputAxisStyle {
+                Substyle = this.Substyle.Clone()
             };
         }
 

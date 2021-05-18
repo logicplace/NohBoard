@@ -156,6 +156,8 @@ namespace ThoNohT.NohBoard.Forms.Properties
 
                 int counter = 0;
                 var data = new List<JoystickButtonComboBoxItem>();
+
+                data.Add(new JoystickButtonComboBoxItem(0, "no DPad selected"));
                 while (counter < this.selectedJoystick.Capabilities.PovCount) {
                     data.Add(new JoystickButtonComboBoxItem(++counter, string.Format("DPad {0}", counter)));
                 }
@@ -406,7 +408,15 @@ namespace ThoNohT.NohBoard.Forms.Properties
         }
 
         private void cmbDpad_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox comboBox = (ComboBox)sender;
 
+            if (comboBox.SelectedItem != null) {
+                int selectedDpad = ((JoystickButtonComboBoxItem)comboBox.SelectedItem).ID;
+
+                // Handles changing the button
+                this.currentDefinition = this.currentDefinition.Modify(dpadNumber: selectedDpad);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
         }
 
         private void comboBoxDevicesList_SelectedIndexChanged(object sender, EventArgs e) {
@@ -438,20 +448,21 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 this.btnDetectDpad.Text = "Detecting...";
 
                 // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputDpadInsert = (dpad) => {
+                HookManager.CurrentDevideGuid = this.selectedJoystick.Information.ProductGuid;
+                HookManager.DirectInputDpadInsert = (dpad) => {
 
                     // Changes current definition
                     this.currentDefinition = this.currentDefinition.Modify(dpadNumber: dpad);
 
-                    if (Application.OpenForms["DirectInputAxisPropertiesForm"] != null) {
-                        (Application.OpenForms["DirectInputAxisPropertiesForm"] as DirectInputAxisPropertiesForm).Invoke(new DataSetMethodDpadInvokerInt(ChangeDpad), dpad + 1);
+                    if (Application.OpenForms["DirectInputDpadPropertiesForm"] != null) {
+                        (Application.OpenForms["DirectInputDpadPropertiesForm"] as DirectInputDpadPropertiesForm).Invoke(new DataSetMethodDpadInvokerInt(ChangeDpad), dpad + 1);
                     }
 
                     return true;
                 };
             } else {
                 this.btnDetectDpad.Text = "Detect Axis";
-                Hooking.Interop.HookManager.DirectInputAxisInsert = null;
+                HookManager.DirectInputDpadInsert = null;
             }
         }
     }

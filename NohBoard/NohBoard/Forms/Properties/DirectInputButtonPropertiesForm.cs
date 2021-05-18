@@ -323,13 +323,13 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 this.btnDetectButton.Text = "Detecting...";
 
                 // Wait for a button press
-                Hooking.Interop.HookManager.DirectInputButtonInsert = (code) => {
+                HookManager.CurrentDevideGuid = this.selectedJoystick.Information.ProductGuid;
+                HookManager.DirectInputButtonInsert = (code) => {
 
                     // Changes current definition
                     this.currentDefinition = this.currentDefinition.Modify(buttonNumber: code);
 
                     if (Application.OpenForms["DirectInputButtonPropertiesForm"] != null) {
-                        //(Application.OpenForms["DirectInputButtonPropertiesForm"] as DirectInputButtonPropertiesForm).RefreshFormOnJoystickChange();
                         (Application.OpenForms["DirectInputButtonPropertiesForm"] as DirectInputButtonPropertiesForm).Invoke(new DataSetMethodInvoker(ChangeButton), code + 1);
                     }
 
@@ -337,7 +337,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 };
             } else {
                 this.btnDetectButton.Text = "Detect Button";
-                Hooking.Interop.HookManager.DirectInputButtonInsert = null;
+                HookManager.DirectInputAxisInsert = null;
             }
         }
 

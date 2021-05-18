@@ -564,7 +564,7 @@ namespace ThoNohT.NohBoard.Forms
             this.menuOpen = false;
 
             var c = this.currentManipulationPoint;
-            var w = Constants.DefaultElementSize / 2;
+            var w = Constants.DefaultElementSize;
             var boundaries = new List<TPoint>
             {
                 new TPoint(c.X - w, c.Y - w), // Top left
@@ -600,7 +600,7 @@ namespace ThoNohT.NohBoard.Forms
             this.menuOpen = false;
 
             var c = this.currentManipulationPoint;
-            var w = Constants.DefaultElementSize / 2;
+            var w = Constants.DefaultElementSize;
             var boundaries = new List<TPoint>
             {
                 new TPoint(c.X - w, c.Y - w), // Top left
