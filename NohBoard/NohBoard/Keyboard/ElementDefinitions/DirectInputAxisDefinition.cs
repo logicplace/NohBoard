@@ -390,7 +390,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             var style = GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(this.Id)
                             ?? null;
             var defaultKeyStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = style != null ? style.Substyle : defaultKeyStyle.Loose;
+            var subStyle = style != null ? style.SubStyle : defaultKeyStyle.Loose;
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
             var txtPoint = new TPoint(
                 this.TextPosition.X - (int)(txtSize.Width / 2),
@@ -453,8 +453,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <param name="y">The Axis y coordinate.</param>
         /// <returns></returns>
         public Brush GetAxisBrush(DirectInputAxisStyle style, Rectangle boundingBox, int x, int y) {
-            if (style != null ? style.DrawDirectionalIcon : false) {
-
+            if (style != null) {
                 string imageFileName = style.BackgroundNeutralImageFileName;
                 double relativeX = (double)x / (double)AxisOneMax;
                 double relativeY = (double)y / (double)AxisTwoMax;
@@ -491,8 +490,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                     imageFileName = style.BackgroundBottomRightImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
-                return style.Substyle.BackgroundImageFileName == null || !FileHelper.StyleImageExists(imageFileName)
-                    ? new SolidBrush(style.Substyle.Background)
+                return style.SubStyle.BackgroundImageFileName == null || !FileHelper.StyleImageExists(imageFileName)
+                    ? new SolidBrush(style.SubStyle.Background)
                     : this.BrushFromImage(boundingBox, imageFileName);
             } else {
                 return new SolidBrush(GlobalSettings.CurrentStyle.DefaultKeyStyle.Pressed.Background);

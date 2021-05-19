@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace ThoNohT.NohBoard.Forms.Style
 {
     using System;
+    using System.Drawing;
     using System.Windows.Forms;
     using Keyboard.Styles;
     using ThoNohT.NohBoard.Extra;
@@ -32,17 +33,17 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// <summary>
         /// A backup style to return to if the user presses cancel.
         /// </summary>
-        private readonly KeyStyle initialStyle;
+        private readonly DirectInputAxisStyle initialStyle;
 
         /// <summary>
         /// The style to revert to if the overwrite checkbox is unchecked.
         /// </summary>
-        private readonly KeyStyle defaultStyle;
+        private readonly DirectInputAxisStyle defaultStyle;
 
         /// <summary>
         /// The currently loaded style.
         /// </summary>
-        private readonly KeyStyle currentStyle;
+        private readonly DirectInputAxisStyle currentStyle;
 
         #endregion Fields
 
@@ -52,7 +53,7 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// The event that is invoked when the style has been changed. Only invoked when the style is changed through
         /// the user interface, not when it is changed programmatically.
         /// </summary>
-        public new event Action<KeyStyle> StyleChanged;
+        public event Action<DirectInputAxisStyle> SubStyleChanged;
 
         /// <summary>
         /// The event that is invoked when the style is saved.
@@ -68,19 +69,16 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// </summary>
         /// <param name="initialStyle">The initial style.</param>
         /// <param name="defaultStyle">The default style to revert to when the override checkbox is unchecked.</param>
-        public DirectInputAxisStyleForm(KeyStyle initialStyle, KeyStyle defaultStyle)
-        {
+        public DirectInputAxisStyleForm(DirectInputAxisStyle initialStyle, DirectInputAxisStyle defaultStyle) {
             if (defaultStyle == null) throw new ArgumentNullException(nameof(defaultStyle));
-            if (defaultStyle.Loose == null) throw new ArgumentNullException(nameof(defaultStyle));
-            if (defaultStyle.Pressed == null) throw new ArgumentNullException(nameof(defaultStyle));
+            if (defaultStyle.SubStyle == null) throw new ArgumentNullException(nameof(defaultStyle));
 
-            this.initialStyle = ((KeyStyle)initialStyle?.Clone()) ?? new KeyStyle
-            {
-                Loose = null,
-                Pressed = null
+            this.initialStyle = ((DirectInputAxisStyle)initialStyle?.Clone()) ?? new DirectInputAxisStyle {
+                SubStyle = null
             };
-            this.defaultStyle = (KeyStyle)defaultStyle?.Clone();
-            this.currentStyle = (KeyStyle)this.initialStyle.Clone();
+            this.defaultStyle = (DirectInputAxisStyle)defaultStyle?.Clone();
+            this.currentStyle = (DirectInputAxisStyle)this.initialStyle.Clone();
+
             this.InitializeComponent();
         }
 
@@ -91,21 +89,25 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// <summary>
         /// Loads the form, setting the controls to the initial style.
         /// </summary>
-        private void KeyStyleForm_Load(object sender, EventArgs e)
+        private void DirectInputAxisStyleForm_Load(object sender, EventArgs e)
         {
-            // Default key styles.
-            this.loose.SubStyle = this.initialStyle?.Loose ?? this.defaultStyle.Loose;
-            this.pressed.SubStyle = this.initialStyle?.Pressed ?? this.defaultStyle.Pressed;
-            this.chkOverwriteLoose.Checked = this.currentStyle?.Loose != null;
-            this.chkOverwritePressed.Checked = this.currentStyle?.Pressed != null;
-            this.loose.Enabled = this.chkOverwriteLoose.Checked;
-            this.pressed.Enabled = this.chkOverwritePressed.Checked;
-
-            this.UpdateOutlineWarning();
+            // Default Direct Input Axis styles.
+            this.stylePanel.SubStyle = this.initialStyle?.SubStyle ?? this.defaultStyle.SubStyle;
+            this.clrKeyboardBackground.Color = this.initialStyle?.ForegroundColor ?? this.defaultStyle.ForegroundColor;
+            this.txtAxisImage.Text = this.initialStyle?.BackgroundNeutralImageFileName ?? this.defaultStyle.BackgroundNeutralImageFileName;
+            this.txtTopImage.Text = this.initialStyle?.BackgroundTopImageFileName ?? this.defaultStyle.BackgroundTopImageFileName;
+            this.txtBottomImage.Text = this.initialStyle?.BackgroundBottomImageFileName ?? this.defaultStyle.BackgroundBottomImageFileName;
+            this.txtLeftImage.Text = this.initialStyle?.BackgroundLeftImageFileName ?? this.defaultStyle.BackgroundLeftImageFileName;
+            this.txtRightImage.Text = this.initialStyle?.BackgroundRightImageFileName ?? this.defaultStyle.BackgroundRightImageFileName;
+            this.txtBottomLeftImage.Text = this.initialStyle?.BackgroundBottomLeftImageFileName ?? this.defaultStyle.BackgroundBottomLeftImageFileName;
+            this.txtBottomRightImage.Text = this.initialStyle?.BackgroundBottomRightImageFileName ?? this.defaultStyle.BackgroundBottomRightImageFileName;
+            this.txtTopLeftImage.Text = this.initialStyle?.BackgroundTopLeftImageFileName ?? this.defaultStyle.BackgroundTopLeftImageFileName;
+            this.txtTopRightImage.Text = this.initialStyle?.BackgroundTopRightImageFileName ?? this.defaultStyle.BackgroundTopRightImageFileName;
+            this.chkAxisBackground.Checked = this.initialStyle?.DrawAxisBackground ?? this.defaultStyle.DrawAxisBackground;
+            this.chkOverwriteDefaultStyle.Checked = this.currentStyle != null;
 
             // Only add the event handlers after the initial style has been set.
-            this.pressed.StyleChanged += this.pressedKeys_SubStyleChanged;
-            this.loose.StyleChanged += this.looseKeys_SubStyleChanged;
+            this.stylePanel.StyleChanged += this.style_SubStyleChanged;
         }
 
         /// <summary>
@@ -122,30 +124,18 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// </summary>
         private void CancelButton2_Click(object sender, EventArgs e)
         {
-            this.StyleChanged?.Invoke(this.initialStyle);
+            this.SubStyleChanged?.Invoke(this.initialStyle);
             this.DialogResult = DialogResult.Cancel;
-        }
-
-        /// <summary>
-        /// Handles change of the loose style, sets the new style and invokes the changed event.
-        /// </summary>
-        /// <param name="style">The new style.</param>
-        private void looseKeys_SubStyleChanged(KeySubStyle style)
-        {
-            this.currentStyle.Loose = style;
-            this.StyleChanged?.Invoke(this.currentStyle);
-            this.UpdateOutlineWarning();
         }
 
         /// <summary>
         /// Handles change of the pressed style, sets the new style and invokes the changed event.
         /// </summary>
         /// <param name="style">The new style.</param>
-        private void pressedKeys_SubStyleChanged(Keyboard.Styles.KeySubStyle style)
+        private void style_SubStyleChanged(KeySubStyle style)
         {
-            this.currentStyle.Pressed = style;
-            this.StyleChanged?.Invoke(this.currentStyle);
-            this.UpdateOutlineWarning();
+            this.currentStyle.SubStyle = style;
+            this.SubStyleChanged?.Invoke(this.currentStyle);
         }
 
         /// <summary>
@@ -153,56 +143,18 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// </summary>
         private void chkOverwriteLoose_CheckedChanged(object sender, EventArgs e)
         {
-            this.loose.Enabled = this.chkOverwriteLoose.Checked;
+            this.stylePanel.Enabled = this.chkOverwriteDefaultStyle.Checked;
 
-            if (this.chkOverwriteLoose.Checked)
+            if (this.chkOverwriteDefaultStyle.Checked)
             {
-                this.currentStyle.Loose = this.initialStyle.Loose ?? this.defaultStyle.Loose;
-                this.loose.SubStyle = this.currentStyle.Loose;
+                this.stylePanel.SubStyle = this.initialStyle.SubStyle ?? this.defaultStyle.SubStyle;
             }
             else
             {
-                this.currentStyle.Loose = null;
+                this.currentStyle.SubStyle = null;
             }
 
-            this.StyleChanged?.Invoke(this.currentStyle);
-            this.UpdateOutlineWarning();
-        }
-
-        /// <summary>
-        /// Toggles the overwriting of the default style for pressed keys.
-        /// </summary>
-        private void chkOverwritePressed_CheckedChanged(object sender, EventArgs e)
-        {
-            this.pressed.Enabled = this.chkOverwritePressed.Checked;
-
-            if (this.chkOverwritePressed.Checked)
-            {
-                this.currentStyle.Pressed = this.initialStyle.Pressed ?? this.defaultStyle.Pressed;
-                this.pressed.SubStyle = this.currentStyle.Pressed;
-            }
-            else
-            {
-                this.currentStyle.Pressed = null;
-            }
-
-            this.StyleChanged?.Invoke(this.currentStyle);
-
-            this.UpdateOutlineWarning();
-        }
-
-        /// <summary>
-        /// Updates the visibility of the outline warning.
-        /// </summary>
-        private void UpdateOutlineWarning()
-        {
-            int OutlineWidth(KeySubStyle subStyle, KeySubStyle globalSubStyle) =>
-                (subStyle ?? globalSubStyle).ShowOutline ? (subStyle ?? globalSubStyle).OutlineWidth : 0;
-
-            var def = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-
-            this.lblOutlineWarning.Visible =
-                OutlineWidth(this.currentStyle.Pressed, def.Pressed) < OutlineWidth(this.currentStyle.Loose, def.Loose);
+            this.SubStyleChanged?.Invoke(this.currentStyle);
         }
 
         #endregion Methods

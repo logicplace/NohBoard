@@ -72,6 +72,13 @@ namespace ThoNohT.NohBoard.Keyboard
         #region Defaults for elements
 
         /// <summary>
+        /// The default style for all key definitions; DirectInputAxisDefinition, KeyboardKeyDefinition, MouseKeyDefinition and
+        /// MouseScrollDefinition.
+        /// </summary>
+        [DataMember]
+        public DirectInputAxisStyle DefaultDirectInputAxisStyle { get; set; } = new DirectInputAxisStyle();
+
+        /// <summary>
         /// The default style for all key definitions; KeyboardKeyDefinition, MouseKeyDefinition and
         /// MouseScrollDefinition.
         /// </summary>

@@ -19,6 +19,7 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
 {
     using System.Drawing;
     using System.Runtime.Serialization;
+    using ThoNohT.NohBoard.Extra;
 
     /// <summary>
     /// The style for a key definition.
@@ -30,7 +31,7 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         /// The <see cref="KeySubStyle"/> for this key when it is loose.
         /// </summary>
         [DataMember]
-        public KeySubStyle Substyle { get; set; } = new KeySubStyle
+        public KeySubStyle SubStyle { get; set; } = new KeySubStyle
         {
             Background = Color.FromArgb(0, 0, 100),
             Text = Color.FromArgb(0, 0, 0),
@@ -39,16 +40,16 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         };
 
         /// <summary>
+        /// The color of the axis placeholder
+        /// </summary>
+        [DataMember]
+        public SerializableColor ForegroundColor { get; set; }
+
+        /// <summary>
         /// Whether or not the Axis' backgound should be drawn
         /// </summary>
         [DataMember]
         public bool DrawAxisBackground { get; set; }
-
-        /// <summary>
-        /// Whether or not the "dot" of the axis should be drawn. If not, a circular black ball will be instead.
-        /// </summary>
-        [DataMember]
-        public bool DrawDirectionalIcon { get; set; }
 
         /// <summary>
         /// The filename of the left background image, relative to the style's images folder.
@@ -111,7 +112,7 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         public override ElementStyle Clone()
         {
             return new DirectInputAxisStyle {
-                Substyle = this.Substyle.Clone()
+                SubStyle = this.SubStyle.Clone()
             };
         }
 
@@ -124,9 +125,9 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         {
             if (!(other is DirectInputAxisStyle ks)) return true;
 
-            if (this.Substyle is null != ks.Substyle is null) return true;
+            if (this.SubStyle is null != ks.SubStyle is null) return true;
 
-            return (this.Substyle?.IsChanged(ks.Substyle) ?? false);
+            return (this.SubStyle?.IsChanged(ks.SubStyle) ?? false);
         }
     }
 }
