@@ -21,6 +21,7 @@ namespace ThoNohT.NohBoard.Forms.Style
     using System.Drawing;
     using System.Windows.Forms;
     using Keyboard.Styles;
+    using ThoNohT.NohBoard.Controls;
     using ThoNohT.NohBoard.Extra;
 
     /// <summary>
@@ -53,7 +54,7 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// The event that is invoked when the style has been changed. Only invoked when the style is changed through
         /// the user interface, not when it is changed programmatically.
         /// </summary>
-        public event Action<DirectInputAxisStyle> SubStyleChanged;
+        public new event Action<DirectInputAxisStyle> StyleChanged;
 
         /// <summary>
         /// The event that is invoked when the style is saved.
@@ -78,6 +79,7 @@ namespace ThoNohT.NohBoard.Forms.Style
             };
             this.defaultStyle = (DirectInputAxisStyle)defaultStyle?.Clone();
             this.currentStyle = (DirectInputAxisStyle)this.initialStyle.Clone();
+            this.currentStyle.DrawAxisBackground = true;
 
             this.InitializeComponent();
         }
@@ -108,6 +110,23 @@ namespace ThoNohT.NohBoard.Forms.Style
 
             // Only add the event handlers after the initial style has been set.
             this.stylePanel.StyleChanged += this.style_SubStyleChanged;
+            this.clrKeyboardBackground.ColorChanged += this.style_KeyboardBackgroundChanged;
+            this.txtAxisImage.TextChanged += this.txtAxisImage_TextChanged;
+            this.txtBottomImage.TextChanged += this.txtBottomImage_TextChanged;
+            this.txtTopImage.TextChanged += this.txtTopImage_TextChanged;
+            this.txtLeftImage.TextChanged += this.txtLeftImage_TextChanged;
+            this.txtRightImage.TextChanged += this.txtRightImage_TextChanged;
+            this.txtBottomLeftImage.TextChanged += this.txtBottomLeftImage_TextChanged;
+            this.txtBottomRightImage.TextChanged += this.txtBottomRightImage_TextChanged;
+            this.txtTopLeftImage.TextChanged += this.txtTopLeftImage_TextChanged;
+            this.txtTopRightImage.TextChanged += this.txtTopRightImage_TextChanged;
+            this.chkOverwriteDefaultStyle.CheckStateChanged += this.chkOverwriteLoose_CheckedChanged;
+            this.chkAxisBackground.CheckedChanged += this.chkAxisBackground_CheckedChanged;
+        }
+
+        private void style_KeyboardBackgroundChanged(ColorChooser sender, Color color) {
+            this.currentStyle.ForegroundColor = color;
+            this.StyleChanged?.Invoke(this.currentStyle);
         }
 
         /// <summary>
@@ -124,7 +143,7 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// </summary>
         private void CancelButton2_Click(object sender, EventArgs e)
         {
-            this.SubStyleChanged?.Invoke(this.initialStyle);
+            this.StyleChanged?.Invoke(this.initialStyle);
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -135,7 +154,7 @@ namespace ThoNohT.NohBoard.Forms.Style
         private void style_SubStyleChanged(KeySubStyle style)
         {
             this.currentStyle.SubStyle = style;
-            this.SubStyleChanged?.Invoke(this.currentStyle);
+            this.StyleChanged?.Invoke(this.currentStyle);
         }
 
         /// <summary>
@@ -154,9 +173,69 @@ namespace ThoNohT.NohBoard.Forms.Style
                 this.currentStyle.SubStyle = null;
             }
 
-            this.SubStyleChanged?.Invoke(this.currentStyle);
+            this.StyleChanged?.Invoke(this.currentStyle);
         }
 
         #endregion Methods
+
+        private void txtAxisImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundNeutralImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtLeftImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundLeftImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtRightImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundRightImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtTopImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundTopImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtBottomImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundBottomImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtBottomLeftImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundBottomLeftImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtBottomRightImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundBottomRightImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtTopLeftImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundTopLeftImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void txtTopRightImage_TextChanged(object sender, EventArgs e) {
+            TextBox textBox = (TextBox)sender;
+            this.currentStyle.BackgroundTopRightImageFileName = textBox.Text;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
+
+        private void chkAxisBackground_CheckedChanged(object sender, EventArgs e) {
+            CheckBox checkBox = (CheckBox)sender;
+            this.currentStyle.DrawAxisBackground = checkBox.Checked;
+            this.StyleChanged?.Invoke(this.currentStyle);
+        }
     }
 }

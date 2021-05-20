@@ -47,11 +47,11 @@ namespace ThoNohT.NohBoard.Forms.Style
         /// </summary>
         private void InitializeComponent()
         {
-            ThoNohT.NohBoard.Keyboard.Styles.KeySubStyle keySubStyle2 = new ThoNohT.NohBoard.Keyboard.Styles.KeySubStyle();
-            ThoNohT.NohBoard.Extra.SerializableColor serializableColor4 = new ThoNohT.NohBoard.Extra.SerializableColor();
-            ThoNohT.NohBoard.Extra.SerializableFont serializableFont2 = new ThoNohT.NohBoard.Extra.SerializableFont();
-            ThoNohT.NohBoard.Extra.SerializableColor serializableColor5 = new ThoNohT.NohBoard.Extra.SerializableColor();
-            ThoNohT.NohBoard.Extra.SerializableColor serializableColor6 = new ThoNohT.NohBoard.Extra.SerializableColor();
+            ThoNohT.NohBoard.Keyboard.Styles.KeySubStyle keySubStyle1 = new ThoNohT.NohBoard.Keyboard.Styles.KeySubStyle();
+            ThoNohT.NohBoard.Extra.SerializableColor serializableColor1 = new ThoNohT.NohBoard.Extra.SerializableColor();
+            ThoNohT.NohBoard.Extra.SerializableFont serializableFont1 = new ThoNohT.NohBoard.Extra.SerializableFont();
+            ThoNohT.NohBoard.Extra.SerializableColor serializableColor2 = new ThoNohT.NohBoard.Extra.SerializableColor();
+            ThoNohT.NohBoard.Extra.SerializableColor serializableColor3 = new ThoNohT.NohBoard.Extra.SerializableColor();
             this.AcceptButton2 = new System.Windows.Forms.Button();
             this.CancelButton2 = new System.Windows.Forms.Button();
             this.chkOverwriteDefaultStyle = new System.Windows.Forms.CheckBox();
@@ -113,7 +113,6 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.chkOverwriteDefaultStyle.TabIndex = 18;
             this.chkOverwriteDefaultStyle.Text = "Overwrite default style";
             this.chkOverwriteDefaultStyle.UseVisualStyleBackColor = true;
-            this.chkOverwriteDefaultStyle.CheckedChanged += new System.EventHandler(this.chkOverwriteLoose_CheckedChanged);
             // 
             // stylePanel
             // 
@@ -121,28 +120,28 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.stylePanel.Margin = new System.Windows.Forms.Padding(8, 12, 8, 12);
             this.stylePanel.Name = "stylePanel";
             this.stylePanel.Size = new System.Drawing.Size(285, 637);
-            serializableColor4.Blue = ((byte)(0));
-            serializableColor4.Green = ((byte)(0));
-            serializableColor4.Red = ((byte)(0));
-            keySubStyle2.Background = serializableColor4;
-            keySubStyle2.BackgroundImageFileName = "";
-            serializableFont2.AlternateFontFamily = null;
-            serializableFont2.DownloadUrl = null;
-            serializableFont2.FontFamily = "Courier New";
-            serializableFont2.Size = 10F;
-            serializableFont2.Style = ThoNohT.NohBoard.Extra.SerializableFontStyle.Regular;
-            keySubStyle2.Font = serializableFont2;
-            serializableColor5.Blue = ((byte)(0));
-            serializableColor5.Green = ((byte)(0));
-            serializableColor5.Red = ((byte)(0));
-            keySubStyle2.Outline = serializableColor5;
-            keySubStyle2.OutlineWidth = 1;
-            keySubStyle2.ShowOutline = false;
-            serializableColor6.Blue = ((byte)(0));
-            serializableColor6.Green = ((byte)(0));
-            serializableColor6.Red = ((byte)(0));
-            keySubStyle2.Text = serializableColor6;
-            this.stylePanel.SubStyle = keySubStyle2;
+            serializableColor1.Blue = ((byte)(0));
+            serializableColor1.Green = ((byte)(0));
+            serializableColor1.Red = ((byte)(0));
+            keySubStyle1.Background = serializableColor1;
+            keySubStyle1.BackgroundImageFileName = "";
+            serializableFont1.AlternateFontFamily = null;
+            serializableFont1.DownloadUrl = null;
+            serializableFont1.FontFamily = "Courier New";
+            serializableFont1.Size = 10F;
+            serializableFont1.Style = ThoNohT.NohBoard.Extra.SerializableFontStyle.Regular;
+            keySubStyle1.Font = serializableFont1;
+            serializableColor2.Blue = ((byte)(0));
+            serializableColor2.Green = ((byte)(0));
+            serializableColor2.Red = ((byte)(0));
+            keySubStyle1.Outline = serializableColor2;
+            keySubStyle1.OutlineWidth = 1;
+            keySubStyle1.ShowOutline = false;
+            serializableColor3.Blue = ((byte)(0));
+            serializableColor3.Green = ((byte)(0));
+            serializableColor3.Red = ((byte)(0));
+            keySubStyle1.Text = serializableColor3;
+            this.stylePanel.SubStyle = keySubStyle1;
             this.stylePanel.TabIndex = 12;
             this.stylePanel.Title = "Style";
             // 

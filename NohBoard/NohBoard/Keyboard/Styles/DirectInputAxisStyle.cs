@@ -49,7 +49,7 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         /// Whether or not the Axis' backgound should be drawn
         /// </summary>
         [DataMember]
-        public bool DrawAxisBackground { get; set; }
+        public bool DrawAxisBackground { get; set; } = true;
 
         /// <summary>
         /// The filename of the left background image, relative to the style's images folder.
@@ -112,7 +112,18 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
         public override ElementStyle Clone()
         {
             return new DirectInputAxisStyle {
-                SubStyle = this.SubStyle.Clone()
+                SubStyle = this.SubStyle?.Clone(),
+                ForegroundColor = this.ForegroundColor,
+                DrawAxisBackground = this.DrawAxisBackground,
+                BackgroundNeutralImageFileName = this.BackgroundNeutralImageFileName,
+                BackgroundBottomImageFileName = this.BackgroundBottomImageFileName,
+                BackgroundTopImageFileName = this.BackgroundTopImageFileName,
+                BackgroundLeftImageFileName = this.BackgroundLeftImageFileName,
+                BackgroundRightImageFileName = this.BackgroundRightImageFileName,
+                BackgroundBottomLeftImageFileName = this.BackgroundBottomLeftImageFileName,
+                BackgroundBottomRightImageFileName = this.BackgroundBottomRightImageFileName,
+                BackgroundTopLeftImageFileName = this.BackgroundTopLeftImageFileName,
+                BackgroundTopRightImageFileName = this.BackgroundTopRightImageFileName
             };
         }
 

@@ -111,7 +111,8 @@ namespace ThoNohT.NohBoard.Keyboard
                 Name = this.Name,
                 BackgroundColor = this.BackgroundColor,
                 BackgroundImageFileName = this.BackgroundImageFileName,
-                DefaultKeyStyle = (KeyStyle) this.DefaultKeyStyle.Clone(),
+                DefaultKeyStyle = (KeyStyle)this.DefaultKeyStyle?.Clone(),
+                DefaultDirectInputAxisStyle = (DirectInputAxisStyle)this.DefaultDirectInputAxisStyle?.Clone(),
                 DefaultMouseSpeedIndicatorStyle =
                     (MouseSpeedIndicatorStyle) this.DefaultMouseSpeedIndicatorStyle.Clone(),
                 ElementStyles = this.ElementStyles.Select(s => (s.Key, s.Value.Clone()))

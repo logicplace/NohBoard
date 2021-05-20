@@ -982,24 +982,14 @@ namespace ThoNohT.NohBoard.Forms
             }
 
             if (relevantElement is DirectInputAxisDefinition) {
-                var directInputAxistStyle = GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(id);
-
                 using (var directInputAxisStyleForm = new DirectInputAxisStyleForm(
                     GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(id),
                     GlobalSettings.CurrentStyle.DefaultDirectInputAxisStyle)) {
-                    directInputAxisStyleForm.SubStyleChanged += style =>
+                    directInputAxisStyleForm.StyleChanged += style =>
                     {
-                        if (style == null) {
-                            if (GlobalSettings.CurrentStyle.ElementIsStyled(id)) {
-                                // Remove existing style.
-                                GlobalSettings.Settings
-                                    .UpdateStyle(GlobalSettings.CurrentStyle.RemoveElementStyle(id), false);
-                            }
-                        } else {
-                            // Set style.
-                            GlobalSettings.Settings
-                                .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
-                        }
+                        // Sets style
+                        GlobalSettings.Settings
+                            .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
 
                         this.ResetBackBrushes();
                     };
@@ -1010,36 +1000,6 @@ namespace ThoNohT.NohBoard.Forms
                     };
 
                     directInputAxisStyleForm.ShowDialog(this);
-                }
-            }
-
-            if (relevantElement is DirectInputElementDefinition) {
-                using (var styleForm = new KeyStyleForm(
-                    GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(id),
-                    GlobalSettings.CurrentStyle.DefaultKeyStyle)) {
-                    styleForm.StyleChanged += style =>
-                    {
-                        if (style.Loose == null && style.Pressed == null) {
-                            if (GlobalSettings.CurrentStyle.ElementIsStyled(id)) {
-                                // Remove existing style.
-                                GlobalSettings.Settings
-                                    .UpdateStyle(GlobalSettings.CurrentStyle.RemoveElementStyle(id), false);
-                            }
-                        } else {
-                            // Set style.
-                            GlobalSettings.Settings
-                                .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
-                        }
-
-                        this.ResetBackBrushes();
-                    };
-
-                    styleForm.StyleSaved += () =>
-                    {
-                        GlobalSettings.Settings.UpdateStyle(GlobalSettings.CurrentStyle, true);
-                    };
-
-                    styleForm.ShowDialog(this);
                 }
             }
 

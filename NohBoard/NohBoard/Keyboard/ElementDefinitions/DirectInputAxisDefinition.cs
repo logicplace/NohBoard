@@ -388,9 +388,9 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
             // Get the style, defaultkeys, substyle, txtSize, txtPoint
             var style = GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(this.Id)
-                            ?? null;
-            var defaultKeyStyle = GlobalSettings.CurrentStyle.DefaultKeyStyle;
-            var subStyle = style != null ? style.SubStyle : defaultKeyStyle.Loose;
+                            ?? GlobalSettings.CurrentStyle.DefaultDirectInputAxisStyle;
+            var defaultDirectInputAxisStyle = GlobalSettings.CurrentStyle.DefaultDirectInputAxisStyle;
+            var subStyle = style != null ? style?.SubStyle ?? defaultDirectInputAxisStyle.SubStyle : defaultDirectInputAxisStyle.SubStyle;
             var txtSize = g.MeasureString(this.GetText(shift, capsLock), subStyle.Font);
             var txtPoint = new TPoint(
                 this.TextPosition.X - (int)(txtSize.Width / 2),
@@ -490,11 +490,11 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                     imageFileName = style.BackgroundBottomRightImageFileName ?? style.BackgroundNeutralImageFileName;
                 }
 
-                return style.SubStyle.BackgroundImageFileName == null || !FileHelper.StyleImageExists(imageFileName)
-                    ? new SolidBrush(style.SubStyle.Background)
+                return imageFileName == null || !FileHelper.StyleImageExists(imageFileName)
+                    ? new SolidBrush(style.ForegroundColor)
                     : this.BrushFromImage(boundingBox, imageFileName);
             } else {
-                return new SolidBrush(GlobalSettings.CurrentStyle.DefaultKeyStyle.Pressed.Background);
+                return new SolidBrush(GlobalSettings.CurrentStyle.DefaultDirectInputAxisStyle.ForegroundColor);
             }
         }
 
