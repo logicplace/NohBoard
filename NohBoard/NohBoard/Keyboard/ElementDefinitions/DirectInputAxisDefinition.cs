@@ -402,37 +402,35 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 g.FillPolygon(backgroundBrush, this.Boundaries.ConvertAll<Point>(x => x).ToArray());
             }
 
-            if (directInputAxis.Any() && directInputAxis.ContainsKey(DeviceId)) {
-                int[] axis;
-                directInputAxis.TryGetValue(DeviceId, out axis);
+            int[] axis;
+            directInputAxis.TryGetValue(DeviceId, out axis);
 
-                try {
-                    // Retrieve the value of both axis
-                    var axis1Number = AxisOne != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisOne) : null;
-                    var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
+            try {
+                // Retrieve the value of both axis
+                var axis1Number = AxisOne != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisOne) : null;
+                var axis2Number = AxisTwo != string.Empty ? Enum.Parse(typeof(DirectInputAxisNames), AxisTwo) : null;
 
-                    // If there is no axis defined, the value is the "rest" one
-                    int axis1Value = axis1Number != null ? axis[(int)axis1Number] : AxisOneMax / 2;
-                    int axis2Value = axis2Number != null ? axis[(int)axis2Number] : AxisTwoMax / 2;
+                // If there is no axis defined, the value is the "rest" one
+                int axis1Value = axis1Number != null && axis != null ? axis[(int)axis1Number] : AxisOneMax / 2;
+                int axis2Value = axis2Number != null && axis != null ? axis[(int)axis2Number] : AxisTwoMax / 2;
 
-                    // Calculate the "delta" (from the starting position) of each axis
-                    var deltaX = ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
-                    var deltaY = ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
+                // Calculate the "delta" (from the starting position) of each axis
+                var deltaX = ((double)axis1Value / (double)AxisOneMax) * (Width - StickWidth);
+                var deltaY = ((double)axis2Value / (double)AxisTwoMax) * (Height - StickHeight);
 
-                    // Calculate the absolute X/Y position of a given axis
-                    var dotX = TopLeft.X + (this.InvertAxisOne == 1 ? (Width - StickWidth) - deltaX : deltaX);
-                    var dotY = TopLeft.Y + (this.InvertAxisTwo == 1 ? (Height - StickHeight) - deltaY : deltaY);
+                // Calculate the absolute X/Y position of a given axis
+                var dotX = TopLeft.X + (this.InvertAxisOne == 1 ? (Width - StickWidth) - deltaX : deltaX);
+                var dotY = TopLeft.Y + (this.InvertAxisTwo == 1 ? (Height - StickHeight) - deltaY : deltaY);
 
-                    /// Round'em up
-                    dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
-                    dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
-                    var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
+                /// Round'em up
+                dotX = Math.Round(dotX, MidpointRounding.AwayFromZero);
+                dotY = Math.Round(dotY, MidpointRounding.AwayFromZero);
+                var boundingBox = GetBoundingBoxImpl((int)dotX, (int)dotY);
 
-                    // Draw brush and draw
-                    var foregroundBrush = GetAxisBrush(style, boundingBox, this.InvertAxisOne == 1 ? AxisOneMax - axis1Value : axis1Value, this.InvertAxisTwo == 1 ? AxisTwoMax - axis2Value : axis2Value);
-                    g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, StickWidth, StickHeight);
-                } catch (Exception) { }
-            }
+                // Draw brush and draw
+                var foregroundBrush = GetAxisBrush(style, boundingBox, this.InvertAxisOne == 1 ? AxisOneMax - axis1Value : axis1Value, this.InvertAxisTwo == 1 ? AxisTwoMax - axis2Value : axis2Value);
+                g.FillEllipse(foregroundBrush, (int)dotX, (int)dotY, StickWidth, StickHeight);
+            } catch (Exception) { }
 
             // Draw the text
             g.DrawString(this.GetText(shift, capsLock), subStyle.Font, new SolidBrush(subStyle.Text), (Point)txtPoint);
@@ -491,7 +489,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 }
 
                 return imageFileName == null || !FileHelper.StyleImageExists(imageFileName)
-                    ? new SolidBrush(style.ForegroundColor)
+                    ? FileHelper.StyleImageExists(style.BackgroundNeutralImageFileName) ? this.BrushFromImage(boundingBox, style.BackgroundNeutralImageFileName) : new SolidBrush(style.ForegroundColor)
                     : this.BrushFromImage(boundingBox, imageFileName);
             } else {
                 return new SolidBrush(GlobalSettings.CurrentStyle.DefaultDirectInputAxisStyle.ForegroundColor);

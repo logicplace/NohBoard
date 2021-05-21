@@ -72,14 +72,21 @@ namespace ThoNohT.NohBoard.Keyboard
         #region Defaults for elements
 
         /// <summary>
-        /// The default style for all key definitions; DirectInputAxisDefinition, KeyboardKeyDefinition, MouseKeyDefinition and
+        /// The default style for all key definitions; DirectInputAxisDefinition, DirectInputDpadDefinition, KeyboardKeyDefinition, MouseKeyDefinition and
         /// MouseScrollDefinition.
         /// </summary>
         [DataMember]
         public DirectInputAxisStyle DefaultDirectInputAxisStyle { get; set; } = new DirectInputAxisStyle();
 
         /// <summary>
-        /// The default style for all key definitions; KeyboardKeyDefinition, MouseKeyDefinition and
+        /// The default style for all key definitions; DirectInputAxisDefinition, DirectInputDpadDefinition, KeyboardKeyDefinition, MouseKeyDefinition and
+        /// MouseScrollDefinition.
+        /// </summary>
+        [DataMember]
+        public DirectInputDpadStyle DefaultDirectInputDpadStyle { get; set; } = new DirectInputDpadStyle();
+
+        /// <summary>
+        /// The default style for all key definitions; DirectInputAxisDefinition, DirectInputDpadDefinition, KeyboardKeyDefinition, MouseKeyDefinition and
         /// MouseScrollDefinition.
         /// </summary>
         [DataMember]
@@ -113,6 +120,7 @@ namespace ThoNohT.NohBoard.Keyboard
                 BackgroundImageFileName = this.BackgroundImageFileName,
                 DefaultKeyStyle = (KeyStyle)this.DefaultKeyStyle?.Clone(),
                 DefaultDirectInputAxisStyle = (DirectInputAxisStyle)this.DefaultDirectInputAxisStyle?.Clone(),
+                DefaultDirectInputDpadStyle = (DirectInputDpadStyle)this.DefaultDirectInputDpadStyle?.Clone(),
                 DefaultMouseSpeedIndicatorStyle =
                     (MouseSpeedIndicatorStyle) this.DefaultMouseSpeedIndicatorStyle.Clone(),
                 ElementStyles = this.ElementStyles.Select(s => (s.Key, s.Value.Clone()))

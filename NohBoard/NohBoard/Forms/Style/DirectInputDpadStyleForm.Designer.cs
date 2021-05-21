@@ -19,7 +19,7 @@ namespace ThoNohT.NohBoard.Forms.Style
 {
     using Controls;
 
-    partial class DirectInputAxisStyleForm
+    partial class DirectInputDpadStyleForm
     {
         /// <summary>
         /// Required designer variable.
@@ -73,10 +73,10 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.lblRightImage = new System.Windows.Forms.Label();
             this.txtLeftImage = new System.Windows.Forms.TextBox();
             this.lblLeftImage = new System.Windows.Forms.Label();
-            this.txtAxisImage = new System.Windows.Forms.TextBox();
+            this.txtDpadImage = new System.Windows.Forms.TextBox();
             this.lblBackgroundImage = new System.Windows.Forms.Label();
             this.clrKeyboardBackground = new ThoNohT.NohBoard.Controls.ColorChooser();
-            this.chkAxisBackground = new System.Windows.Forms.CheckBox();
+            this.chkDpadBackground = new System.Windows.Forms.CheckBox();
             this.KeyboardGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -163,7 +163,7 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.KeyboardGroup.Controls.Add(this.lblRightImage);
             this.KeyboardGroup.Controls.Add(this.txtLeftImage);
             this.KeyboardGroup.Controls.Add(this.lblLeftImage);
-            this.KeyboardGroup.Controls.Add(this.txtAxisImage);
+            this.KeyboardGroup.Controls.Add(this.txtDpadImage);
             this.KeyboardGroup.Controls.Add(this.lblBackgroundImage);
             this.KeyboardGroup.Controls.Add(this.clrKeyboardBackground);
             this.KeyboardGroup.Location = new System.Drawing.Point(318, 65);
@@ -319,13 +319,13 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.lblLeftImage.Text = "Left Image:";
             this.lblLeftImage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // txtAxisImage
+            // txtDpadImage
             // 
-            this.txtAxisImage.Location = new System.Drawing.Point(205, 99);
-            this.txtAxisImage.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.txtAxisImage.Name = "txtAxisImage";
-            this.txtAxisImage.Size = new System.Drawing.Size(341, 31);
-            this.txtAxisImage.TabIndex = 4;
+            this.txtDpadImage.Location = new System.Drawing.Point(205, 99);
+            this.txtDpadImage.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.txtDpadImage.Name = "txtDpadImage";
+            this.txtDpadImage.Size = new System.Drawing.Size(341, 31);
+            this.txtDpadImage.TabIndex = 4;
             // 
             // lblBackgroundImage
             // 
@@ -349,24 +349,24 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.clrKeyboardBackground.Size = new System.Drawing.Size(263, 50);
             this.clrKeyboardBackground.TabIndex = 2;
             // 
-            // chkAxisBackground
+            // chkDpadBackground
             // 
-            this.chkAxisBackground.AutoSize = true;
-            this.chkAxisBackground.Location = new System.Drawing.Point(318, 567);
-            this.chkAxisBackground.Name = "chkAxisBackground";
-            this.chkAxisBackground.Size = new System.Drawing.Size(216, 29);
-            this.chkAxisBackground.TabIndex = 20;
-            this.chkAxisBackground.Text = "Draw Axis Background";
-            this.chkAxisBackground.UseVisualStyleBackColor = true;
+            this.chkDpadBackground.AutoSize = true;
+            this.chkDpadBackground.Location = new System.Drawing.Point(318, 567);
+            this.chkDpadBackground.Name = "chkDpadBackground";
+            this.chkDpadBackground.Size = new System.Drawing.Size(228, 29);
+            this.chkDpadBackground.TabIndex = 20;
+            this.chkDpadBackground.Text = "Draw Dpad Background";
+            this.chkDpadBackground.UseVisualStyleBackColor = true;
             // 
-            // DirectInputAxisStyleForm
+            // DirectInputDpadStyleForm
             // 
             this.AcceptButton = this.AcceptButton2;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelButton2;
             this.ClientSize = new System.Drawing.Size(904, 703);
-            this.Controls.Add(this.chkAxisBackground);
+            this.Controls.Add(this.chkDpadBackground);
             this.Controls.Add(this.KeyboardGroup);
             this.Controls.Add(this.chkOverwriteDefaultStyle);
             this.Controls.Add(this.stylePanel);
@@ -374,10 +374,10 @@ namespace ThoNohT.NohBoard.Forms.Style
             this.Controls.Add(this.AcceptButton2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.Name = "DirectInputAxisStyleForm";
+            this.Name = "DirectInputDpadStyleForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Axis Style";
+            this.Text = "Dpad Style";
             this.Load += new System.EventHandler(this.DirectInputAxisStyleForm_Load);
             this.KeyboardGroup.ResumeLayout(false);
             this.KeyboardGroup.PerformLayout();
@@ -395,7 +395,7 @@ namespace ThoNohT.NohBoard.Forms.Style
         private System.Windows.Forms.TextBox txtAxisImage;
         private System.Windows.Forms.Label lblBackgroundImage;
         private ColorChooser clrKeyboardBackground;
-        private System.Windows.Forms.CheckBox chkAxisBackground;
+        private System.Windows.Forms.CheckBox chkDpadBackground;
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox7;
@@ -427,5 +427,7 @@ namespace ThoNohT.NohBoard.Forms.Style
         private System.Windows.Forms.TextBox txtTopLeftImage;
         private System.Windows.Forms.Label lblTopRightImage;
         private System.Windows.Forms.TextBox txtTopRightImage;
+        private System.Windows.Forms.TextBox txtDpadImage;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

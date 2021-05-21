@@ -68,6 +68,7 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.label2 = new System.Windows.Forms.Label();
             this.cmbDpad = new System.Windows.Forms.ComboBox();
             this.btnDetectDpad = new System.Windows.Forms.Button();
+            this.chkDrawDiagonalDirections = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnBoundaryDown
@@ -326,13 +327,25 @@ namespace ThoNohT.NohBoard.Forms.Properties {
             this.btnDetectDpad.Text = "Detect Dpad";
             this.btnDetectDpad.UseVisualStyleBackColor = true;
             // 
+            // chkDrawDiagonalDirections
+            // 
+            this.chkDrawDiagonalDirections.AutoSize = true;
+            this.chkDrawDiagonalDirections.Location = new System.Drawing.Point(417, 263);
+            this.chkDrawDiagonalDirections.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.chkDrawDiagonalDirections.Name = "chkDrawDiagonalDirections";
+            this.chkDrawDiagonalDirections.Size = new System.Drawing.Size(239, 29);
+            this.chkDrawDiagonalDirections.TabIndex = 65;
+            this.chkDrawDiagonalDirections.Text = "Draw Diagonal Directions";
+            this.chkDrawDiagonalDirections.UseVisualStyleBackColor = true;
+            // 
             // DirectInputDpadPropertiesForm
             // 
             this.AcceptButton = this.AcceptButton2;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelButton2;
-            this.ClientSize = new System.Drawing.Size(820, 759);
+            this.ClientSize = new System.Drawing.Size(820, 566);
+            this.Controls.Add(this.chkDrawDiagonalDirections);
             this.Controls.Add(this.btnDetectDpad);
             this.Controls.Add(this.cmbDpad);
             this.Controls.Add(this.label2);
@@ -398,5 +411,6 @@ namespace ThoNohT.NohBoard.Forms.Properties {
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbDpad;
         private System.Windows.Forms.Button btnDetectDpad;
+        private System.Windows.Forms.CheckBox chkDrawDiagonalDirections;
     }
 }

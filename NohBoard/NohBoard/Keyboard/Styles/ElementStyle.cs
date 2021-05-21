@@ -25,6 +25,7 @@ namespace ThoNohT.NohBoard.Keyboard.Styles
     [KnownType(typeof(KeyStyle))]
     [KnownType(typeof(MouseSpeedIndicatorStyle))]
     [KnownType(typeof(DirectInputAxisStyle))]
+    [KnownType(typeof(DirectInputDpadStyle))]
     [DataContract(Name = "ElementStyle", Namespace = "")]
     public abstract class ElementStyle
     {

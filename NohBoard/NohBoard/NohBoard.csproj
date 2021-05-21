@@ -24,6 +24,9 @@
     <Compile Update="Forms\Properties\DirectInputAxisPropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Style\DirectInputDpadStyleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Style\DirectInputAxisStyleForm.cs">
       <SubType>Form</SubType>
     </Compile>

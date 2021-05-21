@@ -98,6 +98,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtTextPosition.Y = this.initialDefinition.TextPosition.Y;
             this.lstBoundaries.Items.AddRange(this.initialDefinition.Boundaries.Cast<object>().ToArray());
             this.chkChangeOnCaps.Checked = this.initialDefinition.ChangeOnCaps;
+            this.chkDrawDiagonalDirections.Checked = this.initialDefinition.DrawDiagonalDirections;
             this.txtDeviceId.Text = this.initialDefinition.DeviceId.ToString();
 
             // Retrieves all of the currently available joysticks and lists them here
@@ -136,6 +137,7 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.comboBoxDevicesList.SelectedIndexChanged += this.comboBoxDevicesList_SelectedIndexChanged;
             this.cmbDpad.SelectedIndexChanged += this.cmbDpad_SelectedIndexChanged;
             this.btnDetectDpad.Click += this.btnDetectAxis1_Click;
+            this.chkDrawDiagonalDirections.CheckedChanged += this.chkDrawDiagonalDirections_CheckedChanged;
         }
 
         /// <summary>
@@ -464,6 +466,11 @@ namespace ThoNohT.NohBoard.Forms.Properties
                 this.btnDetectDpad.Text = "Detect Axis";
                 HookManager.DirectInputDpadInsert = null;
             }
+        }
+
+        private void chkDrawDiagonalDirections_CheckedChanged(object sender, EventArgs e) {
+            this.currentDefinition = this.currentDefinition.Modify(drawDiagonalDirections: this.chkDrawDiagonalDirections.Checked);
+            this.DefinitionChanged?.Invoke(this.currentDefinition);
         }
     }
 }

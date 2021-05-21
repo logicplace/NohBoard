@@ -617,6 +617,7 @@ namespace ThoNohT.NohBoard.Forms
                     string.Empty,
                     Guid.Empty,
                     0,
+                    false,
                     false));
         }
 
@@ -981,6 +982,36 @@ namespace ThoNohT.NohBoard.Forms
                 }
             }
 
+            if (relevantElement is DirectInputButtonDefinition) {
+                using (var styleForm = new KeyStyleForm(
+                    GlobalSettings.CurrentStyle.TryGetElementStyle<KeyStyle>(id),
+                    GlobalSettings.CurrentStyle.DefaultKeyStyle)) {
+                    styleForm.StyleChanged += style =>
+                    {
+                        if (style.Loose == null && style.Pressed == null) {
+                            if (GlobalSettings.CurrentStyle.ElementIsStyled(id)) {
+                                // Remove existing style.
+                                GlobalSettings.Settings
+                                    .UpdateStyle(GlobalSettings.CurrentStyle.RemoveElementStyle(id), false);
+                            }
+                        } else {
+                            // Set style.
+                            GlobalSettings.Settings
+                                .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
+                        }
+
+                        this.ResetBackBrushes();
+                    };
+
+                    styleForm.StyleSaved += () =>
+                    {
+                        GlobalSettings.Settings.UpdateStyle(GlobalSettings.CurrentStyle, true);
+                    };
+
+                    styleForm.ShowDialog(this);
+                }
+            }
+
             if (relevantElement is DirectInputAxisDefinition) {
                 using (var directInputAxisStyleForm = new DirectInputAxisStyleForm(
                     GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputAxisStyle>(id),
@@ -1000,6 +1031,28 @@ namespace ThoNohT.NohBoard.Forms
                     };
 
                     directInputAxisStyleForm.ShowDialog(this);
+                }
+            }
+
+            if (relevantElement is DirectInputDpadDefinition) {
+                using (var directInputDpadStyleForm = new DirectInputDpadStyleForm(
+                    GlobalSettings.CurrentStyle.TryGetElementStyle<DirectInputDpadStyle>(id),
+                    GlobalSettings.CurrentStyle.DefaultDirectInputDpadStyle)) {
+                    directInputDpadStyleForm.StyleChanged += style =>
+                    {
+                        // Sets style
+                        GlobalSettings.Settings
+                            .UpdateStyle(GlobalSettings.CurrentStyle.SetElementStyle(id, style), false);
+
+                        this.ResetBackBrushes();
+                    };
+
+                    directInputDpadStyleForm.StyleSaved += () =>
+                    {
+                        GlobalSettings.Settings.UpdateStyle(GlobalSettings.CurrentStyle, true);
+                    };
+
+                    directInputDpadStyleForm.ShowDialog(this);
                 }
             }
 

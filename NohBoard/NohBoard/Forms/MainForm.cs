@@ -687,11 +687,7 @@ namespace ThoNohT.NohBoard.Forms
                 didDef.Render(g, directInputDpad, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is DirectInputAxisDefinition diaDef) {
-                try {
-                    diaDef.Render(g, directInputAxis, KeyboardState.ShiftDown, KeyboardState.CapsActive);
-                } catch (Exception e) {
-                    var lol = "true";
-                }
+                diaDef.Render(g, directInputAxis, KeyboardState.ShiftDown, KeyboardState.CapsActive);
             }
             if (def is MouseKeyDefinition mkDef)
             {
