@@ -489,7 +489,8 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 }
 
                 return imageFileName == null || !FileHelper.StyleImageExists(imageFileName)
-                    ? FileHelper.StyleImageExists(style.BackgroundNeutralImageFileName) ? this.BrushFromImage(boundingBox, style.BackgroundNeutralImageFileName) : new SolidBrush(style.ForegroundColor)
+                    ? string.IsNullOrEmpty(style.BackgroundNeutralImageFileName) || !FileHelper.StyleImageExists(style.BackgroundNeutralImageFileName) ?
+                    new SolidBrush(style.ForegroundColor) : this.BrushFromImage(boundingBox, style.BackgroundNeutralImageFileName)
                     : this.BrushFromImage(boundingBox, imageFileName);
             } else {
                 return new SolidBrush(GlobalSettings.CurrentStyle.DefaultDirectInputAxisStyle.ForegroundColor);
