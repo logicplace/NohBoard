@@ -56,6 +56,92 @@
       }
     }
   },
+  "DefaultDirectInputDpadStyle": {
+    "BackgroundBottomImageFileName": null,
+    "BackgroundBottomLeftImageFileName": null,
+    "BackgroundBottomRightImageFileName": null,
+    "BackgroundLeftImageFileName": null,
+    "BackgroundNeutralImageFileName": null,
+    "BackgroundRightImageFileName": null,
+    "BackgroundTopImageFileName": null,
+    "BackgroundTopLeftImageFileName": null,
+    "BackgroundTopRightImageFileName": null,
+    "DrawDpadBackground": true,
+    "ForegroundColor": {
+      "Blue": 255,
+      "Green": 255,
+      "Red": 255
+    },
+    "SubStyle": {
+      "Background": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Orbitron",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      }
+    }
+  },
+  "DefaultDirectInputAxisStyle": {
+    "BackgroundBottomImageFileName": null,
+    "BackgroundBottomLeftImageFileName": null,
+    "BackgroundBottomRightImageFileName": null,
+    "BackgroundLeftImageFileName": null,
+    "BackgroundNeutralImageFileName": null,
+    "BackgroundRightImageFileName": null,
+    "BackgroundTopImageFileName": null,
+    "BackgroundTopLeftImageFileName": null,
+    "BackgroundTopRightImageFileName": null,
+    "DrawAxisBackground": true,
+    "ForegroundColor": {
+      "Blue": 255,
+      "Green": 255,
+      "Red": 255
+    },
+    "SubStyle": {
+      "Background": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Orbitron",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      }
+    }
+  },
   "DefaultMouseSpeedIndicatorStyle": {
     "InnerColor": {
       "Blue": 100,
