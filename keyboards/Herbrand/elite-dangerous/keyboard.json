@@ -5,32 +5,32 @@
       "Id": 1,
       "Boundaries": [
         {
-          "X": 105,
+          "X": 103,
           "Y": 5
         },
         {
-          "X": 195,
+          "X": 193,
           "Y": 5
         },
         {
-          "X": 195,
+          "X": 193,
           "Y": 95
         },
         {
-          "X": 105,
+          "X": 103,
           "Y": 95
         }
       ],
       "KeyCodes": [
-        9
+        87
       ],
-      "Text": "Forward",
+      "Text": "",
       "TextPosition": {
-        "X": 150,
-        "Y": 50
+        "X": 148,
+        "Y": 40
       },
       "ChangeOnCaps": false,
-      "ShiftText": "tab"
+      "ShiftText": "UP"
     },
     {
       "__type": "KeyboardKey",
@@ -54,15 +54,15 @@
         }
       ],
       "KeyCodes": [
-        9
+        65
       ],
-      "Text": "Left",
+      "Text": "",
       "TextPosition": {
         "X": 50,
         "Y": 150
       },
       "ChangeOnCaps": false,
-      "ShiftText": "tab"
+      "ShiftText": "Left"
     },
     {
       "__type": "KeyboardKey",
@@ -86,15 +86,15 @@
         }
       ],
       "KeyCodes": [
-        9
+        83
       ],
-      "Text": "Backward",
+      "Text": "",
       "TextPosition": {
         "X": 150,
-        "Y": 150
+        "Y": 160
       },
       "ChangeOnCaps": false,
-      "ShiftText": "tab"
+      "ShiftText": "Down"
     },
     {
       "__type": "KeyboardKey",
@@ -118,15 +118,15 @@
         }
       ],
       "KeyCodes": [
-        9
+        68
       ],
-      "Text": "Right",
+      "Text": "",
       "TextPosition": {
         "X": 250,
         "Y": 150
       },
       "ChangeOnCaps": false,
-      "ShiftText": "tab"
+      "ShiftText": "Right"
     },
     {
       "__type": "KeyboardKey",
@@ -152,7 +152,7 @@
       "KeyCodes": [
         9
       ],
-      "Text": "Tab",
+      "Text": "",
       "TextPosition": {
         "X": 275,
         "Y": 50
@@ -165,64 +165,64 @@
       "Id": 6,
       "Boundaries": [
         {
-          "X": 355,
+          "X": 354,
           "Y": 5
         },
         {
-          "X": 445,
+          "X": 444,
           "Y": 5
         },
         {
-          "X": 445,
+          "X": 444,
           "Y": 95
         },
         {
-          "X": 355,
+          "X": 354,
           "Y": 95
         }
       ],
       "KeyCodes": [
-        9
+        90
       ],
-      "Text": "Up",
+      "Text": "",
       "TextPosition": {
-        "X": 400,
-        "Y": 50
+        "X": 399,
+        "Y": 40
       },
       "ChangeOnCaps": false,
-      "ShiftText": "tab"
+      "ShiftText": "FW"
     },
     {
       "__type": "KeyboardKey",
       "Id": 7,
       "Boundaries": [
         {
-          "X": 355,
+          "X": 356,
           "Y": 105
         },
         {
-          "X": 445,
+          "X": 446,
           "Y": 105
         },
         {
-          "X": 445,
+          "X": 446,
           "Y": 195
         },
         {
-          "X": 355,
+          "X": 356,
           "Y": 195
         }
       ],
       "KeyCodes": [
-        9
+        32
       ],
-      "Text": "Down",
+      "Text": "",
       "TextPosition": {
-        "X": 400,
-        "Y": 150
+        "X": 401,
+        "Y": 160
       },
       "ChangeOnCaps": false,
-      "ShiftText": "tab"
+      "ShiftText": "BW"
     },
     {
       "__type": "DirectInputAxis",
@@ -230,33 +230,33 @@
       "Boundaries": [
         {
           "X": 5,
-          "Y": 205
+          "Y": 198
         },
         {
-          "X": 345,
-          "Y": 205
+          "X": 291,
+          "Y": 198
         },
         {
-          "X": 345,
-          "Y": 245
+          "X": 291,
+          "Y": 250
         },
         {
           "X": 5,
-          "Y": 245
+          "Y": 250
         }
       ],
-      "DeviceId": "b10a044f-0000-0000-0000-504944564944",
+      "DeviceId": "0a3816d0-0000-0000-0000-504944564944",
       "Text": "Roll",
       "TextPosition": {
-        "X": 175,
-        "Y": 260
+        "X": 148,
+        "Y": 224
       },
-      "AxisOne": "Slider0",
+      "AxisOne": "RotationZ",
       "AxisOneMax": 65535,
-      "AxisTwo": "X",
+      "AxisTwo": "",
       "AxisTwoMax": 65535,
       "ChangeOnCaps": false,
-      "InvertAxisOne": 0,
+      "InvertAxisOne": 1,
       "InvertAxisTwo": 0,
       "ShiftText": null,
       "StickHeight": 50,

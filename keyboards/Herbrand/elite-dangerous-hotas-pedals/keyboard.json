@@ -1,0 +1,276 @@
+{
+  "Elements": [
+    {
+      "__type": "DirectInputButton",
+      "Id": 5,
+      "Boundaries": [
+        {
+          "X": 199,
+          "Y": 20
+        },
+        {
+          "X": 319,
+          "Y": 20
+        },
+        {
+          "X": 319,
+          "Y": 80
+        },
+        {
+          "X": 199,
+          "Y": 80
+        }
+      ],
+      "DeviceId": "0404044f-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 126,
+        "Y": 46
+      },
+      "ButtonNumber": 8,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputAxis",
+      "Id": 8,
+      "Boundaries": [
+        {
+          "X": 5,
+          "Y": 198
+        },
+        {
+          "X": 291,
+          "Y": 198
+        },
+        {
+          "X": 291,
+          "Y": 250
+        },
+        {
+          "X": 5,
+          "Y": 250
+        }
+      ],
+      "DeviceId": "0a3816d0-0000-0000-0000-504944564944",
+      "Text": "Roll",
+      "TextPosition": {
+        "X": 148,
+        "Y": 264
+      },
+      "AxisOne": "RotationZ",
+      "AxisOneMax": 65535,
+      "AxisTwo": "",
+      "AxisTwoMax": 65535,
+      "ChangeOnCaps": false,
+      "InvertAxisOne": 1,
+      "InvertAxisTwo": 0,
+      "ShiftText": null,
+      "StickHeight": 50,
+      "StickWidth": 50
+    },
+    {
+      "__type": "DirectInputAxis",
+      "Id": 9,
+      "Boundaries": [
+        {
+          "X": 413,
+          "Y": 8
+        },
+        {
+          "X": 413,
+          "Y": 190
+        },
+        {
+          "X": 595,
+          "Y": 190
+        },
+        {
+          "X": 595,
+          "Y": 8
+        }
+      ],
+      "DeviceId": "0402044f-0000-0000-0000-504944564944",
+      "Text": "Joystick",
+      "TextPosition": {
+        "X": 500,
+        "Y": 204
+      },
+      "AxisOne": "X",
+      "AxisOneMax": 65535,
+      "AxisTwo": "Y",
+      "AxisTwoMax": 65535,
+      "ChangeOnCaps": false,
+      "InvertAxisOne": 0,
+      "InvertAxisTwo": 0,
+      "ShiftText": null,
+      "StickHeight": 50,
+      "StickWidth": 50
+    },
+    {
+      "__type": "DirectInputAxis",
+      "Id": 10,
+      "Boundaries": [
+        {
+          "X": 333,
+          "Y": 6
+        },
+        {
+          "X": 333,
+          "Y": 188
+        },
+        {
+          "X": 384,
+          "Y": 188
+        },
+        {
+          "X": 384,
+          "Y": 6
+        }
+      ],
+      "DeviceId": "0404044f-0000-0000-0000-504944564944",
+      "Text": "Throttle",
+      "TextPosition": {
+        "X": 358,
+        "Y": 207
+      },
+      "AxisOne": "",
+      "AxisOneMax": 65535,
+      "AxisTwo": "Z",
+      "AxisTwoMax": 65535,
+      "ChangeOnCaps": false,
+      "InvertAxisOne": 1,
+      "InvertAxisTwo": 0,
+      "ShiftText": null,
+      "StickHeight": 50,
+      "StickWidth": 50
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 11,
+      "Boundaries": [
+        {
+          "X": 100,
+          "Y": 5
+        },
+        {
+          "X": 100,
+          "Y": 95
+        },
+        {
+          "X": 190,
+          "Y": 95
+        },
+        {
+          "X": 190,
+          "Y": 5
+        }
+      ],
+      "DeviceId": "0404044f-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 113,
+        "Y": 33
+      },
+      "ButtonNumber": 3,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 12,
+      "Boundaries": [
+        {
+          "X": 195,
+          "Y": 100
+        },
+        {
+          "X": 195,
+          "Y": 190
+        },
+        {
+          "X": 285,
+          "Y": 190
+        },
+        {
+          "X": 285,
+          "Y": 100
+        }
+      ],
+      "DeviceId": "0404044f-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 144,
+        "Y": 102
+      },
+      "ButtonNumber": 4,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 13,
+      "Boundaries": [
+        {
+          "X": 100,
+          "Y": 100
+        },
+        {
+          "X": 100,
+          "Y": 190
+        },
+        {
+          "X": 190,
+          "Y": 190
+        },
+        {
+          "X": 190,
+          "Y": 100
+        }
+      ],
+      "DeviceId": "0404044f-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 126,
+        "Y": 46
+      },
+      "ButtonNumber": 5,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 14,
+      "Boundaries": [
+        {
+          "X": 5,
+          "Y": 100
+        },
+        {
+          "X": 95,
+          "Y": 190
+        },
+        {
+          "X": 95,
+          "Y": 190
+        },
+        {
+          "X": 5,
+          "Y": 100
+        }
+      ],
+      "DeviceId": "0404044f-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 1,
+        "Y": 46
+      },
+      "ButtonNumber": 6,
+      "ChangeOnCaps": false,
+      "ShiftText": "A"
+    }
+  ],
+  "Height": 275,
+  "Version": 2,
+  "Width": 602
+}
