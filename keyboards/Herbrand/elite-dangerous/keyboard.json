@@ -227,11 +227,6 @@
     {
       "__type": "DirectInputAxis",
       "Id": 8,
-      "DeviceId": "028e045e-0000-0000-0000-504944564944",
-      "AxisOne": "X",
-      "AxisTwo": "",
-      "AxisOneMax": 65535,
-      "AxisTwoMax": 65535,
       "Boundaries": [
         {
           "X": 5,
@@ -250,13 +245,22 @@
           "Y": 245
         }
       ],
+      "DeviceId": "b10a044f-0000-0000-0000-504944564944",
       "Text": "Roll",
       "TextPosition": {
         "X": 175,
         "Y": 260
       },
+      "AxisOne": "Slider0",
+      "AxisOneMax": 65535,
+      "AxisTwo": "X",
+      "AxisTwoMax": 65535,
       "ChangeOnCaps": false,
-      "ShiftText": "Pedals"
+      "InvertAxisOne": 0,
+      "InvertAxisTwo": 0,
+      "ShiftText": null,
+      "StickHeight": 50,
+      "StickWidth": 50
     },
     {
       "__type": "MouseKey",
@@ -481,4 +485,4 @@
   "Height": 275,
   "Version": 2,
   "Width": 600
-} 
+}

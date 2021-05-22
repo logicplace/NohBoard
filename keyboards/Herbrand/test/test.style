@@ -5,6 +5,92 @@
     "Red": 0
   },
   "BackgroundImageFileName": null,
+  "DefaultDirectInputAxisStyle": {
+    "BackgroundBottomImageFileName": null,
+    "BackgroundBottomLeftImageFileName": null,
+    "BackgroundBottomRightImageFileName": null,
+    "BackgroundLeftImageFileName": null,
+    "BackgroundNeutralImageFileName": null,
+    "BackgroundRightImageFileName": null,
+    "BackgroundTopImageFileName": null,
+    "BackgroundTopLeftImageFileName": null,
+    "BackgroundTopRightImageFileName": null,
+    "DrawAxisBackground": true,
+    "ForegroundColor": {
+      "Blue": 255,
+      "Green": 255,
+      "Red": 255
+    },
+    "SubStyle": {
+      "Background": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Orbitron",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      }
+    }
+  },
+  "DefaultDirectInputDpadStyle": {
+    "BackgroundBottomImageFileName": null,
+    "BackgroundBottomLeftImageFileName": null,
+    "BackgroundBottomRightImageFileName": null,
+    "BackgroundLeftImageFileName": null,
+    "BackgroundNeutralImageFileName": null,
+    "BackgroundRightImageFileName": null,
+    "BackgroundTopImageFileName": null,
+    "BackgroundTopLeftImageFileName": null,
+    "BackgroundTopRightImageFileName": null,
+    "DrawDpadBackground": false,
+    "ForegroundColor": {
+      "Blue": 255,
+      "Green": 255,
+      "Red": 255
+    },
+    "SubStyle": {
+      "Background": {
+        "Blue": 100,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": null,
+      "Font": {
+        "DownloadUrl": null,
+        "FontFamily": "Courier New",
+        "Size": 10,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 255,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      }
+    }
+  },
   "DefaultKeyStyle": {
     "Loose": {
       "Background": {
@@ -14,10 +100,10 @@
       },
       "BackgroundImageFileName": "",
       "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
         "FontFamily": "Razer Blackwidow",
         "Size": 11.25,
-        "Style": 0,
-        "DownloadUrl": "https://www.dafont.com/razer-blackwidow.font"
+        "Style": 0
       },
       "Outline": {
         "Blue": 0,
@@ -40,10 +126,10 @@
       },
       "BackgroundImageFileName": "",
       "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
         "FontFamily": "Razer Blackwidow",
         "Size": 11.25,
-        "Style": 0,
-        "DownloadUrl": "https://www.dafont.com/razer-blackwidow.font"
+        "Style": 0
       },
       "Outline": {
         "Blue": 0,
@@ -85,6 +171,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -110,62 +197,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
-            "FontFamily": "Razer Blackwidow",
-            "Size": 9.75,
-            "Style": 0
-          },
-          "Outline": {
-            "Blue": 0,
-            "Green": 255,
-            "Red": 0
-          },
-          "OutlineWidth": 1,
-          "ShowOutline": false,
-          "Text": {
-            "Blue": 0,
-            "Green": 0,
-            "Red": 0
-          }
-        }
-      }
-    },
-	{
-      "Key": 32,
-      "Value": {
-        "__type": "KeyStyle",
-        "Loose": {
-          "Background": {
-            "Blue": 0,
-            "Green": 0,
-            "Red": 0
-          },
-          "BackgroundImageFileName": "",
-          "Font": {
-            "FontFamily": "Razer Blackwidow",
-            "Size": 9.75,
-            "Style": 0
-          },
-          "Outline": {
-            "Blue": 0,
-            "Green": 255,
-            "Red": 0
-          },
-          "OutlineWidth": 1,
-          "ShowOutline": false,
-          "Text": {
-            "Blue": 255,
-            "Green": 255,
-            "Red": 255
-          }
-        },
-        "Pressed": {
-          "Background": {
-            "Blue": 255,
-            "Green": 255,
-            "Red": 255
-          },
-          "BackgroundImageFileName": "",
-          "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -197,6 +229,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -222,6 +255,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -242,6 +276,64 @@
       }
     },
     {
+      "Key": 2,
+      "Value": {
+        "__type": "KeyStyle",
+        "Loose": {
+          "Background": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          },
+          "BackgroundImageFileName": "",
+          "Font": {
+            "DownloadUrl": null,
+            "FontFamily": "Orbitron",
+            "Size": 14.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          },
+          "OutlineWidth": 1,
+          "ShowOutline": true,
+          "Text": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          }
+        },
+        "Pressed": {
+          "Background": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          },
+          "BackgroundImageFileName": "",
+          "Font": {
+            "DownloadUrl": null,
+            "FontFamily": "Orbitron",
+            "Size": 14.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          },
+          "OutlineWidth": 1,
+          "ShowOutline": true,
+          "Text": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          }
+        }
+      }
+    },
+    {
       "Key": 24,
       "Value": {
         "__type": "KeyStyle",
@@ -253,6 +345,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -278,6 +371,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -309,6 +403,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -334,6 +429,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 9.75,
             "Style": 0
@@ -341,62 +437,6 @@
           "Outline": {
             "Blue": 0,
             "Green": 255,
-            "Red": 0
-          },
-          "OutlineWidth": 1,
-          "ShowOutline": false,
-          "Text": {
-            "Blue": 0,
-            "Green": 0,
-            "Red": 0
-          }
-        }
-      }
-    },
-    {
-      "Key": 2,
-      "Value": {
-        "__type": "KeyStyle",
-        "Loose": {
-          "Background": {
-            "Blue": 0,
-            "Green": 0,
-            "Red": 0
-          },
-          "BackgroundImageFileName": "",
-          "Font": {
-            "FontFamily": "Razer Blackwidow",
-            "Size": 14.25,
-            "Style": 0
-          },
-          "Outline": {
-            "Blue": 0,
-            "Green": 0,
-            "Red": 0
-          },
-          "OutlineWidth": 1,
-          "ShowOutline": false,
-          "Text": {
-            "Blue": 255,
-            "Green": 255,
-            "Red": 255
-          }
-        },
-        "Pressed": {
-          "Background": {
-            "Blue": 255,
-            "Green": 255,
-            "Red": 255
-          },
-          "BackgroundImageFileName": "",
-          "Font": {
-            "FontFamily": "Razer Blackwidow",
-            "Size": 14.25,
-            "Style": 0
-          },
-          "Outline": {
-            "Blue": 0,
-            "Green": 0,
             "Red": 0
           },
           "OutlineWidth": 1,
@@ -421,6 +461,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -446,6 +487,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -477,6 +519,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -502,6 +545,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -533,6 +577,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -558,6 +603,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -589,6 +635,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -614,6 +661,7 @@
           },
           "BackgroundImageFileName": "",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 14.25,
             "Style": 0
@@ -634,14 +682,6 @@
       }
     },
     {
-      "Key": 1,
-      "Value": {
-        "__type": "KeyStyle",
-        "Loose": null,
-        "Pressed": null
-      }
-    },
-    {
       "Key": 27,
       "Value": {
         "__type": "KeyStyle",
@@ -653,6 +693,7 @@
           },
           "BackgroundImageFileName": "leftb.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -678,6 +719,7 @@
           },
           "BackgroundImageFileName": "leftbp.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -709,6 +751,7 @@
           },
           "BackgroundImageFileName": "t.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -734,6 +777,7 @@
           },
           "BackgroundImageFileName": "suw.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 12.25,
             "Style": 0
@@ -765,6 +809,7 @@
           },
           "BackgroundImageFileName": "sb.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -790,6 +835,7 @@
           },
           "BackgroundImageFileName": "sw.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -821,6 +867,7 @@
           },
           "BackgroundImageFileName": "rightb.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -846,6 +893,7 @@
           },
           "BackgroundImageFileName": "rightbp.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -877,6 +925,7 @@
           },
           "BackgroundImageFileName": "t.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -902,6 +951,7 @@
           },
           "BackgroundImageFileName": "sdw.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 12.25,
             "Style": 0
@@ -933,6 +983,7 @@
           },
           "BackgroundImageFileName": "m5b.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -958,6 +1009,7 @@
           },
           "BackgroundImageFileName": "m5w.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -989,6 +1041,7 @@
           },
           "BackgroundImageFileName": "m4b.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -1014,6 +1067,7 @@
           },
           "BackgroundImageFileName": "m4w.png",
           "Font": {
+            "DownloadUrl": null,
             "FontFamily": "Razer Blackwidow",
             "Size": 11.25,
             "Style": 0
@@ -1039,6 +1093,212 @@
         "__type": "KeyStyle",
         "Loose": null,
         "Pressed": null
+      }
+    },
+    {
+      "Key": 1,
+      "Value": {
+        "__type": "KeyStyle",
+        "Loose": {
+          "Background": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          },
+          "BackgroundImageFileName": "buttonlol.jpg",
+          "Font": {
+            "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+            "FontFamily": "Microsoft Sans Serif",
+            "Size": 11.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 255,
+            "Green": 128,
+            "Red": 0
+          },
+          "OutlineWidth": 2,
+          "ShowOutline": true,
+          "Text": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          }
+        },
+        "Pressed": {
+          "Background": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          },
+          "BackgroundImageFileName": "buttonlol.jpg",
+          "Font": {
+            "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+            "FontFamily": "Microsoft Sans Serif",
+            "Size": 11.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 255
+          },
+          "OutlineWidth": 2,
+          "ShowOutline": true,
+          "Text": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          }
+        }
+      }
+    },
+    {
+      "Key": 32,
+      "Value": {
+        "__type": "DirectInputAxisStyle",
+        "BackgroundBottomImageFileName": null,
+        "BackgroundBottomLeftImageFileName": null,
+        "BackgroundBottomRightImageFileName": null,
+        "BackgroundLeftImageFileName": "",
+        "BackgroundNeutralImageFileName": "30ball.png",
+        "BackgroundRightImageFileName": null,
+        "BackgroundTopImageFileName": null,
+        "BackgroundTopLeftImageFileName": null,
+        "BackgroundTopRightImageFileName": null,
+        "DrawAxisBackground": true,
+        "ForegroundColor": {
+          "Blue": 0,
+          "Green": 0,
+          "Red": 255
+        },
+        "SubStyle": {
+          "Background": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 185
+          },
+          "BackgroundImageFileName": "",
+          "Font": {
+            "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+            "FontFamily": "Orbitron",
+            "Size": 11.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 100,
+            "Green": 100,
+            "Red": 255
+          },
+          "OutlineWidth": 1,
+          "ShowOutline": true,
+          "Text": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          }
+        }
+      }
+    },
+    {
+      "Key": 34,
+      "Value": {
+        "__type": "KeyStyle",
+        "Loose": {
+          "Background": {
+            "Blue": 255,
+            "Green": 128,
+            "Red": 0
+          },
+          "BackgroundImageFileName": "",
+          "Font": {
+            "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+            "FontFamily": "Microsoft Sans Serif",
+            "Size": 11.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          },
+          "OutlineWidth": 1,
+          "ShowOutline": false,
+          "Text": {
+            "Blue": 255,
+            "Green": 255,
+            "Red": 255
+          }
+        },
+        "Pressed": {
+          "Background": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 255
+          },
+          "BackgroundImageFileName": "",
+          "Font": {
+            "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+            "FontFamily": "Microsoft Sans Serif",
+            "Size": 11.25,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          },
+          "OutlineWidth": 1,
+          "ShowOutline": false,
+          "Text": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          }
+        }
+      }
+    },
+    {
+      "Key": 33,
+      "Value": {
+        "__type": "DirectInputDpadStyle",
+        "BackgroundBottomImageFileName": "RollBottoms.png",
+        "BackgroundBottomLeftImageFileName": "RollBottomLefts.png",
+        "BackgroundBottomRightImageFileName": "RollBottomRights.png",
+        "BackgroundLeftImageFileName": "RollLefts.png",
+        "BackgroundNeutralImageFileName": "RollNeutral.png",
+        "BackgroundRightImageFileName": "RollRights.png",
+        "BackgroundTopImageFileName": "RollTops.png",
+        "BackgroundTopLeftImageFileName": "RollTopLefts.png",
+        "BackgroundTopRightImageFileName": "RollTopRights.png",
+        "DrawDpadBackground": true,
+        "ForegroundColor": null,
+        "SubStyle": {
+          "Background": {
+            "Blue": 219,
+            "Green": 219,
+            "Red": 219
+          },
+          "BackgroundImageFileName": "",
+          "Font": {
+            "DownloadUrl": null,
+            "FontFamily": "Courier New",
+            "Size": 10,
+            "Style": 0
+          },
+          "Outline": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 255
+          },
+          "OutlineWidth": 2,
+          "ShowOutline": false,
+          "Text": {
+            "Blue": 0,
+            "Green": 0,
+            "Red": 0
+          }
+        }
       }
     }
   ]

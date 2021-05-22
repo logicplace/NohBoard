@@ -1,0 +1,162 @@
+{
+  "BackgroundColor": {
+    "Blue": 0,
+    "Green": 255,
+    "Red": 0
+  },
+  "BackgroundImageFileName": null,
+  "DefaultDirectInputAxisStyle": {
+    "BackgroundBottomImageFileName": null,
+    "BackgroundBottomLeftImageFileName": null,
+    "BackgroundBottomRightImageFileName": null,
+    "BackgroundLeftImageFileName": null,
+    "BackgroundNeutralImageFileName": null,
+    "BackgroundRightImageFileName": null,
+    "BackgroundTopImageFileName": null,
+    "BackgroundTopLeftImageFileName": null,
+    "BackgroundTopRightImageFileName": null,
+    "DrawAxisBackground": true,
+    "ForegroundColor": {
+      "Blue": 255,
+      "Green": 255,
+      "Red": 255
+    },
+    "SubStyle": {
+      "Background": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Courier New",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      }
+    }
+  },
+  "DefaultDirectInputDpadStyle": {
+    "BackgroundBottomImageFileName": null,
+    "BackgroundBottomLeftImageFileName": null,
+    "BackgroundBottomRightImageFileName": null,
+    "BackgroundLeftImageFileName": null,
+    "BackgroundNeutralImageFileName": null,
+    "BackgroundRightImageFileName": null,
+    "BackgroundTopImageFileName": null,
+    "BackgroundTopLeftImageFileName": null,
+    "BackgroundTopRightImageFileName": null,
+    "DrawDpadBackground": true,
+    "ForegroundColor": {
+      "Blue": 255,
+      "Green": 255,
+      "Red": 255
+    },
+    "SubStyle": {
+      "Background": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Courier New",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      }
+    }
+  },
+  "DefaultKeyStyle": {
+    "Loose": {
+      "Background": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Courier New",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      }
+    },
+    "Pressed": {
+      "Background": {
+        "Blue": 255,
+        "Green": 255,
+        "Red": 255
+      },
+      "BackgroundImageFileName": "",
+      "Font": {
+        "DownloadUrl": "https:\/\/www.dafont.com\/razer-blackwidow.font",
+        "FontFamily": "Courier New",
+        "Size": 11.25,
+        "Style": 0
+      },
+      "Outline": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      },
+      "OutlineWidth": 1,
+      "ShowOutline": false,
+      "Text": {
+        "Blue": 0,
+        "Green": 0,
+        "Red": 0
+      }
+    }
+  },
+  "DefaultMouseSpeedIndicatorStyle": {
+    "InnerColor": {
+      "Blue": 205,
+      "Green": 205,
+      "Red": 205
+    },
+    "OuterColor": {
+      "Blue": 205,
+      "Green": 205,
+      "Red": 205
+    },
+    "OutlineWidth": 5
+  },
+  "ElementStyles": []
+}
