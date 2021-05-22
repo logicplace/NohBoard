@@ -139,17 +139,9 @@ namespace ThoNohT.NohBoard.Forms
             else
                 HookManager.DisableMouseHook();
 
-            // Enable the keyboard hook only if there are keyboard keys on the screen.
-            if (GlobalSettings.CurrentDefinition.Elements.Any(x => x is KeyboardKeyDefinition))
-                HookManager.EnableKeyboardHook();
-            else
-                HookManager.DisableKeyboardHook();
+            HookManager.EnableKeyboardHook();
 
-            if (GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputButtonDefinition) || GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputAxisDefinition) || GlobalSettings.CurrentDefinition.Elements.Any(x => x is DirectInputDpadDefinition)) {
-                HookManager.EnableDirectInputTimer();
-            } else {
-                HookManager.DisableDirectInputTimer();
-            }
+            HookManager.EnableDirectInputTimer();
 
             //Prompt to download any fonts we don't have yet.
             var missingFonts = this.CheckMissingFonts();
