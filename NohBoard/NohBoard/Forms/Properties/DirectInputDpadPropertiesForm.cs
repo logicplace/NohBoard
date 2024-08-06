@@ -98,7 +98,19 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.txtTextPosition.Y = this.initialDefinition.TextPosition.Y;
             this.lstBoundaries.Items.AddRange(this.initialDefinition.Boundaries.Cast<object>().ToArray());
             this.chkChangeOnCaps.Checked = this.initialDefinition.ChangeOnCaps;
-            this.chkDrawDiagonalDirections.Checked = this.initialDefinition.DrawDiagonalDirections;
+            switch (this.initialDefinition.DrawMode)
+            {
+                case NohBoard.Keyboard.ElementDefinitions.DrawMode.Single:
+                    this.rdDrawModeSingle.Checked = true;
+                    break;
+                case NohBoard.Keyboard.ElementDefinitions.DrawMode.FourWay:
+                    this.rdDrawModeFourWay.Checked = true;
+                    break;
+                case NohBoard.Keyboard.ElementDefinitions.DrawMode.Diagonals:
+                    this.rdDrawModeDiagonals.Checked = true;
+                    break;
+
+            }
             this.txtDeviceId.Text = this.initialDefinition.DeviceId.ToString();
 
             // Retrieves all of the currently available joysticks and lists them here
@@ -137,7 +149,9 @@ namespace ThoNohT.NohBoard.Forms.Properties
             this.comboBoxDevicesList.SelectedIndexChanged += this.comboBoxDevicesList_SelectedIndexChanged;
             this.cmbDpad.SelectedIndexChanged += this.cmbDpad_SelectedIndexChanged;
             this.btnDetectDpad.Click += this.btnDetectAxis1_Click;
-            this.chkDrawDiagonalDirections.CheckedChanged += this.chkDrawDiagonalDirections_CheckedChanged;
+            this.rdDrawModeSingle.CheckedChanged += this.rdDrawModeSingle_CheckedChanged;
+            this.rdDrawModeFourWay.CheckedChanged += this.rdDrawModeFourWay_CheckedChanged;
+            this.rdDrawModeDiagonals.CheckedChanged += this.rdDrawModeDiagonals_CheckedChanged;
         }
 
         /// <summary>
@@ -468,9 +482,25 @@ namespace ThoNohT.NohBoard.Forms.Properties
             }
         }
 
-        private void chkDrawDiagonalDirections_CheckedChanged(object sender, EventArgs e) {
-            this.currentDefinition = this.currentDefinition.Modify(drawDiagonalDirections: this.chkDrawDiagonalDirections.Checked);
-            this.DefinitionChanged?.Invoke(this.currentDefinition);
+        private void rdDrawModeSingle_CheckedChanged(object sender, EventArgs e) {
+            if (this.rdDrawModeSingle.Checked) {
+                this.currentDefinition = this.currentDefinition.Modify(drawMode: NohBoard.Keyboard.ElementDefinitions.DrawMode.Single);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
+        }
+
+        private void rdDrawModeFourWay_CheckedChanged(object sender, EventArgs e) {
+            if (this.rdDrawModeFourWay.Checked) {
+                this.currentDefinition = this.currentDefinition.Modify(drawMode: NohBoard.Keyboard.ElementDefinitions.DrawMode.FourWay);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
+        }
+
+        private void rdDrawModeDiagonals_CheckedChanged(object sender, EventArgs e) {
+            if (this.rdDrawModeDiagonals.Checked) {
+                this.currentDefinition = this.currentDefinition.Modify(drawMode: NohBoard.Keyboard.ElementDefinitions.DrawMode.Diagonals);
+                this.DefinitionChanged?.Invoke(this.currentDefinition);
+            }
         }
     }
 }

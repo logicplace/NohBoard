@@ -618,7 +618,7 @@ namespace ThoNohT.NohBoard.Forms
                     Guid.Empty,
                     0,
                     false,
-                    false));
+                    Keyboard.ElementDefinitions.DrawMode.FourWay));
         }
 
         /// <summary>

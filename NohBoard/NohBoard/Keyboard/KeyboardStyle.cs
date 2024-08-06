@@ -222,8 +222,9 @@ namespace ThoNohT.NohBoard.Keyboard
         public static KeyboardStyle Load(string name, bool global)
         {
             var cDef = GlobalSettings.CurrentDefinition;
-            var filePath = global
-                ? FileHelper.FromKbs(Constants.GlobalStylesFolder, $"{name}{StyleExtension}").FullName
+
+            var filePath = global || cDef is null
+				? FileHelper.FromKbs(Constants.GlobalStylesFolder, $"{name}{StyleExtension}").FullName
                 : FileHelper.FromKbs(cDef.Category, cDef.Name, $"{name}{StyleExtension}").FullName;
 
             var currentPath = global ? Constants.GlobalStylesFolder : $"{cDef.Category}/{cDef.Name}";

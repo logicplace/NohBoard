@@ -26,6 +26,13 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
     using Extra;
     using ThoNohT.NohBoard.Keyboard.Styles;
 
+    public enum DrawMode
+    {
+        Single,
+        FourWay,
+        Diagonals
+    }
+
     /// <summary>
     /// Represents a button on a DirectInput device
     /// </summary>
@@ -52,12 +59,13 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         [DataMember]
         public int DpadNumber { get; private set; }
 
-        /// <summary>
-        /// When set to true diagonal directions will be drawn with their own square/image.
-        /// When set to false, diagonal directions will be represented by the horizontal and vertical square/image adjacent to them.
-        /// </summary>
-        [DataMember]
-        public bool DrawDiagonalDirections { get; private set; }
+		/// <summary>
+		/// When set to Single, the current direction(s) will be display as an arrow/image in a single square.
+		/// When set to FourWay, diagonal directions will be represented by the horizontal and vertical square/image adjacent to them.
+		/// When set to Diagonals, diagonal directions will be drawn with their own square/image.
+		/// </summary>
+		[DataMember]
+        public DrawMode DrawMode { get; private set; }
 
         /// <summary>
         /// The center of the button.
@@ -123,12 +131,12 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             Guid deviceId,
             int dpadNumber,
             bool changeOnCaps,
-            bool drawDiagonalDirections,
+			DrawMode drawMode,
             TPoint textPosition = null,
             ElementManipulation manipulation = null) : base(id, boundaries, normalText, deviceId, textPosition, manipulation) {
 
             this.DpadNumber = dpadNumber;
-            this.DrawDiagonalDirections = drawDiagonalDirections;
+            this.DrawMode = drawMode;
 
             if (!PropertiesInitialized) {
                 InitializeSubProperties();
@@ -156,7 +164,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -174,7 +182,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -248,7 +256,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 this.TextPosition,
                 this.RelevantManipulation);
         }
@@ -268,7 +276,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 this.TextPosition.Translate(dx, dy),
                 this.CurrentManipulation);
         }
@@ -311,7 +319,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections);
+                this.DrawMode);
         }
 
         /// <summary>
@@ -332,7 +340,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -387,76 +395,99 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
 
             // Draws the D-pad
             if (subStyle.ShowOutline) {
-                g.DrawLine(borderPen, x2, y1, x3, y1);
-                g.DrawLine(borderPen, x3, y1, x3, y2);
-                g.DrawLine(borderPen, x3, y2, x4, y2);
-                g.DrawLine(borderPen, x4, y2, x4, y3);
-                g.DrawLine(borderPen, x4, y3, x3, y3);
-                g.DrawLine(borderPen, x3, y3, x3, y4);
-                g.DrawLine(borderPen, x3, y4, x2, y4);
-                g.DrawLine(borderPen, x2, y4, x2, y3);
-                g.DrawLine(borderPen, x2, y3, x1, y3);
-                g.DrawLine(borderPen, x1, y3, x1, y2);
-                g.DrawLine(borderPen, x1, y2, x2, y2);
-                g.DrawLine(borderPen, x2, y2, x2, y1);
+                if (this.DrawMode == DrawMode.Single) {
+					g.DrawLine(borderPen, x1, y1, x4, y1);
+					g.DrawLine(borderPen, x4, y1, x4, y1);
+					g.DrawLine(borderPen, x4, y4, x1, y4);
+					g.DrawLine(borderPen, x4, y4, x4, y1);
+                }
+                else {
+					g.DrawLine(borderPen, x2, y1, x3, y1);
+					g.DrawLine(borderPen, x3, y1, x3, y2);
+					g.DrawLine(borderPen, x3, y2, x4, y2);
+					g.DrawLine(borderPen, x4, y2, x4, y3);
+					g.DrawLine(borderPen, x4, y3, x3, y3);
+					g.DrawLine(borderPen, x3, y3, x3, y4);
+					g.DrawLine(borderPen, x3, y4, x2, y4);
+					g.DrawLine(borderPen, x2, y4, x2, y3);
+					g.DrawLine(borderPen, x2, y3, x1, y3);
+					g.DrawLine(borderPen, x1, y3, x1, y2);
+					g.DrawLine(borderPen, x1, y2, x2, y2);
+					g.DrawLine(borderPen, x2, y2, x2, y1);
+				}
             }
 
             // Draws the up fill if needed
             // The procedure is rather different depending on whether or not we also draw the diagonals
-            if (this.DrawDiagonalDirections) {
-                if (dpadValue == 0) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 0, new Rectangle(new Point(x2, y1), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
-                }
-                if (dpadValue == 4500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 4500, new Rectangle(new Point(x3, y1), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y1), new PointF(x4, y1), new PointF(x4, y2), new PointF(x3, y2) });
-                }
-                if (dpadValue == 9000) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 9000, new Rectangle(new Point(x3, y2), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
-                }
-                if (dpadValue == 13500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 13500, new Rectangle(new Point(x3, y3), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y3), new PointF(x4, y3), new PointF(x4, y4), new PointF(x3, y4) });
-                }
-                if (dpadValue == 18000) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 18000, new Rectangle(new Point(x2, y3), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
-                }
-                if (dpadValue == 22500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 22500, new Rectangle(new Point(x1, y3), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y3), new PointF(x2, y3), new PointF(x2, y4), new PointF(x1, y4) });
-                }
-                if (dpadValue == 27000) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 27000, new Rectangle(new Point(x1, y2), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
-                }
-                if (dpadValue == 31500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 31500, new Rectangle(new Point(x1, y1), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y1), new PointF(x2, y1), new PointF(x2, y2), new PointF(x1, y2) });
-                }
-            } else {
-                if (dpadValue == 31500 || dpadValue == 0 || dpadValue == 4500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 0, new Rectangle(new Point(x2, y1), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
-                }
-                if (dpadValue == 4500 || dpadValue == 9000 || dpadValue == 13500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 9000, new Rectangle(new Point(x3, y2), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
-                }
-                if (dpadValue == 13500 || dpadValue == 18000 || dpadValue == 22500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 18000, new Rectangle(new Point(x2, y3), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
-                }
-                if (dpadValue == 22500 || dpadValue == 27000 || dpadValue == 31500) {
-                    var foregroundBrush = GetForegroundDpadBrush(style, 27000, new Rectangle(new Point(x1, y2), new Size(sWidth, sHeight)));
-                    g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
-                }
+            switch (this.DrawMode) {
+                case DrawMode.Diagonals:
+                    if (dpadValue == 0) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 0, new Rectangle(new Point(x2, y1), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
+                    }
+                    if (dpadValue == 4500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 4500, new Rectangle(new Point(x3, y1), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y1), new PointF(x4, y1), new PointF(x4, y2), new PointF(x3, y2) });
+                    }
+                    if (dpadValue == 9000) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 9000, new Rectangle(new Point(x3, y2), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
+                    }
+                    if (dpadValue == 13500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 13500, new Rectangle(new Point(x3, y3), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y3), new PointF(x4, y3), new PointF(x4, y4), new PointF(x3, y4) });
+                    }
+                    if (dpadValue == 18000) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 18000, new Rectangle(new Point(x2, y3), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
+                    }
+                    if (dpadValue == 22500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 22500, new Rectangle(new Point(x1, y3), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y3), new PointF(x2, y3), new PointF(x2, y4), new PointF(x1, y4) });
+                    }
+                    if (dpadValue == 27000) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 27000, new Rectangle(new Point(x1, y2), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
+                    }
+                    if (dpadValue == 31500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 31500, new Rectangle(new Point(x1, y1), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y1), new PointF(x2, y1), new PointF(x2, y2), new PointF(x1, y2) });
+                    }
+                    break;
+				case DrawMode.Single:
+                    if (dpadValue % 4500 == 0 && dpadValue <= 31500) {
+						var foregroundBrush = GetForegroundDpadBrush(style, dpadValue, new Rectangle(new Point(x1, y1), new Size(x4 - x1, y4 - y1)));
+						g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y1), new PointF(x4, y1), new PointF(x4, y4), new PointF(x1, y4) });
+					}
+					break;
+				default:
+					if (dpadValue == 31500 || dpadValue == 0 || dpadValue == 4500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 0, new Rectangle(new Point(x2, y1), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y1), new PointF(x3, y1), new PointF(x3, y2), new PointF(x2, y2) });
+                    }
+                    if (dpadValue == 4500 || dpadValue == 9000 || dpadValue == 13500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 9000, new Rectangle(new Point(x3, y2), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x3, y2), new PointF(x4, y2), new PointF(x4, y3), new PointF(x3, y3) });
+                    }
+                    if (dpadValue == 13500 || dpadValue == 18000 || dpadValue == 22500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 18000, new Rectangle(new Point(x2, y3), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y3), new PointF(x3, y3), new PointF(x3, y4), new PointF(x2, y4) });
+                    }
+                    if (dpadValue == 22500 || dpadValue == 27000 || dpadValue == 31500) {
+                        var foregroundBrush = GetForegroundDpadBrush(style, 27000, new Rectangle(new Point(x1, y2), new Size(sWidth, sHeight)));
+                        g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y2), new PointF(x2, y2), new PointF(x2, y3), new PointF(x1, y3) });
+                    }
+                    break;
             }
             if (dpadValue == -1) {
-                var foregroundBrush = GetForegroundDpadBrush(style, -1, new Rectangle(new Point(x2, y2), new Size(sWidth, sHeight)));
-                g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y2), new PointF(x3, y2), new PointF(x3, y3), new PointF(x2, y3) });
+                if (this.DrawMode == DrawMode.Single) {
+					var foregroundBrush = GetForegroundDpadBrush(style, -1, new Rectangle(new Point(x1, y1), new Size(x4 - x1, y4 - y1)));
+					g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x1, y1), new PointF(x4, y1), new PointF(x4, y4), new PointF(x1, y4) });
+				}
+                else {
+					var foregroundBrush = GetForegroundDpadBrush(style, -1, new Rectangle(new Point(x2, y2), new Size(sWidth, sHeight)));
+					g.FillPolygon(foregroundBrush, new PointF[] { new PointF(x2, y2), new PointF(x3, y2), new PointF(x3, y3), new PointF(x2, y3) });
+				}
             }
 
             // Draw the text
@@ -511,7 +542,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
             // Create a texture brush from the image.
             var tex = new TextureBrush(img, imgBb);
             tex.TranslateTransform(boundingBox.Left, boundingBox.Top);
-            tex.TranslateTransform(-25, -25);
+            //tex.TranslateTransform(-25, -25);
             tex.ScaleTransform(boundingBox.Width / imgBb.Width, boundingBox.Height / imgBb.Height);
 
             return tex;
@@ -544,7 +575,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 GlobalSettings.Settings.UpdateTextPosition ? null : this.TextPosition,
                 this.CurrentManipulation);
         }
@@ -563,7 +594,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 this.DeviceId,
                 this.DpadNumber,
                 this.ChangeOnCaps,
-                this.DrawDiagonalDirections,
+                this.DrawMode,
                 this.TextPosition + diff,
                 this.CurrentManipulation);
         }
@@ -581,7 +612,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
         /// <returns>The new element definition.</returns>
         public DirectInputDpadDefinition Modify(
             List<TPoint> boundaries = null, string deviceId = null, int dpadNumber = 0, string text = null, string shiftText = null,
-            bool? changeOnCaps = null, bool? drawDiagonalDirections = null, TPoint textPosition = null) {
+            bool? changeOnCaps = null, DrawMode? drawMode = null, TPoint textPosition = null) {
             return new DirectInputDpadDefinition(
                 this.Id,
                 boundaries ?? this.Boundaries.Select(x => x.Clone()).ToList(),
@@ -590,7 +621,7 @@ namespace ThoNohT.NohBoard.Keyboard.ElementDefinitions
                 deviceId != null && Guid.Parse(deviceId) != Guid.Empty ? Guid.Parse(deviceId) : this.DeviceId,
                 dpadNumber != 0 ? dpadNumber : this.DpadNumber,
                 changeOnCaps ?? this.ChangeOnCaps,
-                drawDiagonalDirections ?? this.DrawDiagonalDirections,
+				drawMode ?? this.DrawMode,
                 textPosition ?? this.TextPosition,
                 this.CurrentManipulation);
         }
