@@ -1,0 +1,194 @@
+{
+  "Elements": [
+    {
+      "__type": "DirectInputDPad",
+      "Id": 1,
+      "Boundaries": [
+        {
+          "X": 16,
+          "Y": 16
+        },
+        {
+          "X": 266,
+          "Y": 16
+        },
+        {
+          "X": 266,
+          "Y": 266
+        },
+        {
+          "X": 16,
+          "Y": 266
+        }
+      ],
+      "DeviceId": "60062dc8-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 141,
+        "Y": 188
+      },
+      "ChangeOnCaps": false,
+      "DpadNumber": 1,
+      "DrawMode": 0,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 4,
+      "Boundaries": [
+        {
+          "X": 460,
+          "Y": 100
+        },
+        {
+          "X": 542,
+          "Y": 100
+        },
+        {
+          "X": 542,
+          "Y": 225
+        },
+        {
+          "X": 460,
+          "Y": 225
+        }
+      ],
+      "DeviceId": "60062dc8-0000-0000-0000-504944564944",
+      "Text": "FIRE",
+      "TextPosition": {
+        "X": 501,
+        "Y": 162
+      },
+      "ButtonNumber": 4,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 5,
+      "Boundaries": [
+        {
+          "X": 293,
+          "Y": 56
+        },
+        {
+          "X": 450,
+          "Y": 56
+        },
+        {
+          "X": 450,
+          "Y": 254
+        },
+        {
+          "X": 293,
+          "Y": 254
+        }
+      ],
+      "DeviceId": "60062dc8-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 371,
+        "Y": 155
+      },
+      "ButtonNumber": 1,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 6,
+      "Boundaries": [
+        {
+          "X": 293,
+          "Y": 56
+        },
+        {
+          "X": 450,
+          "Y": 56
+        },
+        {
+          "X": 450,
+          "Y": 254
+        },
+        {
+          "X": 293,
+          "Y": 254
+        }
+      ],
+      "DeviceId": "60062dc8-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 428,
+        "Y": 236
+      },
+      "ButtonNumber": 2,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 7,
+      "Boundaries": [
+        {
+          "X": 293,
+          "Y": 56
+        },
+        {
+          "X": 450,
+          "Y": 56
+        },
+        {
+          "X": 450,
+          "Y": 254
+        },
+        {
+          "X": 293,
+          "Y": 254
+        }
+      ],
+      "DeviceId": "60062dc8-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 554,
+        "Y": 271
+      },
+      "ButtonNumber": 1,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    },
+    {
+      "__type": "DirectInputButton",
+      "Id": 8,
+      "Boundaries": [
+        {
+          "X": 52,
+          "Y": 41
+        },
+        {
+          "X": 220,
+          "Y": 41
+        },
+        {
+          "X": 238,
+          "Y": 220
+        },
+        {
+          "X": 52,
+          "Y": 231
+        }
+      ],
+      "DeviceId": "60062dc8-0000-0000-0000-504944564944",
+      "Text": "",
+      "TextPosition": {
+        "X": 145,
+        "Y": 136
+      },
+      "ButtonNumber": 10,
+      "ChangeOnCaps": false,
+      "ShiftText": null
+    }
+  ],
+  "Height": 331,
+  "Version": 2,
+  "Width": 640
+}
