@@ -1,6 +1,16 @@
 # NohBoard
 
+Original version at [ThoNohT's repo](https://github.com/ThoNohT/NohBoard). DirectInput version by [EmanueleCiriachi](https://github.com/EmanueleCiriachi/NohBoardBranch)
+
 NohBoard is a keyboard visualization program. I know certain applications already exist that do just this, display your keyboard on-screen. And even more probably. However, so far I have found none that were both free and easy to use. That's where this program came in, I made it to be free and easy to use, without any fancy graphics, and easily capturable (possibly with chroma key). Furthermore, it's very customizable.
+
+## Caveats
+
+When using a controller, I had to plug in my 8BitDo Pro 2 in `D` (Android??) mode to get both Re-Volt and this app to detect the input at the same time. Using wireless in `S` (Nintendo Switch) mode didn't work, only Re-Volt could read the input.
+
+## Building
+
+This was built with Visual Studio 2022. In order for gotri to work (and thus your build to work), the branch you're working off of must be tagged, similar to `v1.3.1`
 
 ## Rewrite
 
