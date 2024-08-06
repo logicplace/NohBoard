@@ -21,6 +21,9 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e3c2e235-2b95-40c9-981d-46674c7cab3d")]
 
+// This is a Windows-only project
+[assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("windows")]
+
 // KeyboardFileVersion information for an assembly consists of the following four values:
 //
 //      Major KeyboardFileVersion

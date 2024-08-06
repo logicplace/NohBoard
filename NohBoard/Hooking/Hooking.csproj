@@ -12,4 +12,8 @@
     <PackageReference Include="SharpDX.DirectInput" Version="3.1.1" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="$(SolutionDir)gotri.exe -i $(ProjectDir)Properties\AssemblyInfo.cs.template &gt; $(ProjectDir)Properties\AssemblyInfo.cs" />
+  </Target>
+
 </Project>

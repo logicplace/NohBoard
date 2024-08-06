@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>ThoNohT.NohBoard</RootNamespace>
     <StartupObject>ThoNohT.NohBoard.Program</StartupObject>
@@ -31,5 +31,9 @@
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="echo template: $(ProjectDir)Version.cs.template&#xD;&#xA;$(SolutionDir)gotri.exe -i $(ProjectDir)Version.cs.template &gt; $(ProjectDir)Version.cs&#xD;&#xA;$(SolutionDir)gotri.exe -i $(ProjectDir)Properties\AssemblyInfo.cs.template &gt; $(ProjectDir)Properties\AssemblyInfo.cs" />
+  </Target>
 
 </Project>
